@@ -1,6 +1,6 @@
 # Electrical-Software Documentation
 
-Electrical software development is focused on writing software to simulate and run the robot.
+Electrical software development focused on writing software to simulate and run the robot.
 
 ## Contributing Guide
 
