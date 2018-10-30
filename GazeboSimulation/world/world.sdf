@@ -1,0 +1,111 @@
+<?xml version='1.0'?>
+<sdf version='1.6'>
+  <world name='default'>
+    <gravity>0 0 -9.8</gravity>
+    <magnetic_field>6e-06 2.3e-05 -4.2e-05</magnetic_field>
+    <atmosphere type='adiabatic'/>
+    <physics name='default_physics' default='0' type='ode'>
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+    </physics>
+    <scene>
+      <ambient>0.4 0.4 0.4 1</ambient>
+      <background>0.7 0.7 0.7 1</background>
+      <shadows>1</shadows>
+    </scene>
+    <include>
+      <static>true</static>
+      <uri>model://arena</uri>
+      <pose>0 0 -0.1 0 0 0</pose>
+    </include>
+    <include>
+      <static>true</static>
+      <uri>model://spacetels</uri>
+      <pose>0 0 -0.09 0 0 0</pose>
+    </include>
+    <population name="spheres">
+      <model_count>4</model_count>
+      <distribution><type>random</type></distribution>
+      <cylinder>
+        <radius>1</radius>
+        <length>0.2</length>
+      </cylinder>
+      <model name="debris_sphere">
+        <include>
+          <static>false</static>
+          <uri>model://debrisSphere</uri>
+        </include>
+      </model>
+      <pose>0 0 0 0 0 0</pose>
+    </population>
+    <population name="cubes">
+      <model_count>8</model_count>
+      <distribution><type>random</type></distribution>
+      <cylinder>
+        <radius>1</radius>
+        <length>0.2</length>
+      </cylinder>
+      <model name="debris_cube">
+        <include>
+          <static>false</static>
+          <uri>model://debrisCube</uri>
+        </include>
+      </model>
+      <pose>0 0 0 0 0 0</pose>
+    </population>
+    <light name='user_point_light_0' type='point'>
+      <pose frame=''>1.22 1.22 1 0 -0 0</pose>
+      <diffuse>0.494118 0.494118 0.494118 1</diffuse>
+      <specular>0.0901961 0.0901961 0.0901961 1</specular>
+      <direction>0 0 -1</direction>
+      <attenuation>
+        <range>20</range>
+        <constant>0.01</constant>
+        <linear>0.1</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <cast_shadows>0</cast_shadows>
+    </light>
+    <light name='user_point_light_1' type='point'>
+      <pose frame=''>-1.22 1.22 1 0 -0 0</pose>
+      <diffuse>0.494118 0.494118 0.494118 1</diffuse>
+      <specular>0.0901961 0.0901961 0.0901961 1</specular>
+      <direction>0 0 -1</direction>
+      <attenuation>
+        <range>20</range>
+        <constant>0.01</constant>
+        <linear>0.1</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <cast_shadows>0</cast_shadows>
+    </light>
+    <light name='user_point_light_2' type='point'>
+      <pose frame=''>1.22 -1.22 1 0 -0 0</pose>
+      <diffuse>0.494118 0.494118 0.494118 1</diffuse>
+      <specular>0.0901961 0.0901961 0.0901961 1</specular>
+      <direction>0 0 -1</direction>
+      <attenuation>
+        <range>20</range>
+        <constant>0.01</constant>
+        <linear>0.1</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <cast_shadows>0</cast_shadows>
+    </light>
+    <light name='user_point_light_3' type='point'>
+      <pose frame=''>-1.22 -1.22 1 0 -0 0</pose>
+      <diffuse>0.494118 0.494118 0.494118 1</diffuse>
+      <specular>0.0901961 0.0901961 0.0901961 1</specular>
+      <direction>0 0 -1</direction>
+      <attenuation>
+        <range>20</range>
+        <constant>0.01</constant>
+        <linear>0.1</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <cast_shadows>0</cast_shadows>
+    </light>
+    <plugin name='scoreEngine' filename='libscoreEngine.so'/>
+  </world>
+</sdf>

@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 2.8)
+project( DebrisDetection )
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF )
+find_package( OpenCV REQUIRED )
+add_executable( DebrisDetection src/main.cpp )
+target_link_libraries( DebrisDetection ${OpenCV_LIBS} )

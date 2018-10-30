@@ -1,0 +1,69 @@
+<?xml version='1.0'?>
+<sdf version='1.6'>
+    <model name='debris_sphere'>
+      <static>0</static>
+      <link name='link'>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0.004</angular>
+        </velocity_decay>
+        <gravity>1</gravity>
+        <inertial>
+          <mass>0.053211</mass>
+          <inertia>
+            <ixx>2.208e-06</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>2.208e-06</iyy>
+            <iyz>0</iyz>
+            <izz>2.208e-06</izz>
+          </inertia>
+        </inertial>
+        <collision name='collision'>
+          <geometry>
+            <sphere>
+              <radius>0.03175</radius>
+            </sphere>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>50.000000</mu>
+                <mu2>50.000000</mu2>
+                <fdir1>0.000000 0.000000 0.000000</fdir1>
+                <slip1>0.000000</slip1>
+                <slip2>0.000000</slip2>
+              </ode>
+            </friction>
+            <bounce>
+              <restitution_coefficient>0.001000</restitution_coefficient>
+              <threshold>100000.000000</threshold>
+            </bounce>
+            <contact>
+              <ode>
+                <soft_cfm>0.010000</soft_cfm>
+                <soft_erp>0.200000</soft_erp>
+                <kp>100.000000</kp>
+                <kd>1.000000</kd>
+                <max_vel>100.000000</max_vel>
+                <min_depth>0</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://debrisSphere/meshes/sphereBlue.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+      </link>
+      <allow_auto_disable>1</allow_auto_disable>
+      <plugin name='debris' filename='libdebris.so'/>
+    </model>
+</sdf>

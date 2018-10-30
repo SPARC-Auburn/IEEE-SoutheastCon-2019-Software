@@ -1,0 +1,414 @@
+<?xml version='1.0'?>
+<sdf version='1.6'>
+  <model name='bot'>
+    <pose frame=''>0 0 0.013692188 0 -0 0</pose>
+    <static>0</static>
+    <link name='chassis'>
+      <gravity>1</gravity>
+      <inertial>
+        <mass>12.773403</mass>
+        <inertia> <!-- inertias are tricky to compute -->
+          <!-- http://gazebosim.org/tutorials?tut=inertia&cat=build_robot -->
+          <ixx>7.668621</ixx>
+          <ixy>0.0</ixy>
+          <ixz>0.0</ixz>
+          <iyy>10.958139</iyy>
+          <iyz>0.0</iyz>
+          <izz>17.371395</izz>
+        </inertia>
+        <pose>0 -0.0141659 0.0317501</pose>
+      </inertial>
+      <collision name='collision'>
+        <geometry>
+          <mesh>
+            <uri>model://badbot/meshes/chassisCollision.stl</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='visual'>
+        <geometry>
+          <mesh>
+            <uri>model://badbot/meshes/chassis.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient>0.75 0.75 0.75 1</ambient>
+          <diffuse>0.1 0.1 0.1 1</diffuse>
+          <specular>0 0 0 0</specular>
+          <emissive>0 0 0 0</emissive>
+        </material>
+      </visual>
+      <sensor name="laserFront" type="ray">
+        <pose>0 0 0 0 0 0</pose>
+        <ray>
+          <scan>
+          
+          </scan> 
+        </ray>
+      </sensor>
+    </link>
+    
+    <link name='ghost'>
+      <gravity>0</gravity>
+      <visual name='visual'>
+        <geometry>
+          <mesh>
+            <uri>model://badbot/meshes/chassis.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient>0.75 0.75 0.75 0.3</ambient>
+          <diffuse>0.1 0.1 0.1 0.3</diffuse>
+          <specular>0 0 0 0</specular>
+          <emissive>0 0 0 0</emissive>
+        </material>
+      </visual>
+    </link>
+    
+    <link name="left_front_wheel">
+      <pose>-0.09398 0.0600075 0.022820312 0 1.57079632679 0</pose>
+      <gravity>1</gravity>
+      <inertial>
+        <mass>0.063819</mass>
+        <inertia> <!-- inertias are tricky to compute -->
+          <!-- http://gazebosim.org/tutorials?tut=inertia&cat=build_robot -->
+          <ixx>0.004254</ixx>
+          <ixy>0.0</ixy>
+          <ixz>0.0</ixz>
+          <iyy>0.002181</iyy>
+          <iyz>0.0</iyz>
+          <izz>0.002181</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <cylinder>
+            <radius>0.0365125</radius>
+            <length>0.01016</length>
+          </cylinder>
+        </geometry>
+        <surface>
+          <friction>
+            <torsional>
+              <coefficient>0.5</coefficient>
+              <patch_radius>0.01</patch_radius>
+              <ode>
+                <slip>0.2</slip>
+
+              </ode>
+            </torsional>
+            <ode>
+              <mu>0.998000</mu>
+              <mu2>0.998000</mu2>
+              <fdir1>0.000000 0.000000 0.000000</fdir1>
+              <slip1>0.02000</slip1>
+              <slip2>0.020000</slip2>
+            </ode>
+          </friction>
+          <bounce>
+            <restitution_coefficient>0.000000</restitution_coefficient>
+            <threshold>100000.000000</threshold>
+          </bounce>
+          <contact>
+            <ode>
+              <soft_cfm>0.000000</soft_cfm>
+              <soft_erp>0.200000</soft_erp>
+              <kp>100000.000000</kp>
+              <kd>1.000000</kd>
+              <max_vel>100.000000</max_vel>
+              <min_depth>0.001000</min_depth>
+            </ode>
+          </contact>
+        </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <cylinder>
+            <radius>0.0365125</radius>
+            <length>0.01016</length>
+          </cylinder>
+        </geometry>
+      </visual>
+    </link>
+    <link name="right_front_wheel">
+      <pose>0.09398 0.0600075 0.022820312 0 1.57079632679 0</pose>
+      <gravity>1</gravity>
+      <inertial>
+        <mass>0.063819</mass>
+        <inertia> <!-- inertias are tricky to compute -->
+          <!-- http://gazebosim.org/tutorials?tut=inertia&cat=build_robot -->
+          <ixx>0.004254</ixx>
+          <ixy>0.0</ixy>
+          <ixz>0.0</ixz>
+          <iyy>0.002181</iyy>
+          <iyz>0.0</iyz>
+          <izz>0.002181</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <cylinder>
+            <radius>0.0365125</radius>
+            <length>0.01016</length>
+          </cylinder>
+        </geometry>
+        <surface>
+          <friction>
+            <torsional>
+              <coefficient>0.5</coefficient>
+              <patch_radius>0.01</patch_radius>
+              <ode>
+                <slip>0.2</slip>
+
+              </ode>
+            </torsional>
+            <ode>
+              <mu>0.998000</mu>
+              <mu2>0.998000</mu2>
+              <fdir1>0.000000 0.000000 0.000000</fdir1>
+              <slip1>0.02000</slip1>
+              <slip2>0.020000</slip2>
+            </ode>
+          </friction>
+          <bounce>
+            <restitution_coefficient>0.000000</restitution_coefficient>
+            <threshold>100000.000000</threshold>
+          </bounce>
+          <contact>
+            <ode>
+              <soft_cfm>0.000000</soft_cfm>
+              <soft_erp>0.200000</soft_erp>
+              <kp>100000.000000</kp>
+              <kd>1.000000</kd>
+              <max_vel>100.000000</max_vel>
+              <min_depth>0.001000</min_depth>
+            </ode>
+          </contact>
+        </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <cylinder>
+            <radius>0.0365125</radius>
+            <length>0.01016</length>
+          </cylinder>
+        </geometry>
+      </visual>
+    </link>
+    <link name="left_back_wheel">
+      <pose>-0.09398 -0.0600075 0.022820312 0 1.57079632679 0</pose>
+      <gravity>1</gravity>
+      <inertial>
+        <mass>0.063819</mass>
+        <inertia> <!-- inertias are tricky to compute -->
+          <!-- http://gazebosim.org/tutorials?tut=inertia&cat=build_robot -->
+          <ixx>0.004254</ixx>
+          <ixy>0.0</ixy>
+          <ixz>0.0</ixz>
+          <iyy>0.002181</iyy>
+          <iyz>0.0</iyz>
+          <izz>0.002181</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <cylinder>
+            <radius>0.0365125</radius>
+            <length>0.01016</length>
+          </cylinder>
+        </geometry>
+        <surface>
+          <friction>
+            <torsional>
+              <coefficient>0.5</coefficient>
+              <patch_radius>0.01</patch_radius>
+              <ode>
+                <slip>0.2</slip>
+
+              </ode>
+            </torsional>
+            <ode>
+              <mu>0.998000</mu>
+              <mu2>0.998000</mu2>
+              <fdir1>0.000000 0.000000 0.000000</fdir1>
+              <slip1>0.02000</slip1>
+              <slip2>0.020000</slip2>
+            </ode>
+          </friction>
+          <bounce>
+            <restitution_coefficient>0.000000</restitution_coefficient>
+            <threshold>100000.000000</threshold>
+          </bounce>
+          <contact>
+            <ode>
+              <soft_cfm>0.000000</soft_cfm>
+              <soft_erp>0.200000</soft_erp>
+              <kp>100000.000000</kp>
+              <kd>1.000000</kd>
+              <max_vel>100.000000</max_vel>
+              <min_depth>0.001000</min_depth>
+            </ode>
+          </contact>
+        </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <cylinder>
+            <radius>0.0365125</radius>
+            <length>0.01016</length>
+          </cylinder>
+        </geometry>
+      </visual>
+    </link>
+    <link name="right_back_wheel">
+      <pose>0.09398 -0.0600075 0.022820312 0 1.57079632679 0</pose>
+      <gravity>1</gravity>
+      <inertial>
+        <mass>0.063819</mass>
+        <inertia> <!-- inertias are tricky to compute -->
+          <!-- http://gazebosim.org/tutorials?tut=inertia&cat=build_robot -->
+          <ixx>0.004254</ixx>
+          <ixy>0.0</ixy>
+          <ixz>0.0</ixz>
+          <iyy>0.002181</iyy>
+          <iyz>0.0</iyz>
+          <izz>0.002181</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <cylinder>
+            <radius>0.0365125</radius>
+            <length>0.01016</length>
+          </cylinder>
+        </geometry>
+        <surface>
+          <friction>
+            <torsional>
+              <coefficient>0.5</coefficient>
+              <patch_radius>0.01</patch_radius>
+              <ode>
+                <slip>0.2</slip>
+
+              </ode>
+            </torsional>
+            <ode>
+              <mu>0.998000</mu>
+              <mu2>0.998000</mu2>
+              <fdir1>0.000000 0.000000 0.000000</fdir1>
+              <slip1>0.02000</slip1>
+              <slip2>0.020000</slip2>
+            </ode>
+          </friction>
+          <bounce>
+            <restitution_coefficient>0.000000</restitution_coefficient>
+            <threshold>100000.000000</threshold>
+          </bounce>
+          <contact>
+            <ode>
+              <soft_cfm>0.000000</soft_cfm>
+              <soft_erp>0.200000</soft_erp>
+              <kp>100000.000000</kp>
+              <kd>1.000000</kd>
+              <max_vel>100.000000</max_vel>
+              <min_depth>0.001000</min_depth>
+            </ode>
+          </contact>
+        </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <cylinder>
+            <radius>0.0365125</radius>
+            <length>0.01016</length>
+          </cylinder>
+        </geometry>
+      </visual>
+    </link>
+    <joint type="revolute" name="left_front">
+      <pose>0 0 0 0 0 0</pose>
+      <child>left_front_wheel</child>
+      <parent>chassis</parent>
+      <physics>
+        <provide_feedback>
+          1
+        </provide_feedback>
+      </physics>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <velocity>65.346888889</velocity>
+        </limit>     
+        <dynamics>
+          <damping>0.1</damping>
+          <friction>0.7</friction>
+        </dynamics>
+      </axis>
+    </joint>
+    <joint type="revolute" name="right_front">
+      <pose>0 0 0 0 0 0</pose>
+      <child>right_front_wheel</child>
+      <parent>chassis</parent>
+      <physics>
+        <provide_feedback>
+          1
+        </provide_feedback>
+      </physics> 
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <velocity>65.346888889</velocity>
+        </limit>     
+        <dynamics>
+          <damping>0.1</damping>
+          <friction>0.7</friction>
+        </dynamics>
+      </axis>
+    </joint>
+    <joint type="revolute" name="left_rear">
+      <pose>0 0 0 0 0 0</pose>
+      <child>left_back_wheel</child>
+      <parent>chassis</parent>
+      <physics>
+        <provide_feedback>
+          1
+        </provide_feedback>
+      </physics>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <velocity>65.346888889</velocity>
+        </limit>
+        <dynamics>
+          <damping>0.1</damping>
+          <friction>0.7</friction>
+        </dynamics>
+      </axis>
+    </joint>
+    <joint type="revolute" name="right_rear">
+      <pose>0 0 0 0 0 0</pose>
+      <child>right_back_wheel</child>
+      <parent>chassis</parent>
+      <physics>
+        <provide_feedback>
+          1
+        </provide_feedback>
+      </physics>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <velocity>65.346888889</velocity>
+        </limit>
+        <dynamics>
+          <damping>0.1</damping>
+          <friction>0.7</friction>
+        </dynamics>
+      </axis>
+    </joint>
+    <plugin name='skidSteer' filename='libskidSteer.so'>
+      <skidsteer_motor_max_torque>8.52</skidsteer_motor_max_torque>
+      <skidsteer_motor_max_speed>1560.833333333</skidsteer_motor_max_speed>
+      <skidsteer_equilibrium_max>1.5</skidsteer_equilibrium_max>
+    </plugin>
+  </model>
+</sdf>
