@@ -5,10 +5,12 @@
 #include <sys/ioctl.h>
 #include <cerrno>
 #include <cstring>		//for strerror()
+#include <sstream>
 
 using namespace std;
 
 
+const char serialPort::typicalPortName[] = "/dev/ttyACM0";
 
 serialPort::serialPort(const char* portName) {
   fileHandle = open(portName, O_RDWR | O_NOCTTY | O_NDELAY);
@@ -56,6 +58,15 @@ int serialPort::available() {
   int bytes;
   ioctl(fileHandle, FIONREAD, &bytes);
   return(bytes);
+}
+
+void serialPort::controlMotors(bool dir1, int speed1, bool dir2, int speed2) {
+	if(speed1 < 0 || speed1 > 255 || speed2 < 0 || speed1 > 255)
+		throw out_of_range("Motor speed must be between 0 and 255.");
+
+	stringstream output;
+	output << dir1 << ',' << dir2 << ',' << speed1 << ',' << speed2;
+	write(output.str());		//There is an unnecessary copy here
 }
 
 serialPort::~serialPort() {
