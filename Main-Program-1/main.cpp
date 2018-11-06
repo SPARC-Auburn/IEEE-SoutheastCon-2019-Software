@@ -2,7 +2,7 @@
 #include <unistd.h>
 
 int main (){    
-    serialPort arduino (serialPort::typicalPortName);
+    serialPort arduino ("/dev/ttyACM1");
     while (1){
         arduino.controlMotors(1, 100, 1, 100);
         sleep(3);
