@@ -65,7 +65,7 @@ void serialPort::controlMotors(bool dir1, int speed1, bool dir2, int speed2) {
 		throw out_of_range("Motor speed must be between 0 and 255.");
 
 	stringstream output;
-	output << dir1 << ',' << dir2 << ',' << speed1 << ',' << speed2;
+	output << dir1 << ',' << speed1 << ',' << dir2 << ',' << speed2;
 	write(output.str());		//There is an unnecessary copy here
 }
 

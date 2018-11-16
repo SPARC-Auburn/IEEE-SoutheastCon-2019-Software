@@ -2,12 +2,24 @@
 #include <unistd.h>
 
 int main (){    
-    serialPort arduino (serialPort::typicalPortName);
-    while (1){
-        arduino.controlMotors(1, 100, 1, 100);
-        sleep(3);
-        arduino.controlMotors(0, 0, 0, 0);
-        sleep(3);
-    }    
+    serialPort arduino ("/dev/ttyACM0");
+   while (1){
+        arduino.controlMotors(1, 255, 1, 255);
+        sleep(2);
+	arduino.controlMotors(0, 0, 0, 0);
+        sleep(2);
+	arduino.controlMotors(0, 150, 0, 150);
+        sleep(2);
+	arduino.controlMotors(0, 0, 0, 0);
+        sleep(2);
+	arduino.controlMotors(1, 255, 0, 255);
+        sleep(2);
+	arduino.controlMotors(0, 0, 0, 0);
+        sleep(2);
+	arduino.controlMotors(0, 150, 1, 150);
+        sleep(2);
+	arduino.controlMotors(0, 0, 0, 0);
+        sleep(2);
+   }    
     return 0;
 }
