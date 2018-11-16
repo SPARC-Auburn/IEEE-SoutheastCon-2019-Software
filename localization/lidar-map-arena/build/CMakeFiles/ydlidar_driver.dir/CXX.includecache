@@ -1,4 +1,4 @@
-#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
 
 #IncludeRegexScan: ^.*$
 
@@ -6,19 +6,19 @@
 
 #IncludeRegexTransform: 
 
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/include/CYdLidar.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/include/CYdLidar.h
 line_feature.h
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/include/line_feature.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/include/line_feature.h
 utils.h
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/include/utils.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/include/utils.h
 ydlidar_driver.h
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/include/ydlidar_driver.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/include/ydlidar_driver.h
 math.h
 -
 matrix/math.hpp
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/include/matrix/math.hpp
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/include/matrix/math.hpp
 
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/include/line_feature.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/include/line_feature.h
 iostream
 -
 stdio.h
@@ -26,9 +26,9 @@ stdio.h
 math.h
 -
 utilities.h
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/include/utilities.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/include/utilities.h
 
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/include/lock.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/include/lock.h
 sys/file.h
 -
 sys/socket.h
@@ -68,7 +68,7 @@ math.h
 lockdev.h
 -
 
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/include/locker.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/include/locker.h
 conio.h
 -
 windows.h
@@ -96,7 +96,7 @@ sys/stat.h
 errno.h
 -
 
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/include/serial.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/include/serial.h
 limits
 -
 vector
@@ -108,11 +108,11 @@ cstring
 sstream
 -
 v8stdint.h
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/include/v8stdint.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/include/v8stdint.h
 
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/include/thread.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/include/thread.h
 v8stdint.h
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/include/v8stdint.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/include/v8stdint.h
 conio.h
 -
 windows.h
@@ -126,9 +126,9 @@ pthread.h
 assert.h
 -
 
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/include/timer.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/include/timer.h
 v8stdint.h
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/include/v8stdint.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/include/v8stdint.h
 assert.h
 -
 time.h
@@ -142,15 +142,15 @@ sys/time.h
 unistd.h
 -
 
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/include/utilities.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/include/utilities.h
 cmath
 -
 vector
 -
 
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/include/utils.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/include/utils.h
 
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/include/v8stdint.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/include/v8stdint.h
 stddef.h
 -
 stdio.h
@@ -158,7 +158,7 @@ stdio.h
 stdint.h
 -
 
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/include/ydlidar_driver.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/include/ydlidar_driver.h
 stdlib.h
 -
 atomic
@@ -166,13 +166,13 @@ atomic
 list
 -
 locker.h
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/include/locker.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/include/locker.h
 serial.h
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/include/serial.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/include/serial.h
 thread.h
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/include/thread.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/include/thread.h
 
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/matrix/matrix/Matrix.hpp
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/matrix/matrix/Matrix.hpp
 cstdio
 -
 cstring
@@ -182,45 +182,45 @@ iostream
 iomanip
 -
 math.hpp
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/matrix/matrix/math.hpp
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/matrix/matrix/math.hpp
 
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/matrix/matrix/SquareMatrix.hpp
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/matrix/matrix/SquareMatrix.hpp
 math.hpp
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/matrix/matrix/math.hpp
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/matrix/matrix/math.hpp
 helper_functions.hpp
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/matrix/matrix/helper_functions.hpp
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/matrix/matrix/helper_functions.hpp
 
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/matrix/matrix/Vector.hpp
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/matrix/matrix/Vector.hpp
 math.hpp
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/matrix/matrix/math.hpp
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/matrix/matrix/math.hpp
 
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/matrix/matrix/Vector2.hpp
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/matrix/matrix/Vector2.hpp
 math.hpp
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/matrix/matrix/math.hpp
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/matrix/matrix/math.hpp
 
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/matrix/matrix/Vector3.hpp
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/matrix/matrix/Vector3.hpp
 math.hpp
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/matrix/matrix/math.hpp
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/matrix/matrix/math.hpp
 
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/matrix/matrix/helper_functions.hpp
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/matrix/matrix/helper_functions.hpp
 math.hpp
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/matrix/matrix/math.hpp
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/matrix/matrix/math.hpp
 
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/matrix/matrix/math.hpp
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/matrix/matrix/math.hpp
 stdlib_imports.hpp
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/matrix/matrix/stdlib_imports.hpp
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/matrix/matrix/stdlib_imports.hpp
 Matrix.hpp
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/matrix/matrix/Matrix.hpp
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/matrix/matrix/Matrix.hpp
 SquareMatrix.hpp
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/matrix/matrix/SquareMatrix.hpp
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/matrix/matrix/SquareMatrix.hpp
 Vector.hpp
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/matrix/matrix/Vector.hpp
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/matrix/matrix/Vector.hpp
 Vector2.hpp
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/matrix/matrix/Vector2.hpp
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/matrix/matrix/Vector2.hpp
 Vector3.hpp
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/matrix/matrix/Vector3.hpp
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/matrix/matrix/Vector3.hpp
 
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/matrix/matrix/stdlib_imports.hpp
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/matrix/matrix/stdlib_imports.hpp
 cmath
 -
 cstdlib
@@ -228,33 +228,33 @@ cstdlib
 cinttypes
 -
 
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/src/CYdLidar.cpp
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/src/CYdLidar.cpp
 CYdLidar.h
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/src/CYdLidar.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/src/CYdLidar.h
 common.h
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/src/common.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/src/common.h
 map
 -
 
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/src/common.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/src/common.h
 impl/windows/win.h
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/src/impl/windows/win.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/src/impl/windows/win.h
 impl/windows/win_serial.h
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/src/impl/windows/win_serial.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/src/impl/windows/win_serial.h
 impl/unix/unix.h
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/src/impl/unix/unix.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/src/impl/unix/unix.h
 impl/unix/unix_serial.h
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/src/impl/unix/unix_serial.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/src/impl/unix/unix_serial.h
 locker.h
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/src/locker.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/src/locker.h
 serial.h
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/src/serial.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/src/serial.h
 thread.h
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/src/thread.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/src/thread.h
 timer.h
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/src/timer.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/src/timer.h
 
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/src/impl/unix/unix.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/src/impl/unix/unix.h
 stdio.h
 -
 stdint.h
@@ -296,7 +296,7 @@ sys/select.h
 time.h
 -
 
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/src/impl/unix/unix_serial.cpp
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/src/impl/unix/unix_serial.cpp
 stdio.h
 -
 string.h
@@ -344,13 +344,13 @@ mach/clock.h
 mach/mach.h
 -
 unix_serial.h
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/src/impl/unix/unix_serial.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/src/impl/unix/unix_serial.h
 lock.h
 -
 IOKit/serial/ioss.h
 -
 
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/src/impl/unix/unix_serial.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/src/impl/unix/unix_serial.h
 pthread.h
 -
 assert.h
@@ -358,13 +358,13 @@ assert.h
 termios.h
 -
 serial.h
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/src/impl/unix/serial.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/src/impl/unix/serial.h
 
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/src/impl/unix/unix_timer.cpp
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/src/impl/unix/unix_timer.cpp
 timer.h
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/src/impl/unix/timer.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/src/impl/unix/timer.h
 
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/src/impl/windows/win.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/src/impl/windows/win.h
 stddef.h
 -
 stdio.h
@@ -378,35 +378,35 @@ process.h
 direct.h
 -
 
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/src/impl/windows/win_serial.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/src/impl/windows/win_serial.h
 serial.h
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/src/impl/windows/serial.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/src/impl/windows/serial.h
 time.h
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/src/impl/windows/time.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/src/impl/windows/time.h
 tchar.h
 -
 windows.h
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/src/impl/windows/windows.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/src/impl/windows/windows.h
 
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/src/line_feature.cpp
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/src/line_feature.cpp
 line_feature.h
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/src/line_feature.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/src/line_feature.h
 
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/src/serial.cpp
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/src/serial.cpp
 algorithm
 -
 alloca.h
 -
 serial.h
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/src/serial.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/src/serial.h
 common.h
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/src/common.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/src/common.h
 
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/src/ydlidar_driver.cpp
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/src/ydlidar_driver.cpp
 common.h
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/src/common.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/src/common.h
 ydlidar_driver.h
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/src/ydlidar_driver.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/src/ydlidar_driver.h
 math.h
 -
 

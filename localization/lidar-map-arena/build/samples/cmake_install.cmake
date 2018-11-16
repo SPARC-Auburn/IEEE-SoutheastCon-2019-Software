@@ -1,4 +1,4 @@
-# Install script for directory: /home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/samples
+# Install script for directory: /home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/samples
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -30,10 +30,5 @@ endif()
 # Install shared libraries without execute permission?
 if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
   set(CMAKE_INSTALL_SO_NO_EXE "1")
-endif()
-
-# Is this installation the result of a crosscompile?
-if(NOT DEFINED CMAKE_CROSSCOMPILING)
-  set(CMAKE_CROSSCOMPILING "FALSE")
 endif()
 

@@ -1,4 +1,4 @@
-#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
 
 #IncludeRegexScan: ^.*$
 
@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/include/lock.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/include/lock.h
 sys/file.h
 -
 sys/socket.h
@@ -46,9 +46,9 @@ math.h
 lockdev.h
 -
 
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/src/lock.c
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/src/lock.c
 lock.h
-/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/src/lock.h
+/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/src/lock.h
 stdio.h
 -
 unistd.h

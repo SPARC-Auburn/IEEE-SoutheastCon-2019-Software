@@ -76,10 +76,10 @@ int main(int argc, char * argv[])
     uint64_t pre_time;
 
     Mat image = Mat::zeros( 1000, 1000, CV_8UC3 );   
-    
+    ofstream myfile;
 
     while(!running){
-		bool hardError;
+	bool hardError;
         LaserScan scan;
         LaserScan syncscan;
         PointCloud pc;
@@ -103,8 +103,10 @@ int main(int argc, char * argv[])
             int maxRange = 4; // max distance allowed from lidar
             cv::circle(image, Point(500,500), 1, Scalar(220, 220, 220 ),  1, 8);
             cv::circle(image, Point(500,500), 499, Scalar(220, 220, 220),  1, 8);
+	    myfile.open ("data.txt");
             for(std::vector<point_info>::const_iterator it = pc.points.begin(); it != pc.points.end(); it++) {
-                //fprintf(stdout, "x: %f,  y: %f, z: %f\n", (*it).x, (*it).y, (*it).z);    
+                //fprintf(stdout, "x: %f,  y: %f, z: %f\n", (*it).x, (*it).y, (*it).z); 
+		myfile <<  (*it).x << "," << (*it).y << "\n";
                 double distance = sqrt((((*it).x)*((*it).x))+(((*it).y)*((*it).y)));              
                 if (distance <= maxRange && distance > 0){
                     int picx = (*it).x*125+500;
@@ -112,7 +114,9 @@ int main(int argc, char * argv[])
                     cv::circle(image, Point(picx,picy), 1, Scalar(0, 220, 0 ),  1, 8);
                 }                
              }
-            //imshow("Image",image);
+	    myfile <<  "----\n";
+	    myfile.close();
+            imshow("Image",image);
             // Press  ESC on keyboard to exit
             char c=(char)waitKey(25);
             if(c==27)

@@ -6,8 +6,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/ydlidar_driver_static.dir/src/lock.c.o"
   "CMakeFiles/ydlidar_driver_static.dir/src/impl/unix/unix_serial.cpp.o"
   "CMakeFiles/ydlidar_driver_static.dir/src/impl/unix/unix_timer.cpp.o"
-  "/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/lib/libydlidar_driver.pdb"
-  "/home/matthew/IEEE-SoutheastCon-2019/Electrical-Software/localization/lidar-map-arena/sdk/lib/libydlidar_driver.a"
+  "/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/lib/libydlidar_driver.pdb"
+  "/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/sdk/lib/libydlidar_driver.a"
 )
 
 # Per-language clean rules from dependency scanning.
