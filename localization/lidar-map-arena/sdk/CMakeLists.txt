@@ -40,9 +40,13 @@ SET_TARGET_PROPERTIES(ydlidar_driver_static PROPERTIES OUTPUT_NAME "ydlidar_driv
 SET_TARGET_PROPERTIES(ydlidar_driver PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 SET_TARGET_PROPERTIES(ydlidar_driver_static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 
+find_package( OpenCV REQUIRED )
+target_link_libraries( ydlidar_driver ${OpenCV_LIBS} )
+
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 IF (WIN32)
 ELSE()
 target_link_libraries(ydlidar_driver rt pthread)
 target_link_libraries(ydlidar_driver_static rt pthread)
-ENDIF()                    
+ENDIF()      
+
