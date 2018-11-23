@@ -69,6 +69,34 @@ void serialPort::controlMotors(bool dir1, int speed1, bool dir2, int speed2) {
 	write(output.str());		//There is an unnecessary copy here
 }
 
+void serialPort::turnLeft(int speed){
+  // speed = int from 0 to 255
+  // TODO: need to verify correct direction
+  controlMotors(1,speed,0,speed);
+}
+
+void serialPort::turnRight(int speed){
+  // speed = int from 0 to 255
+  // TODO: need to verify correct direction
+  controlMotors(0,speed,1,speed);
+}
+
+void serialPort::goForward(int speed){
+  // speed = int from 0 to 255
+  // TODO: need to verify correct direction
+  controlMotors(1,speed,1,speed);
+}
+
+void serialPort::goBackward(int speed){
+  // speed = int from 0 to 255
+  // TODO: need to verify correct direction
+  controlMotors(0,speed,0,speed);
+}
+
+void serialPort::stopMotors(){
+  controlMotors(0,0,0,0);
+}
+
 serialPort::~serialPort() {
   close(fileHandle);
 }

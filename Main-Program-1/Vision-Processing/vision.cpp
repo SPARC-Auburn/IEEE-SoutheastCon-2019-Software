@@ -8,6 +8,7 @@
 #include <opencv2/videoio.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
+#include <raspicam/raspicam_cv.h>
 #include <time.h>
 #include <math.h>
 
@@ -18,22 +19,16 @@ const int MAX_AREA = 100000;
 using namespace cv;
 using namespace std;
 
-int main(int argc, char **argv)
-{
-	cout << CV_VERSION << endl; // print version of opencv
-	string imageName("../images/4.jpg"); // by default
-	if (argc > 1)
-	{
-		imageName = argv[1];
-	}
+int getAngle2ClosestDebris(){
 	Mat image, hsv, threshed;
-	image = imread(imageName.c_str(), IMREAD_COLOR); // Read the file
-	if (image.empty())// Check for invalid input
-	{ 
-		cout << "Could not open or find the image" << std::endl;
-		return -1;
-	}
-	
+	raspicam::RaspiCam_Cv Camera;
+	//set camera params
+	Camera.set( CV_CPU_POPCNT, CV_8UC1 );
+	if (!Camera.open()) {cerr<<"Error opening the camera"<<endl;return -1;}
+	//Start capture
+	Camera.grab();
+	Camera.retrieve(image);
+	Camera.release();
 	// HSV Threshold values for Red, Blue, Yellow, Green
 	Scalar lowerThreshes[] = {Scalar(0, 200, 20), Scalar(95, 200, 20), Scalar(25, 200, 20), Scalar(45, 200, 20)};
 	Scalar upperThreshes[] = {Scalar(20, 255, 255), Scalar(110, 256, 256), Scalar(35, 256, 256), Scalar(60, 256, 256)};
@@ -51,9 +46,12 @@ int main(int argc, char **argv)
 	// Convert to HSV
 	cvtColor(image, hsv, COLOR_BGR2HSV);
 	
+	// Declare variables to find desired angle
+	double largestWidth = 0;
+	double largestWidthAngle = 0;
+
 	// Loop through each of the four colors
-	for (int index = 0; index < 4; index++)
-	{
+	for (int index = 0; index < 4; index++)	{
 		// Generate contours
 		contours.clear();
 		hierarchy.clear();
@@ -70,7 +68,6 @@ int main(int argc, char **argv)
 		vector<Rect> boundRect(contours.size());
 		vector<Point2f> center(contours.size());
 		vector<float> radius(contours.size());
-
 		// Loop through each contour
 		for (int i = 0; i < contours.size(); i++)
 		{
@@ -103,19 +100,27 @@ int main(int argc, char **argv)
 				{					
 					rectangle(image, boundRect[i].tl(), boundRect[i].br(), colors[index], 4, 8, 0);
 					cout << setprecision(2) << numObjects << ". " << setprecision(4) << labels[index] << " blck \t@ " << center[i] << "\t" << setprecision(3) << angle  << " degrees" << " \tw/ width " << boundRect[i].size().width << " \tand height " << boundRect[i].size().height << "\n";
+					if (boundRect[i].size().width > largestWidth){
+						largestWidth = boundRect[i].size().width;
+						largestWidthAngle = angle;
+					}
 				}
 				else // must be ball
 				{
 					circle(image, center[i], (int)radius[i], colors[index], 4, 8, 0);
 					cout << setprecision(2) << numObjects << ". " << setprecision(4) << labels[index] << " ball \t@ " << center[i] << "\t" << setprecision(3)  << angle << " degrees" << " \tw/ radius " << radius[i] << "\n";
+					if (boundRect[i].size().width > largestWidth){
+						largestWidth = boundRect[i].size().width;
+						largestWidthAngle = angle;
+					}
 				}
 			}
+			
 		}
 	}
-
-	line(image, Point(image.cols/2,image.rows), Point(image.cols/2,0), Scalar(256, 256, 256), 4, 8, 0);
-	namedWindow("Display window", WINDOW_NORMAL); // Create a window for display.
-	imshow("Display window", image);			  // Show our image inside it.
-	waitKey(0);									  // Wait for a keystroke in the window
-	return 0;
+	//line(image, Point(image.cols/2,image.rows), Point(image.cols/2,0), Scalar(256, 256, 256), 4, 8, 0);
+	//namedWindow("Display window", WINDOW_NORMAL); // Create a window for display.
+	//imshow("Display window", image);			  // Show our image inside it.
+	//waitKey(0);									  // Wait for a keystroke in the window
+	return largestWidthAngle;
 }
