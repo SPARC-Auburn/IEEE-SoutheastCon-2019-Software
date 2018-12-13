@@ -1,0 +1,15 @@
+cmake_minimum_required(VERSION 2.8)
+project(MainProgram)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF )
+find_package(Boost 1.68.0 REQUIRED)
+find_package(OpenCV REQUIRED)
+IF(Boost_FOUND)
+  INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
+  LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
+ENDIF(Boost_FOUND)
+
+add_executable( MainProgram main.cpp )
+
+target_link_libraries( MainProgram ${Boost_LIBRARIES} ${OpenCV_LIBS})
