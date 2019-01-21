@@ -23,15 +23,17 @@ int getAngle2ClosestDebris(){
 	Mat image, hsv, threshed;
 	raspicam::RaspiCam_Cv Camera;
 	//set camera params
-	Camera.set( CV_CPU_POPCNT, CV_8UC1 );
+	Camera.set( CV_CPU_POPCNT, CV_8UC3 );
 	if (!Camera.open()) {cerr<<"Error opening the camera"<<endl;return -1;}
+	cout << "Starting Image Capture...\n"; 
 	//Start capture
 	Camera.grab();
 	Camera.retrieve(image);
-	Camera.release();
+	Camera.release();	
+	flip(image,image,-1);
 	// HSV Threshold values for Red, Blue, Yellow, Green
-	Scalar lowerThreshes[] = {Scalar(0, 200, 20), Scalar(95, 200, 20), Scalar(25, 200, 20), Scalar(45, 200, 20)};
-	Scalar upperThreshes[] = {Scalar(20, 255, 255), Scalar(110, 256, 256), Scalar(35, 256, 256), Scalar(60, 256, 256)};
+	Scalar lowerThreshes[] = {Scalar(0, 100, 20), Scalar(95, 100, 20), Scalar(15, 100, 20), Scalar(45, 100, 20)};
+	Scalar upperThreshes[] = {Scalar(15, 255, 255), Scalar(110, 256, 256), Scalar(35, 256, 256), Scalar(60, 256, 256)};
 	Scalar colors[] = {Scalar(0, 0, 255), Scalar(255, 0, 0), Scalar(0, 255, 255), Scalar(0, 255, 0)};
 	String labels[] = {"Red", "Blue", "Yellow", "Green"};
 
@@ -60,9 +62,9 @@ int getAngle2ClosestDebris(){
 		findContours(threshed, contours, hierarchy, RETR_TREE, CHAIN_APPROX_SIMPLE, Point(0, 0));
 
 		// Show window of each color
-		//namedWindow(labels[index], WINDOW_NORMAL); // Create a window for display.
-		//imshow(labels[index], threshed);			  // Show our image inside it.
-
+		namedWindow(labels[index], WINDOW_NORMAL); // Create a window for display.
+		imshow(labels[index], threshed);			  // Show our image inside it.
+		waitKey(1);		
 		// Declare variables
 		vector<vector<Point>> contours_poly(contours.size());
 		vector<Rect> boundRect(contours.size());
@@ -118,9 +120,11 @@ int getAngle2ClosestDebris(){
 			
 		}
 	}
-	//line(image, Point(image.cols/2,image.rows), Point(image.cols/2,0), Scalar(256, 256, 256), 4, 8, 0);
-	//namedWindow("Display window", WINDOW_NORMAL); // Create a window for display.
-	//imshow("Display window", image);			  // Show our image inside it.
-	//waitKey(0);									  // Wait for a keystroke in the window
+	line(image, Point(image.cols/2,image.rows), Point(image.cols/2,0), Scalar(256, 256, 256), 4, 8, 0);
+	namedWindow("Display window", WINDOW_NORMAL); // Create a window for display.
+	imshow("Display window", image);			  // Show our image inside it.
+	waitKey(1);									  // Wait for a keystroke in the window
 	return largestWidthAngle;
 }
+
+
