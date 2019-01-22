@@ -173,6 +173,7 @@ int findLargestObject(vector<DebrisObject> objects){
 int getAngle2ClosestDebris(){
 	Mat image;
 	float angle = 361.0;
+	float divided_result = 0;
 	Scalar colors[] = {Scalar(0, 0, 255), Scalar(255, 0, 0), Scalar(0, 255, 255), Scalar(0, 255, 0)};
 	String labels[] = {"Red", "Blue", "Yellow", "Green"};
 	image = takePicture();	
@@ -186,24 +187,23 @@ int getAngle2ClosestDebris(){
 		}
 	}	
 	cout << "Number of objects = " << debris.size() << "\n";
+	if (debris.size()>0){
+		// Find angle to largest debris in view
+		int largestDebris = findLargestObject(debris);
+		cout << "Largest Debris:";
+		line(image, Point(image.cols/2,image.rows), Point(debris[largestDebris].x,debris[largestDebris].y), colors[debris[largestDebris].colorIndex], 4, 8, 0); // draw line from bottom center of image to center of object	
+		line(image, Point(image.cols/2,image.rows), Point(image.cols/2,0), Scalar(256, 256, 256), 4, 8, 0);
+		namedWindow("Display window", WINDOW_NORMAL); // Create a window for display.
+		imshow("Display window", image);			  // Show our image inside it.
+		waitKey(1);									  // Wait for a keystroke in the window
+		divided_result = (float)(debris[largestDebris].x - image.cols/2)/(float)(image.rows - debris[largestDebris].y);
+		angle = atan(divided_result)* 180 / PI; // Find angle to center of object from centerline
+		return int(angle);
+	}
+	else {
+		return 0; //no object detected angle
+	}	
 	
-	// Find angle to largest debris in view
-	int largestDebris = findLargestObject(debris);
-	cout << "Largest Debris:";
-	line(image, Point(image.cols/2,image.rows), Point(debris[largestDebris].x,debris[largestDebris].y), colors[debris[largestDebris].colorIndex], 4, 8, 0); // draw line from bottom center of image to center of object	
-	line(image, Point(image.cols/2,image.rows), Point(image.cols/2,0), Scalar(256, 256, 256), 4, 8, 0);
-	namedWindow("Display window", WINDOW_NORMAL); // Create a window for display.
-	imshow("Display window", image);			  // Show our image inside it.
-	waitKey(1);									  // Wait for a keystroke in the window
-	cout << "x= "<<debris[largestDebris].x<<" y="<<debris[largestDebris].y<<"\n";
-	cout << "cols/2= "<<image.cols/2<<" rows="<<image.rows<<"\n";
-	cout << "x -cols/2= "<<debris[largestDebris].x - image.cols/2<<" rows-y="<<image.rows - debris[largestDebris].y<<"\n";
-	float divided_result = ((debris[largestDebris].x - image.cols/2)/(image.rows - debris[largestDebris].y));
-	cout << "divided_result = " << divided_result << "\n";
-	angle = atan(divided_result)* 180 / PI; // Find angle to center of object from centerline
-	//angle = atan(int(debris[largestDebris].x - image.cols/2)/int(image.rows - debris[largestDebris].y))* 180 / PI; // Find angle to center of object from centerline
-	cout << "angle= "<<angle<<"\n";
-	return int(angle);
 }
 
 

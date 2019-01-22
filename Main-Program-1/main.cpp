@@ -19,7 +19,7 @@ int main (){
                         //arduino.turnLeft(100);
                 //else
                         //arduino.turnRight(100);
-                usleep(10);
+                //usleep(10);
         }
         //arduino.stopMotors();    
         return 0;
