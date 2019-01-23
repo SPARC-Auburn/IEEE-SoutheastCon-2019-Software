@@ -10,6 +10,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <raspicam/raspicam_cv.h>
 #include <time.h>
+#include <ctime>
 #include <math.h>
 
 const int MIN_AREA = 4000;
@@ -171,6 +172,11 @@ int findLargestObject(vector<DebrisObject> objects){
 }
 
 int getAngle2ClosestDebris(){
+	//Start Time Measurement
+	using namespace std;
+	clock_t begin = clock();
+	
+	// Setup and get picture
 	Mat image;
 	float angle = 361.0;
 	float divided_result = 0;
@@ -187,23 +193,35 @@ int getAngle2ClosestDebris(){
 		}
 	}	
 	cout << "Number of objects = " << debris.size() << "\n";
+	
+	// Find angle to largest debris in view
 	if (debris.size()>0){
-		// Find angle to largest debris in view
+		
 		int largestDebris = findLargestObject(debris);
 		cout << "Largest Debris:";
 		line(image, Point(image.cols/2,image.rows), Point(debris[largestDebris].x,debris[largestDebris].y), colors[debris[largestDebris].colorIndex], 4, 8, 0); // draw line from bottom center of image to center of object	
 		line(image, Point(image.cols/2,image.rows), Point(image.cols/2,0), Scalar(256, 256, 256), 4, 8, 0);
-		namedWindow("Display window", WINDOW_NORMAL); // Create a window for display.
-		imshow("Display window", image);			  // Show our image inside it.
-		waitKey(1);									  // Wait for a keystroke in the window
+		//namedWindow("Display window", WINDOW_NORMAL); // Create a window for display.
+		//imshow("Display window", image);			  // Show our image inside it.
+		//waitKey(1);									  // Wait for a keystroke in the window
 		divided_result = (float)(debris[largestDebris].x - image.cols/2)/(float)(image.rows - debris[largestDebris].y);
 		angle = atan(divided_result)* 180 / PI; // Find angle to center of object from centerline
+		
+		// Determine Elapsed Time
+		clock_t end = clock();
+		double elapsed_secs = double(end-begin)/ CLOCKS_PER_SEC;
+		double frequency = 1/elapsed_secs;
+		cout << "Elapsed Time = " << elapsed_secs << "s, Frequency = " << frequency << "Hz \n";	
 		return int(angle);
 	}
 	else {
+		// Determine Elapsed Time
+		clock_t end = clock();
+		double elapsed_secs = double(end-begin)/ CLOCKS_PER_SEC;
+		double frequency = 1/elapsed_secs;
+		cout << "Elapsed Time = " << elapsed_secs << "s, Frequency = " << frequency << "Hz \n";	
 		return 0; //no object detected angle
 	}	
-	
 }
 
 
