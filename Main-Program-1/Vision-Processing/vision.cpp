@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
@@ -56,7 +57,7 @@ namespace IEEE_VISION{
 			Scalar upperThreshes[4] = {Scalar(15, 255, 255), Scalar(110, 256, 256), Scalar(35, 256, 256), Scalar(60, 256, 256)};
 			Scalar colors[4] = {Scalar(0, 0, 255), Scalar(255, 0, 0), Scalar(0, 255, 255), Scalar(0, 255, 0)};
 			String labels[4] = {"Red", "Blue", "Yellow", "Green"};
-			Mat kernel = getStructuringElement(MORPH_ELLIPSE, Size(5, 5));
+			Mat kernel = getStructuringElement(MORPH_CROSS, Size(3, 3));
 			Size resolution;
 			vector<Rect> boundRect;
 			vector<DebrisObject> objectProperties;
@@ -83,6 +84,8 @@ namespace IEEE_VISION{
 			for(int iii = 0; iii < 4; iii++){
 				getObjectProperties(iii);
 			}
+			if(VISION_DEBUG_IMAGE)
+			imwrite("Test.jpg",image);
 			if(VISION_DEBUG_TEXT)
 			cout << "Number of objects = " << objectProperties.size() << endl;
 			// Find angle to largest debris in view
@@ -128,9 +131,13 @@ namespace IEEE_VISION{
 			// Generate contours
 			contours.clear();
 			hierarchy.clear();
+			clock_t begin = clock();
 			inRange(hsv, lowerThreshes[index], upperThreshes[index], threshed);
 			dilate(threshed, threshed, kernel);
-			findContours(threshed, contours, hierarchy, RETR_TREE, CHAIN_APPROX_SIMPLE, Point(0, 0));
+			findContours(threshed, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE, Point(0, 0));
+			if(VISION_DEBUG_TEXT)
+			cout << double(clock()-begin)/CLOCKS_PER_SEC << endl;
+			
 			// Show window of each color
 			//namedWindow(labels[index], WINDOW_NORMAL); // Create a window for display.
 			//imshow(labels[index], threshed);			  // Show our image inside it.
@@ -177,7 +184,7 @@ namespace IEEE_VISION{
 						rectangle(image, boundRect.tl(), boundRect.br(), Scalar(200, 200, 200), 4, 8, 0);
 						//cout << setprecision(2) << numObjects << ". " << setprecision(4) << labels[index] << " Fill Error! \t@ " << center[i] << "\t" << setprecision(3) << " \tw/ width " << boundRect[i].size().width << " \tand height " << boundRect[i].size().height << "\t percent filled " << percentFilled << "\n";
 					}
-					else if (percentFilled > 0.85) // must be block
+					else
 					{					
 						if(VISION_DEBUG_IMAGE)
 						rectangle(image, boundRect.tl(), boundRect.br(), colors[index], 4, 8, 0);
@@ -187,22 +194,8 @@ namespace IEEE_VISION{
 						//	largestWidth = boundRect[i].size().width;
 						//	largestWidthAngle = angle;
 						//	line(image, Point(image.cols/2,image.rows), center[i], colors[index], 4, 8, 0); // draw line from bottom center of image to center of object
-						//}
+						//
 					}
-					else // must be ball
-					{
-						if(VISION_DEBUG_IMAGE)
-						//circle(image, c, (int)r, colors[index], 4, 8, 0);
-						//cout << setprecision(2) << numObjects << ". " << setprecision(4) << labels[index] << " ball \t@ " << center[i] << "\t" << setprecision(3)  << angle << " degrees" << " \tw/ radius " << radius[i] << "\n";
-						objectProperties.push_back(DebrisObject(int(boundRect.x+boundRect.width/2),int(boundRect.y+boundRect.height/2),int(boundRect.width),int(boundRect.height),index));
-
-						//if (boundRect[i].size().width > largestWidth){
-						//	largestWidth = boundRect[i].size().width;
-						//	largestWidthAngle = angle;
-						//	line(image, Point(image.cols/2,image.rows), center[i], colors[index], 4, 8, 0); // draw line from bottom center of image to center of object
-						//}
-					}
-					
 				}
 				
 			}
