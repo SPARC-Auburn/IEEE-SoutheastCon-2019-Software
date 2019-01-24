@@ -64,8 +64,11 @@ namespace IEEE_VISION{
 		public:
 		VisionHandle(){
 			Camera.set( CV_CPU_POPCNT, CV_8UC3);
+			Camera.set(CAP_PROP_FRAME_WIDTH,640);
+			Camera.set(CAP_PROP_FRAME_HEIGHT,480);
 			if (!Camera.open()) {cerr<<"Error opening the camera"<<endl;return;}
 			Camera.grab();
+			
 		}
 		~VisionHandle(){
 			Camera.release();
