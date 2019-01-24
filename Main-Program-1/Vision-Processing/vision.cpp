@@ -58,10 +58,7 @@ namespace IEEE_VISION{
 			String labels[4] = {"Red", "Blue", "Yellow", "Green"};
 			Mat kernel = getStructuringElement(MORPH_ELLIPSE, Size(5, 5));
 			Size resolution;
-			vector<vector<Point>> contours_poly;
 			vector<Rect> boundRect;
-			vector<Point2f> center;
-			vector<float> radius;
 			vector<DebrisObject> objectProperties;
 		public:
 		VisionHandle(){
@@ -139,14 +136,10 @@ namespace IEEE_VISION{
 			//imshow(labels[index], threshed);			  // Show our image inside it.
 			//waitKey(1);		
 			// Declare variables
-			contours_poly.clear();
-			boundRect.clear();
-			center.clear();
-			radius.clear();
+			//boundRect.clear();
 			// Loop through each contour
 			if(VISION_DEBUG_TEXT)
 			cout << "Number of contours: " << contours.size() << endl;
-			//int j = -1;
 			for (int i = 0; i < contours.size(); i++)
 			{
 
@@ -159,36 +152,37 @@ namespace IEEE_VISION{
 					center.push_back(Point2f(0,0));
 					radius.push_back(0.0);
 					*/
-					++j;
 					numObjects++;
 					//approxPolyDP(contours[i], contours_poly[j], 3, true);  // Find best rectangle
-					boundRect[j] = boundingRect(contours[i]);
-					//minEnclosingCircle(contours_poly[j], center[j], radius[j]); // Find best circle
-
+					Rect boundRect = boundingRect(contours[i]);
+					float r;
+					Point2f cent;
+					//minEnclosingCircle(contours[i], cent, r); // Find best circle
+					//cout << boundRect.size() << " " << j << endl;
 					//drawContours(image, contours_poly, i, colors[index], 1, 8, vector<Vec4i>(), 0, Point());  // draw contour around object
 					//putText(image, to_string(numObjects), boundRect[i].tl(), FONT_HERSHEY_PLAIN, 8, colors[index], 3, true); // mark object number
 					//angle = atan((center[i].x - image.cols/2)/(image.rows - center[i].y))* 180 / PI; // Find angle to center of object from centerline
-					w2h = (double)boundRect[j].size().width/boundRect[j].size().height; // Find width to height ratio, 100 is square
-					percentFilled = area/(double)(boundRect[j].size().width*boundRect[j].size().height); // amount of rectangle consumed by contour
+					w2h = (double)boundRect.width/boundRect.height; // Find width to height ratio, 100 is square
+					percentFilled = area/(double)(boundRect.width*boundRect.height); // amount of rectangle consumed by contour
 					// Determine shape
 					if (w2h > 1.50 || w2h < 0.75) // wrong size ratio
 					{
 						if(VISION_DEBUG_IMAGE)
-						rectangle(image, boundRect[j].tl(), boundRect[j].br(), Scalar(100, 100, 100), 4, 8, 0);
+						rectangle(image, boundRect.tl(), boundRect.br(), Scalar(100, 100, 100), 4, 8, 0);
 						//cout << setprecision(2) << numObjects << ". " << setprecision(4) << labels[index] << " W2H Error! \t@ " << center[i] << "\t" << setprecision(3) << " \tw/ width " << boundRect[i].size().width << " \tand height " << boundRect[i].size().height << "\t w2h ratio " << w2h << "\n";
 					}
 					else if (percentFilled < 0.65)
 					{
 						if(VISION_DEBUG_IMAGE)
-						rectangle(image, boundRect[j].tl(), boundRect[j].br(), Scalar(200, 200, 200), 4, 8, 0);
+						rectangle(image, boundRect.tl(), boundRect.br(), Scalar(200, 200, 200), 4, 8, 0);
 						//cout << setprecision(2) << numObjects << ". " << setprecision(4) << labels[index] << " Fill Error! \t@ " << center[i] << "\t" << setprecision(3) << " \tw/ width " << boundRect[i].size().width << " \tand height " << boundRect[i].size().height << "\t percent filled " << percentFilled << "\n";
 					}
-					else if (radius[i] * 1.80 > boundRect[j].size().width) // must be block
+					else if (percentFilled > 0.85) // must be block
 					{					
 						if(VISION_DEBUG_IMAGE)
-						rectangle(image, boundRect[j].tl(), boundRect[j].br(), colors[index], 4, 8, 0);
+						rectangle(image, boundRect.tl(), boundRect.br(), colors[index], 4, 8, 0);
 						//cout << setprecision(2) << numObjects << ". " << setprecision(4) << labels[index] << " blck \t@ " << center[i] << "\t" << setprecision(3) << angle  << " degrees" << " \tw/ width " << boundRect[i].size().width << " \tand height " << boundRect[i].size().height << "\n";
-						objectProperties.push_back(DebrisObject(int(boundRect[j].size().x+boundRect[j].size().width/2),int(boundRect[j].size().y+boundRect[j].size().height/2),int(boundRect[j].size().width),int(boundRect[j].size().height),index));
+						objectProperties.push_back(DebrisObject(int(boundRect.x+boundRect.width/2),int(boundRect.y+boundRect.height/2),int(boundRect.width),int(boundRect.height),index));
 						//if (boundRect[i].size().width > largestWidth){
 						//	largestWidth = boundRect[i].size().width;
 						//	largestWidthAngle = angle;
@@ -198,9 +192,10 @@ namespace IEEE_VISION{
 					else // must be ball
 					{
 						if(VISION_DEBUG_IMAGE)
-						circle(image, center[j], (int)radius[j], colors[index], 4, 8, 0);
+						//circle(image, c, (int)r, colors[index], 4, 8, 0);
 						//cout << setprecision(2) << numObjects << ". " << setprecision(4) << labels[index] << " ball \t@ " << center[i] << "\t" << setprecision(3)  << angle << " degrees" << " \tw/ radius " << radius[i] << "\n";
-						objectProperties.push_back(DebrisObject(int(boundRect[j].size().x+boundRect[j].size().width/2),int(boundRect[j].size().y+boundRect[j].size().height/2),int(boundRect[j].size().width),int(boundRect[j].size().height),index));
+						objectProperties.push_back(DebrisObject(int(boundRect.x+boundRect.width/2),int(boundRect.y+boundRect.height/2),int(boundRect.width),int(boundRect.height),index));
+
 						//if (boundRect[i].size().width > largestWidth){
 						//	largestWidth = boundRect[i].size().width;
 						//	largestWidthAngle = angle;
