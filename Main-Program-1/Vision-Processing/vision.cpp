@@ -21,6 +21,30 @@ const int MAX_AREA = 100000;
 using namespace cv;
 using namespace std;
 namespace IEEE_VISION{
+	struct DebrisObject{
+		int x;
+		int y;
+		int width;
+		int height;
+		int colorIndex;	
+		DebrisObject(){
+			x = 0;
+			y = 0;
+			width = 0;
+			height = 0;
+			colorIndex = 0;
+		}	
+		DebrisObject(int new_x, int new_y, int new_width, int new_height, int new_colorIndex){
+			x = new_x;
+			y = new_y;
+			width = new_width;
+			height = new_height;
+			colorIndex = new_colorIndex;
+		}	
+		void printProperties(){
+			cout << "X="<<x<<" Y="<<y<<" Width="<<width<<" Height="<<height<<" colorIndex="<<colorIndex<<"\n"; 
+		}
+	};
 	struct VisionHandle{
 		raspicam::RaspiCam_Cv Camera;
 		Mat image,hsv,threshed;
@@ -178,12 +202,12 @@ namespace IEEE_VISION{
 			}
 		}
 		// returns the index of the largest object
-		int findLargestObject(vector<DebrisObject> objects){
+		int findLargestObject(){
 			int largestArea = 0;
 			int area = 0;
 			int objectIndex = 0;
-			for (int i = 0; i < objects.size(); i++){
-				area = objects[i].width*objects[i].height;
+			for (int i = 0; i < objectProperties.size(); i++){
+				area = objectProperties[i].width*objectProperties[i].height;
 				if (area >= largestArea){
 					largestArea = area;
 					objectIndex = i;
@@ -191,30 +215,6 @@ namespace IEEE_VISION{
 			}
 			return objectIndex;
 		}
-		struct DebrisObject{
-			int x;
-			int y;
-			int width;
-			int height;
-			int colorIndex;	
-			DebrisObject(){
-				x = 0;
-				y = 0;
-				width = 0;
-				height = 0;
-				colorIndex = 0;
-			}	
-			DebrisObject(int new_x, int new_y, int new_width, int new_height, int new_colorIndex){
-				x = new_x;
-				y = new_y;
-				width = new_width;
-				height = new_height;
-				colorIndex = new_colorIndex;
-			}	
-			void printProperties(){
-				cout << "X="<<x<<" Y="<<y<<" Width="<<width<<" Height="<<height<<" colorIndex="<<colorIndex<<"\n"; 
-			}
-		};
 	};
 
 
