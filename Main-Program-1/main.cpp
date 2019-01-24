@@ -12,8 +12,9 @@ int main (){
         serialPort arduino("/dev/ttyACM0");       
         int angle = 0;
         cout << "Finding Closest Debris...\n"; 
+        IEEE_VISION::VisionHandle vis;
         while (abs(angle) < 180){
-                angle = getAngle2ClosestDebris();
+                angle = vis.proc();
                 cout << "Angle to Debris: "<< angle << "\n"; 
                 //if (angle > 0)
                         //arduino.turnLeft(100);
