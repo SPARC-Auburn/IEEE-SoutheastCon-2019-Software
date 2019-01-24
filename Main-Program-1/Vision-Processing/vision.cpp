@@ -146,23 +146,24 @@ namespace IEEE_VISION{
 			// Loop through each contour
 			if(VISION_DEBUG_TEXT)
 			cout << "Number of contours: " << contours.size() << endl;
-			int j = -1;
+			//int j = -1;
 			for (int i = 0; i < contours.size(); i++)
 			{
 
 				area = contourArea(contours[i]);
 				if (area > MIN_AREA)
 				{
-					contours_poly.push_back(vector<Point>(0));
+
+					/*contours_poly.push_back(vector<Point>(0));
 					boundRect.push_back(Rect(0,0,0,0));
 					center.push_back(Point2f(0,0));
 					radius.push_back(0.0);
+					*/
 					++j;
 					numObjects++;
-					approxPolyDP(contours[i], contours_poly[j], 3, true);  // Find best rectangle
-					boundRect[j] = boundingRect(contours_poly[j]);
-
-					minEnclosingCircle(contours_poly[j], center[j], radius[j]); // Find best circle
+					//approxPolyDP(contours[i], contours_poly[j], 3, true);  // Find best rectangle
+					boundRect[j] = boundingRect(contours[i]);
+					//minEnclosingCircle(contours_poly[j], center[j], radius[j]); // Find best circle
 
 					//drawContours(image, contours_poly, i, colors[index], 1, 8, vector<Vec4i>(), 0, Point());  // draw contour around object
 					//putText(image, to_string(numObjects), boundRect[i].tl(), FONT_HERSHEY_PLAIN, 8, colors[index], 3, true); // mark object number
@@ -187,7 +188,7 @@ namespace IEEE_VISION{
 						if(VISION_DEBUG_IMAGE)
 						rectangle(image, boundRect[j].tl(), boundRect[j].br(), colors[index], 4, 8, 0);
 						//cout << setprecision(2) << numObjects << ". " << setprecision(4) << labels[index] << " blck \t@ " << center[i] << "\t" << setprecision(3) << angle  << " degrees" << " \tw/ width " << boundRect[i].size().width << " \tand height " << boundRect[i].size().height << "\n";
-						objectProperties.push_back(DebrisObject(int(center[j].x),int(center[j].y),int(boundRect[j].size().width),int(boundRect[j].size().height),index));
+						objectProperties.push_back(DebrisObject(int(boundRect[j].size().x+boundRect[j].size().width/2),int(boundRect[j].size().y+boundRect[j].size().height/2),int(boundRect[j].size().width),int(boundRect[j].size().height),index));
 						//if (boundRect[i].size().width > largestWidth){
 						//	largestWidth = boundRect[i].size().width;
 						//	largestWidthAngle = angle;
@@ -199,7 +200,7 @@ namespace IEEE_VISION{
 						if(VISION_DEBUG_IMAGE)
 						circle(image, center[j], (int)radius[j], colors[index], 4, 8, 0);
 						//cout << setprecision(2) << numObjects << ". " << setprecision(4) << labels[index] << " ball \t@ " << center[i] << "\t" << setprecision(3)  << angle << " degrees" << " \tw/ radius " << radius[i] << "\n";
-						objectProperties.push_back(DebrisObject(int(center[j].x),int(center[j].y),int(boundRect[j].size().width),int(boundRect[j].size().height),index));
+						objectProperties.push_back(DebrisObject(int(boundRect[j].size().x+boundRect[j].size().width/2),int(boundRect[j].size().y+boundRect[j].size().height/2),int(boundRect[j].size().width),int(boundRect[j].size().height),index));
 						//if (boundRect[i].size().width > largestWidth){
 						//	largestWidth = boundRect[i].size().width;
 						//	largestWidthAngle = angle;
