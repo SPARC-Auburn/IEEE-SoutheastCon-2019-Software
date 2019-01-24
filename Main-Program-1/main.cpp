@@ -11,8 +11,8 @@ int main (){
         cout << "Connecting to Arduino...\n"; 
         serialPort arduino("/dev/ttyACM0");       
         int angle = 0;
-        cout << "Finding Closest Debris...\n"; 
         IEEE_VISION::VisionHandle vis;
+        cout << "Finding Closest Debris...\n"; 
         while (abs(angle) < 180){
                 angle = vis.proc();
                 cout << "Angle to Debris: "<< angle << "\n"; 
