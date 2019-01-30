@@ -17,7 +17,7 @@
 const int MIN_AREA = 4000;
 const int MAX_AREA = 100000;
 #define PI 3.14159265
-#define VISION_DEBUG_IMAGE 0
+#define VISION_DEBUG_IMAGE 1
 #define VISION_DEBUG_TEXT 1
 using namespace cv;
 using namespace std;
@@ -65,10 +65,8 @@ namespace IEEE_VISION{
 		VisionHandle(){
 			Camera.set( CV_CPU_POPCNT, CV_8UC3);
 			Camera.set(CAP_PROP_FRAME_WIDTH,640);
-			Camera.set(CAP_PROP_FRAME_HEIGHT,480);
-			if (!Camera.open()) {cerr<<"Error opening the camera"<<endl;return;}
-			Camera.grab();
-			
+			Camera.set(CAP_PROP_FRAME_HEIGHT,480);			
+			if (!Camera.open()) {cerr<<"Error opening the camera"<<endl;return;}	
 		}
 		~VisionHandle(){
 			Camera.release();
@@ -77,20 +75,18 @@ namespace IEEE_VISION{
 			double divided_result,angle;
 			clock_t begin = clock();
 			takePicture();
-			if(VISION_DEBUG_TEXT)
-			cout << "converting picture" << endl;
+			//if(VISION_DEBUG_TEXT)
+			//	cout << "converting picture" << endl;
 			cvtColor(image, hsv, COLOR_BGR2HSV);
 			resolution = image.size();
 			objectProperties.clear();
 			if(VISION_DEBUG_TEXT)
-			cout << "getting properties" << endl;
+				cout << "getting properties" << endl;
 			for(int iii = 0; iii < 4; iii++){
 				getObjectProperties(iii);
-			}
-			if(VISION_DEBUG_IMAGE)
-			imwrite("Test.jpg",image);
+			}			
 			if(VISION_DEBUG_TEXT)
-			cout << "Number of objects = " << objectProperties.size() << endl;
+				cout << "Number of objects = " << objectProperties.size() << endl;
 			// Find angle to largest debris in view
 			if (objectProperties.size()>0){
 				
@@ -99,9 +95,7 @@ namespace IEEE_VISION{
 					line(image, Point(image.cols/2,image.rows), Point(objectProperties[largestDebris].x,objectProperties[largestDebris].y), colors[objectProperties[largestDebris].colorIndex], 4, 8, 0); // draw line from bottom center of image to center of object	
 					line(image, Point(image.cols/2,image.rows), Point(image.cols/2,0), Scalar(256, 256, 256), 4, 8, 0);
 				}
-				//namedWindow("Display window", WINDOW_NORMAL); // Create a window for display.
-				//imshow("Display window", image);			  // Show our image inside it.
-				//waitKey(1);									  // Wait for a keystroke in the window
+				
 				divided_result = (float)(objectProperties[largestDebris].x - image.cols/2)/(float)(image.rows - objectProperties[largestDebris].y);
 				angle = atan(divided_result)* 180 / PI; // Find angle to center of object from centerline
 				if(VISION_DEBUG_TEXT){
@@ -109,7 +103,12 @@ namespace IEEE_VISION{
 					double elapsed_secs = double(end-begin)/ CLOCKS_PER_SEC;
 					double frequency = 1/elapsed_secs;
 					cout << "Elapsed Time = " << elapsed_secs << "s, Frequency = " << frequency << "Hz \n";
-				}	
+				}
+				if(VISION_DEBUG_IMAGE){
+					//imwrite("Test.jpg",image);
+					imshow("a", image);			  // Show our image inside it.
+					waitKey(1);									  // Wait for a keystroke in the window
+				}				
 				return int(angle);
 			}
 			else if(VISION_DEBUG_TEXT){
@@ -122,7 +121,8 @@ namespace IEEE_VISION{
 		}
 		void takePicture(){
 			if(VISION_DEBUG_TEXT)
-			cout << "getting picture" << endl;
+			cout << "getting picture" << endl;	
+			Camera.grab();		
 			Camera.retrieve(temp);
 			flip(temp,image,-1);
 		}
@@ -148,8 +148,8 @@ namespace IEEE_VISION{
 			// Declare variables
 			//boundRect.clear();
 			// Loop through each contour
-			if(VISION_DEBUG_TEXT)
-			cout << "Number of contours: " << contours.size() << endl;
+			//if(VISION_DEBUG_TEXT)
+			//	cout << "Number of contours: " << contours.size() << endl;
 			for (int i = 0; i < contours.size(); i++)
 			{
 
