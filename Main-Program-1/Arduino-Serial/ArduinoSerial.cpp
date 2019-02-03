@@ -6,6 +6,7 @@
 #include <cerrno>
 #include <cstring>		//for strerror()
 #include <sstream>
+#include <iostream>
 
 using namespace std;
 
@@ -61,24 +62,25 @@ int serialPort::available() {
 }
 
 void serialPort::controlMotors(bool dir1, int speed1, bool dir2, int speed2) {
-	if(speed1 < 0 || speed1 > 255 || speed2 < 0 || speed1 > 255)
-		throw out_of_range("Motor speed must be between 0 and 255.");
+	if(speed1 < 0 || speed1 > 127 || speed2 < 0 || speed1 > 127)
+		throw out_of_range("Motor speed must be between 0 and 127.");
 
 	stringstream output;
-	output << dir1 << ',' << speed1 << ',' << dir2 << ',' << speed2;
+	output << '[' << dir1 << ',' << speed1 << ',' << dir2 << ',' << speed2;
+  cout << '[' << dir1 << ',' << speed1 << ',' << dir2 << ',' << speed2 << '\n';
 	write(output.str());		//There is an unnecessary copy here
 }
 
 void serialPort::turnLeft(int speed){
   // speed = int from 0 to 255
   // TODO: need to verify correct direction
-  controlMotors(1,speed,0,speed);
+  controlMotors(0,speed,1,speed);
 }
 
 void serialPort::turnRight(int speed){
   // speed = int from 0 to 255
   // TODO: need to verify correct direction
-  controlMotors(0,speed,1,speed);
+  controlMotors(1,speed,0,speed);
 }
 
 void serialPort::goForward(int speed){

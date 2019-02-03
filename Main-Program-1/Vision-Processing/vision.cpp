@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
@@ -14,11 +13,11 @@
 #include <ctime>
 #include <math.h>
 
-const int MIN_AREA = 4000;
-const int MAX_AREA = 100000;
+const int MIN_AREA = 200;
+const int MAX_AREA = 30000;
 #define PI 3.14159265
 #define VISION_DEBUG_IMAGE 1
-#define VISION_DEBUG_TEXT 1
+#define VISION_DEBUG_TEXT 0
 using namespace cv;
 using namespace std;
 namespace IEEE_VISION{
@@ -116,7 +115,20 @@ namespace IEEE_VISION{
 				double elapsed_secs = double(end-begin)/ CLOCKS_PER_SEC;
 				double frequency = 1/elapsed_secs;
 				cout << "Elapsed Time = " << elapsed_secs << "s, Frequency = " << frequency << "Hz \n";	
+				if(VISION_DEBUG_IMAGE){
+					//imwrite("Test.jpg",image);
+					imshow("a", image);			  // Show our image inside it.
+					waitKey(1);									  // Wait for a keystroke in the window
+				}	
 				return 0; //no object detected angle
+			}
+			else {
+				if(VISION_DEBUG_IMAGE){
+					//mwrite("Test.jpg",image);
+					imshow("a", image);			  // Show our image inside it.
+					waitKey(1);									  // Wait for a keystroke in the window
+				}	
+				return 0;
 			}	
 		}
 		void takePicture(){
@@ -141,10 +153,12 @@ namespace IEEE_VISION{
 			if(VISION_DEBUG_TEXT)
 			cout << double(clock()-begin)/CLOCKS_PER_SEC << endl;
 			
-			// Show window of each color
-			//namedWindow(labels[index], WINDOW_NORMAL); // Create a window for display.
-			//imshow(labels[index], threshed);			  // Show our image inside it.
-			//waitKey(1);		
+			// Show window of select color
+			if (index == 5){
+				namedWindow(labels[index], WINDOW_NORMAL); // Create a window for display.
+				imshow(labels[index], threshed);			  // Show our image inside it.
+				waitKey(1);		
+			}
 			// Declare variables
 			//boundRect.clear();
 			// Loop through each contour
@@ -154,7 +168,7 @@ namespace IEEE_VISION{
 			{
 
 				area = contourArea(contours[i]);
-				if (area > MIN_AREA)
+				if (area > MIN_AREA && area < MAX_AREA)
 				{
 
 					/*contours_poly.push_back(vector<Point>(0));

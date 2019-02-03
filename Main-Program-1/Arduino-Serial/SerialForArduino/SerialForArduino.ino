@@ -1,7 +1,7 @@
-const int pinLeft1 = 3;
-const int pinLeft2 = 2;
-const int pinRight2 = 4;
-const int pinRight1 = 5;
+const int pinLeft1 = 6;
+const int pinLeft2 = 5;
+const int pinRight2 = 10;
+const int pinRight1 = 11;
 
 void setup() {
   // initialize serial:

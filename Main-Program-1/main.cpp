@@ -13,16 +13,25 @@ int main (){
         int angle = 0;
         IEEE_VISION::VisionHandle vis;
         cout << "Finding Closest Debris...\n"; 
-        while (abs(angle) < 180){
+        cout << "Turning Left\n"; 
+       while (0==0){
                 angle = vis.proc();
                 cout << "Angle to Debris: "<< angle << "\n"; 
-                //if (angle > 0)
-                        //arduino.turnLeft(100);
-                //else
-                        //arduino.turnRight(100);
-                //usleep(10);
+                if (angle > 5 && angle < 120){
+                        cout << "Turning Right\n"; 
+                        arduino.turnRight(60);
+                                            
+                }
+                else if (angle < -5 && angle > -120){
+                        cout << "Turning Left\n"; 
+                        arduino.turnLeft(60);    
+                        
+                }
+                else{
+                        arduino.stopMotors();
+                }
+                usleep(10);
         }
-        //arduino.stopMotors();    
         return 0;
 }
 
