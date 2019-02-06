@@ -17,7 +17,7 @@ int main()
         cout << "Turning Left\n";
         while (0 == 0)
         {
-                angle = vis.proc();
+                angle = vis.angle2LargestDebris();
                 cout << "Angle to Debris: " << angle << "\n";
                 if (angle > 5 && angle < 120)
                 {

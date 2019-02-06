@@ -13,11 +13,17 @@
 #include <ctime>
 #include <math.h>
 
-const int MIN_AREA = 200;
-const int MAX_AREA = 30000;
+// Constants
 #define PI 3.14159265
+#define MIN_AREA = 200
+#define MAX_AREA = 30000
 #define VISION_DEBUG_IMAGE 1
+#define VISION_DEBUG_COLOR_IMAGE -1 // -1 to disable (0 red,1 blue,2 yellow,3 green)
 #define VISION_DEBUG_TEXT 0
+#define DEBRIS_MIN_W2H 0.75
+#define DEBRIS_MAX_W2H 1.5
+#define DEBRIS_MIN_PERCENT_FILLED 0.65
+
 using namespace cv;
 using namespace std;
 namespace IEEE_VISION
@@ -36,18 +42,23 @@ struct DebrisObject
 		width = 0;
 		height = 0;
 		colorIndex = 0;
+		angle = 0;
+		distance = 0;
 	}
-	DebrisObject(int new_x, int new_y, int new_width, int new_height, int new_colorIndex)
+	DebrisObject(int new_x, int new_y, int new_width, int new_height, int new_colorIndex, int new_angle, int new_distance)
 	{
 		x = new_x;
 		y = new_y;
 		width = new_width;
 		height = new_height;
 		colorIndex = new_colorIndex;
+		angle = new_angle;
+		distance = new_distance;
 	}
 	void printProperties()
 	{
-		cout << "X=" << x << " Y=" << y << " Width=" << width << " Height=" << height << " colorIndex=" << colorIndex << "\n";
+		cout << "X=" << x << " Y=" << y << " Width=" << width << " Height=" << height << " colorIndex=" << colorIndex 
+		<< " angle=" << angle << " distance=" << distance << "\n";
 	}
 };
 struct VisionHandle
@@ -84,25 +95,29 @@ struct VisionHandle
 	{
 		Camera.release();
 	}
-	int proc()
+
+	// Returns the index of the most occurring debris color visible
+	int indexDebrisColors()
 	{
-		double divided_result, angle;
-		clock_t begin = clock();
 		takePicture();
-		//if(VISION_DEBUG_TEXT)
-		//	cout << "converting picture" << endl;
-		cvtColor(image, hsv, COLOR_BGR2HSV);
-		resolution = image.size();
 		objectProperties.clear();
-		if (VISION_DEBUG_TEXT)
-			cout << "getting properties" << endl;
-		for (int iii = 0; iii < 4; iii++)
-		{
-			getObjectProperties(iii);
+		for (int i = 0; i < 4; i++){
+			getObjectProperties(i);
 		}
+		int mostOccurringIndex = objectProperties.getObjectProperties()
+		if (VISION_DEBUG_TEXT)
+			cout << "Out of " << objectProperties.size() << " objects, " << labels[mostOccurringIndex] << " are the most common.";
+		return mostOccurringIndex;
+	}
+
+	// Returns the angle to the largest debris object in view
+	int angle2LargestDebris()
+	{
+		takePicture();
+		objectProperties.clear();
+		getObjectProperties(colorIndex);
 		if (VISION_DEBUG_TEXT)
 			cout << "Number of objects = " << objectProperties.size() << endl;
-
 		// ---- Find angle to largest debris in view ----
 		if (objectProperties.size() > 0)
 		{
@@ -112,9 +127,6 @@ struct VisionHandle
 				line(image, Point(image.cols / 2, image.rows), Point(objectProperties[largestDebris].x, objectProperties[largestDebris].y), colors[objectProperties[largestDebris].colorIndex], 4, 8, 0); // draw line from bottom center of image to center of object
 				line(image, Point(image.cols / 2, image.rows), Point(image.cols / 2, 0), Scalar(256, 256, 256), 4, 8, 0);
 			}
-
-			divided_result = (float)(objectProperties[largestDebris].x - image.cols / 2) / (float)(image.rows - objectProperties[largestDebris].y);
-			angle = atan(divided_result) * 180 / PI; // Find angle to center of object from centerline
 			if (VISION_DEBUG_TEXT)
 			{
 				clock_t end = clock();
@@ -122,56 +134,40 @@ struct VisionHandle
 				double frequency = 1 / elapsed_secs;
 				cout << "Elapsed Time = " << elapsed_secs << "s, Frequency = " << frequency << "Hz \n";
 			}
-			if (VISION_DEBUG_IMAGE)
-			{
-				//imwrite("Test.jpg",image);
-				imshow("a", image); // Show our image inside it.
-				waitKey(1);			// Wait for a keystroke in the window
-			}
-			return int(angle);
+			displayImage("image window");
+			return int(objectProperties[largestDebris].angle);
 		}
-		else if (VISION_DEBUG_TEXT)
+		else // No Objects found
 		{
-			clock_t end = clock();
-			double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-			double frequency = 1 / elapsed_secs;
-			cout << "Elapsed Time = " << elapsed_secs << "s, Frequency = " << frequency << "Hz \n";
-			if (VISION_DEBUG_IMAGE)
-			{
-				//imwrite("Test.jpg",image);
-				imshow("a", image); // Show our image inside it.
-				waitKey(1);			// Wait for a keystroke in the window
+			if (VISION_DEBUG_TEXT){
+				clock_t end = clock();
+				double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+				double frequency = 1 / elapsed_secs;
+				cout << "Elapsed Time = " << elapsed_secs << "s, Frequency = " << frequency << "Hz \n";
 			}
+			displayImage("image window");			
 			return 0; //no object detected angle
-		}
-		else
-		{
-			if (VISION_DEBUG_IMAGE)
-			{
-				//imwrite("Test.jpg",image);
-				imshow("a", image); // Show our image inside it.
-				waitKey(1);			// Wait for a keystroke in the window
-			}
-			return 0;
 		}
 	}
 
-	// Takes a picture, flips it, and saves it in image
+	// Takes a picture, flips it, saves it in image, and converts it to HSV
 	void takePicture()
 	{
 		if (VISION_DEBUG_TEXT)
-			cout << "getting picture" << endl;
+			clock_t begin = clock();
+			cout << "getting picture..." << endl;
 		Camera.grab();
 		Camera.retrieve(temp);
 		flip(temp, image, -1);
+		cvtColor(image, hsv, COLOR_BGR2HSV);
+		resolution = image.size();
 	}
 
-	// Returns vector array of object's x,y,width,height, and color properties
-	// for an image and colorIndex (0 Red, 1 Blue, 2 Yellow, 3 Green)
+	// Populates vector array of object's properties
 	void getObjectProperties(int index)
 	{
 		int numObjects = 0;
-		double area, angle, w2h, percentFilled;
+		double area, angle, w2h, percentFilled, distance;
 		// Generate contours
 		contours.clear();
 		hierarchy.clear();
@@ -180,18 +176,13 @@ struct VisionHandle
 		dilate(threshed, threshed, kernel);
 		findContours(threshed, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE, Point(0, 0));
 		if (VISION_DEBUG_TEXT)
-			cout << double(clock() - begin) / CLOCKS_PER_SEC << endl;
-
-		// ---- Show window of select color ----
-		if (index == 5)
+			cout << double(clock() - begin) / CLOCKS_PER_SEC << endl;		
+		if (index == VISION_DEBUG_COLOR_IMAGE) // ---- Show window of select color ----
 		{
 			namedWindow(labels[index], WINDOW_NORMAL); // Create a window for display.
 			imshow(labels[index], threshed);		   // Show our image inside it.
 			waitKey(1);
 		}
-
-		//if(VISION_DEBUG_TEXT)
-		//	cout << "Number of contours: " << contours.size() << endl;
 		// ---- Loop through each contour ----
 		for (int i = 0; i < contours.size(); i++)
 		{
@@ -205,12 +196,12 @@ struct VisionHandle
 				w2h = (double)boundRect.width / boundRect.height;					 // Find width to height ratio, 100 is square
 				percentFilled = area / (double)(boundRect.width * boundRect.height); // amount of rectangle consumed by contour
 				// Determine shape
-				if (w2h > 1.50 || w2h < 0.75) // wrong size ratio
+				if (w2h > DEBRIS_MAX_W2H || w2h < DEBRIS_MIN_W2H) // wrong size ratio
 				{
 					if (VISION_DEBUG_IMAGE)
 						rectangle(image, boundRect.tl(), boundRect.br(), Scalar(100, 100, 100), 4, 8, 0);
 				}
-				else if (percentFilled < 0.65)
+				else if (percentFilled < DEBRIS_MIN_PERCENT_FILLED)
 				{
 					if (VISION_DEBUG_IMAGE)
 						rectangle(image, boundRect.tl(), boundRect.br(), Scalar(200, 200, 200), 4, 8, 0);
@@ -219,7 +210,9 @@ struct VisionHandle
 				{
 					if (VISION_DEBUG_IMAGE)
 						rectangle(image, boundRect.tl(), boundRect.br(), colors[index], 4, 8, 0);
-					objectProperties.push_back(DebrisObject(int(boundRect.x + boundRect.width / 2), int(boundRect.y + boundRect.height / 2), int(boundRect.width), int(boundRect.height), index));
+					angle = atan((double)(boundRect.x - image.cols / 2) / (double)(image.rows - boundRect.y)) * 180 / PI; // Find angle to center of object from centerline
+					distance = boundRect.width * DISTANCE_MULTIPLIER;
+					objectProperties.push_back(DebrisObject(int(boundRect.x + boundRect.width / 2), int(boundRect.y + boundRect.height / 2), int(boundRect.width), int(boundRect.height), index, angle, distance));
 				}
 			}
 		}
@@ -241,6 +234,41 @@ struct VisionHandle
 		}
 		return objectIndex;
 	}
-};
 
+	int findMostOccuringColor()
+	{
+		int colorOccurrences[4] = {0,0,0,0};
+		int index = 0;
+		int mostOccurrences = 0;
+		int mostOccurringIndex = 0;
+		for (int i = 0; i < objectProperties.size(); i++)
+		{
+			index = objectProperties[i].colorIndex
+			if (index < 4)
+			{
+				colorOccurrences[index] = colorOccurrences[index] + 1;
+			}
+		}
+		for (int i = 0; i < 4; i++)
+		{
+			if (colorOccurrences[i] > mostOccurrences)
+			{
+				mostOccurringIndex = i;
+				mostOccurrences += 1;
+			}
+		}
+		return mostOccurringIndex;
+	}
+
+	// displays image if enabled
+	void displayImage(string label)
+	{
+		if (VISION_DEBUG_IMAGE)
+			{
+				//imwrite("Test.jpg",image);
+				imshow(label, image); // Show our image inside it.
+				waitKey(1);			// Wait for a keystroke in the window
+			}
+	}
+};
 }; // namespace IEEE_VISION
