@@ -23,6 +23,7 @@
 #define DEBRIS_MIN_W2H 0.75
 #define DEBRIS_MAX_W2H 1.5
 #define DEBRIS_MIN_PERCENT_FILLED 0.65
+#define DISTANCE_MULTIPLIER 1
 
 using namespace cv;
 using namespace std;
@@ -35,6 +36,9 @@ struct DebrisObject
 	int width;
 	int height;
 	int colorIndex;
+	int angle;
+	int distance;
+
 	DebrisObject()
 	{
 		x = 0;
@@ -76,6 +80,7 @@ struct VisionHandle
 	String labels[4] = {"Red", "Blue", "Yellow", "Green"};
 	Mat kernel = getStructuringElement(MORPH_CROSS, Size(3, 3));
 	Size resolution;
+	clock_t begin;
 	vector<Rect> boundRect;
 	vector<DebrisObject> objectProperties;
 
@@ -101,17 +106,18 @@ struct VisionHandle
 	{
 		takePicture();
 		objectProperties.clear();
-		for (int i = 0; i < 4; i++){
+		for (int i = 0; i < 4; i++)
+		{
 			getObjectProperties(i);
 		}
-		int mostOccurringIndex = objectProperties.getObjectProperties()
+		int mostOccurringIndex = findMostOccuringColor();
 		if (VISION_DEBUG_TEXT)
 			cout << "Out of " << objectProperties.size() << " objects, " << labels[mostOccurringIndex] << " are the most common.";
 		return mostOccurringIndex;
 	}
 
 	// Returns the angle to the largest debris object in view
-	int angle2LargestDebris()
+	int angle2LargestDebris(int colorIndex)
 	{
 		takePicture();
 		objectProperties.clear();
@@ -154,7 +160,7 @@ struct VisionHandle
 	void takePicture()
 	{
 		if (VISION_DEBUG_TEXT)
-			clock_t begin = clock();
+			begin = clock();
 			cout << "getting picture..." << endl;
 		Camera.grab();
 		Camera.retrieve(temp);
@@ -243,7 +249,7 @@ struct VisionHandle
 		int mostOccurringIndex = 0;
 		for (int i = 0; i < objectProperties.size(); i++)
 		{
-			index = objectProperties[i].colorIndex
+			index = objectProperties[i].colorIndex;
 			if (index < 4)
 			{
 				colorOccurrences[index] = colorOccurrences[index] + 1;
