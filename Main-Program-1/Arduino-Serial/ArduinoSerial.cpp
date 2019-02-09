@@ -62,37 +62,38 @@ int serialPort::available() {
 }
 
 void serialPort::controlMotors(bool dir1, int speed1, bool dir2, int speed2) {
-	if(speed1 < 0 || speed1 > 127 || speed2 < 0 || speed1 > 127)
+	if(speed1 < -127 || speed1 > 127 || speed2 < -127 || speed1 > 127)
 		throw out_of_range("Motor speed must be between 0 and 127.");
 
 	stringstream output;
-	output << '[' << dir1 << ',' << speed1 << ',' << dir2 << ',' << speed2;
-  cout << '[' << dir1 << ',' << speed1 << ',' << dir2 << ',' << speed2 << '\n';
+	int checkSum = dir1 + speed1 + dir2+ speed2;
+	output << '[' << dir1 << ',' << speed1 << ',' << dir2 << ',' << speed2 << ',' << checkSum;
+  	cout << '[' << dir1 << ',' << speed1 << ',' << dir2 << ',' << speed2  << ',' << checkSum << '\n';
 	write(output.str());		//There is an unnecessary copy here
 }
 
 void serialPort::turnLeft(int speed){
   // speed = int from 0 to 255
   // TODO: need to verify correct direction
-  controlMotors(0,speed,1,speed);
+  controlMotors(1,speed,1,-speed);
 }
 
 void serialPort::turnRight(int speed){
   // speed = int from 0 to 255
   // TODO: need to verify correct direction
-  controlMotors(1,speed,0,speed);
+  controlMotors(1,-speed,1,speed);
 }
 
 void serialPort::goForward(int speed){
   // speed = int from 0 to 255
   // TODO: need to verify correct direction
-  controlMotors(1,speed,1,speed);
+  controlMotors(1,-speed,1,-speed);
 }
 
 void serialPort::goBackward(int speed){
   // speed = int from 0 to 255
   // TODO: need to verify correct direction
-  controlMotors(0,speed,0,speed);
+  controlMotors(1,speed,1,speed);
 }
 
 void serialPort::stopMotors(){
