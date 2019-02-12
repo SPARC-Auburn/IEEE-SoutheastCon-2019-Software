@@ -15,15 +15,15 @@
 
 // Constants
 #define PI 3.14159265
-#define MIN_AREA = 200
-#define MAX_AREA = 30000
+#define MIN_AREA 200
+#define MAX_AREA 30000
 #define VISION_DEBUG_IMAGE 1
 #define VISION_DEBUG_COLOR_IMAGE -1 // -1 to disable (0 red,1 blue,2 yellow,3 green)
-#define VISION_DEBUG_TEXT 0
+#define VISION_DEBUG_TEXT 1
 #define DEBRIS_MIN_W2H 0.75
 #define DEBRIS_MAX_W2H 1.5
 #define DEBRIS_MIN_PERCENT_FILLED 0.65
-#define DISTANCE_MULTIPLIER 1
+#define DISTANCE_MULTIPLIER 26.95
 
 using namespace cv;
 using namespace std;
@@ -37,7 +37,7 @@ struct DebrisObject
 	int height;
 	int colorIndex;
 	int angle;
-	int distance;
+	double distance;
 
 	DebrisObject()
 	{
@@ -49,7 +49,7 @@ struct DebrisObject
 		angle = 0;
 		distance = 0;
 	}
-	DebrisObject(int new_x, int new_y, int new_width, int new_height, int new_colorIndex, int new_angle, int new_distance)
+	DebrisObject(int new_x, int new_y, int new_width, int new_height, int new_colorIndex, int new_angle, double new_distance)
 	{
 		x = new_x;
 		y = new_y;
@@ -112,7 +112,11 @@ struct VisionHandle
 		}
 		int mostOccurringIndex = findMostOccuringColor();
 		if (VISION_DEBUG_TEXT)
-			cout << "Out of " << objectProperties.size() << " objects, " << labels[mostOccurringIndex] << " are the most common.";
+			if (objectProperties.size() > 0)
+				cout << "Out of " << objectProperties.size() << " objects, " << labels[mostOccurringIndex] << " are the most common.\n";
+			else
+				cout << "No objects detected\n";
+		//displayImage("image window");	
 		return mostOccurringIndex;
 	}
 
@@ -141,6 +145,7 @@ struct VisionHandle
 				cout << "Elapsed Time = " << elapsed_secs << "s, Frequency = " << frequency << "Hz \n";
 			}
 			displayImage("image window");
+			cout << "Distance = " << objectProperties[largestDebris].distance << "\n";
 			return int(objectProperties[largestDebris].angle);
 		}
 		else // No Objects found
@@ -163,8 +168,9 @@ struct VisionHandle
 			begin = clock();
 			cout << "getting picture..." << endl;
 		Camera.grab();
-		Camera.retrieve(temp);
-		flip(temp, image, -1);
+		Camera.retrieve(image);
+		//Camera.retrieve(temp);
+		//flip(temp, image, -1); // flip the image 180 degrees
 		cvtColor(image, hsv, COLOR_BGR2HSV);
 		resolution = image.size();
 	}
@@ -217,7 +223,7 @@ struct VisionHandle
 					if (VISION_DEBUG_IMAGE)
 						rectangle(image, boundRect.tl(), boundRect.br(), colors[index], 4, 8, 0);
 					angle = atan((double)(boundRect.x - image.cols / 2) / (double)(image.rows - boundRect.y)) * 180 / PI; // Find angle to center of object from centerline
-					distance = boundRect.width * DISTANCE_MULTIPLIER;
+					distance = (1/(double)boundRect.width) * DISTANCE_MULTIPLIER;
 					objectProperties.push_back(DebrisObject(int(boundRect.x + boundRect.width / 2), int(boundRect.y + boundRect.height / 2), int(boundRect.width), int(boundRect.height), index, angle, distance));
 				}
 			}
