@@ -19,7 +19,7 @@
 #define MAX_AREA 30000
 #define VISION_DEBUG_IMAGE 1
 #define VISION_DEBUG_COLOR_IMAGE -1 // -1 to disable (0 red,1 blue,2 yellow,3 green)
-#define VISION_DEBUG_TEXT 1
+#define VISION_DEBUG_TEXT 0
 #define DEBRIS_MIN_W2H 0.75
 #define DEBRIS_MAX_W2H 1.5
 #define DEBRIS_MIN_PERCENT_FILLED 0.65

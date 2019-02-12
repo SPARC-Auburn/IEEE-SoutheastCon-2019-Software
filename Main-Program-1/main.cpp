@@ -10,33 +10,32 @@ int main()
 {
         startupRoutine();
         cout << "Connecting to Arduino...\n";
-        serialPort arduino("/dev/ttyACM0");
-        int angle = 0;
-
+        serialPort arduino("/dev/ttyUSB0");
+        int angle = 0;        
         IEEE_VISION::VisionHandle vis;
-        cout << "Finding Closest Debris...\n";
-        cout << "Turning Left\n";
         while (0 == 0)
         {
-                usleep(1000*1000);
-                //vis.indexDebrisColors();
-                angle = vis.angle2LargestDebris(vis.indexDebrisColors());
+                angle = vis.angle2LargestDebris(1);
                 cout << "Angle to Debris: " << angle << "\n";
                 if (angle > 5 && angle < 120)
                 {
                         cout << "Turning Right\n";
-                        arduino.turnRight(60);
+                        arduino.turnRight(25);
+                        usleep(20*1000);
+                        arduino.stopMotors();
                 }
                 else if (angle < -5 && angle > -120)
                 {
                         cout << "Turning Left\n";
-                        arduino.turnLeft(60);
+                        arduino.turnLeft(25);
+                        usleep(20*1000);
+                        arduino.stopMotors();
                 }
                 else
                 {
                         arduino.stopMotors();
                 }
-                usleep(10);
+
         }
         return 0;
 }
