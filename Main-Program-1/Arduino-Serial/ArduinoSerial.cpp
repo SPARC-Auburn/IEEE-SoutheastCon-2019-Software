@@ -25,8 +25,8 @@ serialPort::serialPort(const char* portName) {
 
   cfmakeraw(&config);     //Sets various parameters for non-canonical mode; disables parity
 
-  cfsetospeed (&config, B9600);    //Baud rate
-  cfsetispeed (&config, B9600);
+  cfsetospeed (&config, B115200);    //Baud rate
+  cfsetispeed (&config, B115200);
 
   config.c_cflag     &=  ~CSTOPB;    //One stop bit
 
@@ -61,43 +61,89 @@ int serialPort::available() {
   return(bytes);
 }
 
-void serialPort::controlMotors(bool dir1, int speed1, bool dir2, int speed2) {
-	if(speed1 < -127 || speed1 > 127 || speed2 < -127 || speed1 > 127)
+void serialPort::controlMotors(int motor, int speed) {
+	if(speed1 < -127 || speed1 > 127)
 		throw out_of_range("Motor speed must be between 0 and 127.");
+	if(motor < 0 || motor > 5)
+	  throw out_of_range("Motor values must be between 0 and 5.");
 
 	stringstream output;
-	int checkSum = dir1 + speed1 + dir2+ speed2;
-	output << '[' << dir1 << ',' << speed1 << ',' << dir2 << ',' << speed2 << ',' << checkSum;
-  	cout << '[' << dir1 << ',' << speed1 << ',' << dir2 << ',' << speed2  << ',' << checkSum << '\n';
+	int checkSum = motor + speed;
+	output << '[' << motor << ',' << speed << checkSum;
+  	cout << '[' << motor << ',' << speed << checkSum << '\n';
 	write(output.str());		//There is an unnecessary copy here
 }
 
 void serialPort::turnLeft(int speed){
   // speed = int from 0 to 255
   // TODO: need to verify correct direction
-  controlMotors(1,speed,1,-speed);
+  controlMotors(1,speed);
+  controlMotors(2,-speed);
 }
 
 void serialPort::turnRight(int speed){
   // speed = int from 0 to 255
   // TODO: need to verify correct direction
-  controlMotors(1,-speed,1,speed);
+  controlMotors(1,-speed);
+  controlMotors(2, speed);
 }
 
 void serialPort::goForward(int speed){
   // speed = int from 0 to 255
   // TODO: need to verify correct direction
-  controlMotors(1,-speed,1,-speed);
+  controlMotors(1,-speed);
+  controlMotors(2,-speed);
 }
 
 void serialPort::goBackward(int speed){
   // speed = int from 0 to 255
   // TODO: need to verify correct direction
-  controlMotors(1,speed,1,speed);
+  controlMotors(1,speed);
+  controlMotors(2,speed);
+}
+
+void serialPort::raiseGate(int speed){
+  // speed = int from 0 to 255
+  // TODO: need to verify correct direction
+  controlMotors(3,speed);
+  controlMotors(4,speed);
+}
+
+void serialPort::holdGate(int speed){
+  // speed = int from 0 to 255
+  // TODO: need to verify correct direction
+  controlMotors(3,0);
+  controlMotors(4,0);
+}
+
+void serialPort::lowerGate(int speed){
+  // speed = int from 0 to 255
+  // TODO: need to verify correct direction
+  controlMotors(3,-speed);
+  controlMotors(4,-speed);
+}
+
+void serialPort::rotateForward(int speed){
+  // speed = int from 0 to 255
+  // TODO: need to verify correct direction
+  controlMotors(5,speed);
+}
+
+void serialPort::rotateBackward(int speed){
+  // speed = int from 0 to 255
+  // TODO: need to verify correct direction
+  controlMotors(5,-speed);
+}
+
+void serialPort::stopBar(int speed){
+  // speed = int from 0 to 255
+  // TODO: need to verify correct direction
+  controlMotors(5,0);
 }
 
 void serialPort::stopMotors(){
-  controlMotors(0,0,0,0);
+  controlMotors(1,0);
+  controlMotors(2,0);
 }
 
 serialPort::~serialPort() {
