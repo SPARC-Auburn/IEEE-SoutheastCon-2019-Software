@@ -1,37 +1,52 @@
 #include "Arduino-Serial/ArduinoSerial.h"
 #include "Arduino-Serial/ArduinoSerial.cpp"
 #include "Vision-Processing/vision.cpp"
+#include <boost/thread.hpp>
 #include <unistd.h>
 #include <iostream>
+#include <chrono>
+#define getms() std::chrono::duration_cast< milliseconds >(system_clock::now().time_since_epoch().count())
 
+const long turnTimePerDegree = 2;
 void startupRoutine();
-
+struct threadableVision{
+        double angle;
+        bool updated = false;
+        IEEE_VISION::VisionHandle vis;
+        void operator()(){
+                this->angle = vis.angle2LargestDebris(1); 
+                updated = true;
+        }
+}
 int main()
 {
         startupRoutine();
-        cout << "Connecting to Arduino...\n";
+        cout << "Connecting to Arduino..." << endl;
         serialPort arduino("/dev/ttyUSB0");
-        int angle = 0;        
-        IEEE_VISION::VisionHandle vis;
+        threadableVision vis;
+        boost::thread visThread = boost::thread(boost::ref(vis));
+        double angle = 0;
+        long startTime;
         while (0 == 0)
-        {
-                angle = vis.angle2LargestDebris(1);
-                cout << "Angle to Debris: " << angle << "\n";
-                if (angle > 5 && angle < 120)
+        {       
+                if(vis.updated)
                 {
-                        cout << "Turning Right\n";
-                        arduino.turnRight(25);
-                        usleep(20*1000);
-                        arduino.stopMotors();
+                        angle = vis.angle;
+                        vis.updated = false;
+                        cout << "Updated State" << endl;
+                        startTime = getms();
+                        if(5 < angle && angle < 120)
+                        {
+                                arduino.turnRight(25);
+                        }
+                        else if(angle < -5 && angle > -120)
+                        {
+                                arduino.turnLeft(25);
+                        }
                 }
-                else if (angle < -5 && angle > -120)
-                {
-                        cout << "Turning Left\n";
-                        arduino.turnLeft(25);
-                        usleep(20*1000);
-                        arduino.stopMotors();
-                }
-                else
+                angle = (sign(angle)*(abs(angle)-((getms()-starTime)/turnTimePerDegree)));//update angle based on time since we started turning
+                cout << "Angle to Debris: " << angle << endl;
+                if(abs(angle) < 5) 
                 {
                         arduino.stopMotors();
                 }
