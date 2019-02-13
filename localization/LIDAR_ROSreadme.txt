@@ -1,6 +1,6 @@
 How to start the LIDAR in ROS:
 
-*This is assuming ROS has been installed in configued. The ROS tutorial's for configuring workspace and setting up catkin has been followed and the LIDAR 
+*This is assuming ROS has been installed and configued. The ROS tutorial's for configuring workspace and setting up catkin has been followed and the LIDAR 
 ROS Manual has been followed.
 
 1. $cd ~/catkin_ws
