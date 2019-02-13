@@ -1,12 +1,12 @@
 #include "Arduino-Serial/ArduinoSerial.h"
 #include "Arduino-Serial/ArduinoSerial.cpp"
 #include "Vision-Processing/vision.cpp"
-#include <boost/thread.hpp>
+#include <thread>
 #include <unistd.h>
 #include <iostream>
 #include <chrono>
-#define getms() std::chrono::duration_cast< milliseconds >(system_clock::now().time_since_epoch().count())
-
+#define getms() std::chrono::duration_cast<std::chrono::milliseconds >(std::chrono::system_clock::now().time_since_epoch()).count()
+template <typename T> int sign(T val){return (T(0)<val)-(val<T(0));}
 const long turnTimePerDegree = 2;
 void startupRoutine();
 struct threadableVision{
@@ -17,14 +17,14 @@ struct threadableVision{
                 this->angle = vis.angle2LargestDebris(1); 
                 updated = true;
         }
-}
+};
 int main()
 {
         startupRoutine();
         cout << "Connecting to Arduino..." << endl;
         serialPort arduino("/dev/ttyUSB0");
         threadableVision vis;
-        boost::thread visThread = boost::thread(boost::ref(vis));
+        thread visThread = thread(ref(vis));
         double angle = 0;
         long startTime;
         while (0 == 0)
@@ -44,7 +44,7 @@ int main()
                                 arduino.turnLeft(25);
                         }
                 }
-                angle = (sign(angle)*(abs(angle)-((getms()-starTime)/turnTimePerDegree)));//update angle based on time since we started turning
+                angle = (sign(angle)*(abs(angle)-((getms()-startTime)/turnTimePerDegree)));//update angle based on time since we started turning
                 cout << "Angle to Debris: " << angle << endl;
                 if(abs(angle) < 5) 
                 {
