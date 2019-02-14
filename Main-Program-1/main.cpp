@@ -10,12 +10,16 @@ template <typename T> int sign(T val){return (T(0)<val)-(val<T(0));}
 const long turnTimePerDegree = 2;
 void startupRoutine();
 struct threadableVision{
-        double angle;
+        double angle=0;
+	int imgs=0;
         bool updated = false;
         IEEE_VISION::VisionHandle vis;
         void operator()(){
-                this->angle = vis.angle2LargestDebris(1); 
-                updated = true;
+		while(1) {
+                	this->angle = vis.angle2LargestDebris(1); 
+			imgs++;
+                	updated = true;
+		}
         }
 };
 int main()
@@ -26,30 +30,35 @@ int main()
         threadableVision vis;
         thread visThread = thread(ref(vis));
         double angle = 0;
-        long startTime;
+        long startTime,temp;
         while (0 == 0)
         {       
                 if(vis.updated)
                 {
                         angle = vis.angle;
                         vis.updated = false;
-                        cout << "Updated State" << endl;
+//                        cout << "Updated State" << endl;
                         startTime = getms();
                         if(5 < angle && angle < 120)
                         {
+				cout <<"issued turn" << endl;
                                 arduino.turnRight(25);
                         }
                         else if(angle < -5 && angle > -120)
                         {
+				cout <<"issued turn" << endl;
                                 arduino.turnLeft(25);
                         }
                 }
-                angle = (sign(angle)*(abs(angle)-((getms()-startTime)/turnTimePerDegree)));//update angle based on time since we started turning
-                cout << "Angle to Debris: " << angle << endl;
+		temp = getms();
+                angle = (sign(angle)*(abs(angle)-((temp-startTime)/turnTimePerDegree)));//update angle based on time since we started turning
+                startTime = temp;
+//		cout << "Angle to Debris: " << angle << ":hoo:" << vis.imgs << endl;
                 if(abs(angle) < 5) 
                 {
                         arduino.stopMotors();
                 }
+		usleep(100);
 
         }
         return 0;
