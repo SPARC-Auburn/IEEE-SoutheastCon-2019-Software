@@ -12,4 +12,4 @@ find_package(raspicam REQUIRED)
 
 add_executable( MainProgram main.cpp )
 
-target_link_libraries( MainProgram ${OpenCV_LIBS} ${raspicam_CV_LIBS})
+target_link_libraries( MainProgram ${OpenCV_LIBS} ${raspicam_CV_LIBS} pthread)
