@@ -17,7 +17,7 @@ Controls 2 drive motors and 3 steppers.  Speed ranges are from -127 to 127.
 #include <iostream>
 
 // Constants
-#define DEBUG_TEXT 1
+#define DEBUG_TEXT 0
 const char serialPort::typicalPortName[] = "/dev/ttyUSB0";
 
 // Namespaces

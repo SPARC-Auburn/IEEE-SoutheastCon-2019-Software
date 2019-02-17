@@ -20,6 +20,7 @@ const long turnTimePerDegree = 2;
 
 void startupRoutine();
 void testMovement();
+void testPointToObject();
 
 struct threadableVision{
         double angle=0;
@@ -37,46 +38,9 @@ struct threadableVision{
 
 int main()
 {
-        startupRoutine();
-        cout << "Connecting to Arduino..." << endl;
-	testMovement();
-        /*
-        
-        serialPort arduino("/dev/ttyUSB0");
-        threadableVision vis;
-        thread visThread = thread(ref(vis));
-        double angle = 0;
-        long startTime,temp;
-        while (0 == 0)
-        {       
-                if(vis.updated)
-                {
-                        angle = vis.angle;
-                        vis.updated = false;
-//                        cout << "Updated State" << endl;
-                        startTime = getms();
-                        if(5 < angle && angle < 120)
-                        {
-				cout <<"issued turn" << endl;
-                                arduino.turnRight(25);
-                        }
-                        else if(angle < -5 && angle > -120)
-                        {
-				cout <<"issued turn" << endl;
-                                arduino.turnLeft(25);
-                        }
-                }
-		temp = getms();
-                angle = (sign(angle)*(abs(angle)-((temp-startTime)/turnTimePerDegree)));//update angle based on time since we started turning
-                startTime = temp;
-//		cout << "Angle to Debris: " << angle << ":hoo:" << vis.imgs << endl;
-                if(abs(angle) < 5) 
-                {
-                        arduino.stopMotors();
-                }
-		usleep(100);
-
-        }*/
+        startupRoutine();        
+	//testMovement();  
+        testPointToObject();      
         return 0;
 }
 
@@ -98,24 +62,49 @@ void startupRoutine()
 
 void testMovement()
 {
+        cout << "Connecting to Arduino..." << endl;
         serialPort arduino("/dev/ttyUSB0");
-        arduino.goForward(20);
+        arduino.turnRight(25);
         sleep(1);
         arduino.stopMotors();
-        sleep(1);
-        arduino.turnRight(20);        
-        sleep(1);
-        arduino.stopMotors();
-        sleep(1);
-        arduino.goForward(20);        
-        sleep(1);
-        arduino.stopMotors();
-        sleep(1);
-        arduino.turnLeft(20);        
-        sleep(1);
-        arduino.stopMotors();
-        sleep(1);
-        arduino.goForward(20);        
-        sleep(1);
-        arduino.stopMotors();
+}
+
+void testPointToObject()
+{
+        cout << "Connecting to Arduino..." << endl;
+        serialPort arduino("/dev/ttyUSB0");
+        threadableVision vis;
+        thread visThread = thread(ref(vis));
+        double angle = 0;
+        long startTime,temp;
+        while (0 == 0)
+        {       
+                if(vis.updated)
+                {
+                        angle = vis.angle;
+                        vis.updated = false;
+//                        cout << "Updated State" << endl;
+                        startTime = getms();
+                        if(5 < angle && angle < 120)
+                        {
+				cout <<"issued turn" << endl;
+                                arduino.turnLeft(25);
+                        }
+                        else if(angle < -5 && angle > -120)
+                        {
+				cout <<"issued turn" << endl;
+                                arduino.turnRight(25);
+                        }
+                }
+		temp = getms();
+                angle = (sign(angle)*(abs(angle)-((temp-startTime)/turnTimePerDegree)));//update angle based on time since we started turning
+                startTime = temp;
+		cout << "Angle to Debris: " << angle << ":hoo:" << vis.imgs << endl;
+                if(abs(angle) < 5) 
+                {
+                        arduino.stopMotors();
+                }
+		usleep(100);
+
+        }
 }
