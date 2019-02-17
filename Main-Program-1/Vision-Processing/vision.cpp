@@ -1,3 +1,13 @@
+/*------------------------------------------------------------------------------
+Filename:     vision.cpp
+Project:      IEEE SoutheastCon Hardware Competition 2019
+School:       Auburn University
+Organization: Student Projects and Research Committee (SPARC)
+Description:  Takes pictures on the Raspberry Pi Camera V2 and processes them
+with OpenCV2 via color recognition.
+
+Color Indices = Red(0), Blue(1), Yellow(2), Green(3)
+------------------------------------------------------------------------------*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
@@ -25,6 +35,7 @@
 #define DEBRIS_MIN_PERCENT_FILLED 0.65
 #define DISTANCE_MULTIPLIER 26.95
 
+// Namespaces
 using namespace cv;
 using namespace std;
 namespace IEEE_VISION

@@ -1,3 +1,10 @@
+/*------------------------------------------------------------------------------
+Filename:     main.cpp
+Project:      IEEE SoutheastCon Hardware Competition 2019
+School:       Auburn University
+Organization: Student Projects and Research Committee (SPARC)
+Description:  Main development program for competition.
+------------------------------------------------------------------------------*/
 #include "Arduino-Serial/ArduinoSerial.h"
 #include "Arduino-Serial/ArduinoSerial.cpp"
 #include "Vision-Processing/vision.cpp"
@@ -5,11 +12,15 @@
 #include <unistd.h>
 #include <iostream>
 #include <chrono>
+
+// Constants
 #define getms() std::chrono::duration_cast<std::chrono::milliseconds >(std::chrono::system_clock::now().time_since_epoch()).count()
 template <typename T> int sign(T val){return (T(0)<val)-(val<T(0));}
 const long turnTimePerDegree = 2;
+
 void startupRoutine();
 void testMovement();
+
 struct threadableVision{
         double angle=0;
 	int imgs=0;
@@ -23,6 +34,7 @@ struct threadableVision{
 		}
         }
 };
+
 int main()
 {
 	testMovement();
@@ -68,18 +80,18 @@ int main()
 
 void startupRoutine()
 {
-        cout << "\033[1;34m-------------------------------------------------------------------\033[0m     \n";
-        cout << "\033[1;34m   .:: ::    .:::::::          .:         .:::::::          .::    \033[0m     \n";
-        cout << "\033[1;34m .::    .::  .::    .::       .: ::       .::    .::     .::   .:: \033[0m     \n";
-        cout << "\033[1;34m  .::        .::    .::      .:  .::      .::    .::    .::        \033[0m    \n";
-        cout << "\033[1;34m    .::      .:::::::       .::   .::     .: .::        .::        \033[0m     \n";
-        cout << "\033[1;34m       .::   .::           .:::::: .::    .::  .::      .::        \033[0m     \n";
-        cout << "\033[1;34m .::    .::  .::          .::       .::   .::    .::     .::   .:: \033[0m     \n";
-        cout << "\033[1;34m   .:: ::    .::         .::         .::  .::      .::     .::::   \033[0m     \n";
-        cout << "\033[1;34m-------------------------------------------------------------------\033[0m     \n";
-        cout << "\033[1;34m|        Student Projects and Research Committee IEEE 2019        |\033[0m     \n";
-        cout << "\033[1;34m ------------------------------------------------------------------\033[0m    \n";
-        cout << "Starting robot...\n";
+        cout << "\033[1;34m-------------------------------------------------------------------\033[0m" << endl;
+        cout << "\033[1;34m   .:: ::    .:::::::          .:         .:::::::          .::    \033[0m" << endl;
+        cout << "\033[1;34m .::    .::  .::    .::       .: ::       .::    .::     .::   .:: \033[0m" << endl;
+        cout << "\033[1;34m  .::        .::    .::      .:  .::      .::    .::    .::        \033[0m" << endl;
+        cout << "\033[1;34m    .::      .:::::::       .::   .::     .: .::        .::        \033[0m" << endl;
+        cout << "\033[1;34m       .::   .::           .:::::: .::    .::  .::      .::        \033[0m" << endl;
+        cout << "\033[1;34m .::    .::  .::          .::       .::   .::    .::     .::   .:: \033[0m" << endl;
+        cout << "\033[1;34m   .:: ::    .::         .::         .::  .::      .::     .::::   \033[0m" << endl;
+        cout << "\033[1;34m-------------------------------------------------------------------\033[0m" << endl;
+        cout << "\033[1;34m|        Student Projects and Research Committee IEEE 2019        |\033[0m" << endl;
+        cout << "\033[1;34m ------------------------------------------------------------------\033[0m" << endl;
+        cout << "Starting robot..." << endl;
 }
 
 void testMovement()

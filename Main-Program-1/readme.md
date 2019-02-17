@@ -32,3 +32,9 @@
     ```
     ./MainProgram
     ```
+1. To recompile and run again use
+    ```
+    cd build
+    make
+    ./MainProgram
+    ```
