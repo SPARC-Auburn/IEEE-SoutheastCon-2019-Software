@@ -38,7 +38,12 @@ Cytron_SmartDriveDuo smartDriveDuo30(SERIAL_SIMPLFIED, IN1, BAUDRATE);
 
 char inChar;
 signed int speedLeft, speedRight;
-
+char streamIn[2] = "00";
+int speed1;
+int dir2;
+int speed2;
+int checkSum;
+int i;
 void setup()
 {
   pinMode(13, OUTPUT);
@@ -48,25 +53,12 @@ void setup()
 
 void loop()
 {
-  if (Serial.available()) {
-    int dir1  = (int)Serial.parseInt();
-    while(!Serial.available()){}
-    int speed1  = (int) Serial.parseInt();
-    while(!Serial.available()){}
-    int dir2  = (int) Serial.parseInt();
-    while(!Serial.available()){}
-    int speed2  = (int) Serial.parseInt();
-    while(!Serial.available()){}
-    int checkSum = (int) Serial.parseInt();
-    if (dir1+speed1+dir2+speed2 == checkSum){
-      if (dir1 == 0)
-        dir1 = -1;
-      if (dir2 == 0)
-        dir2 = -1;
-      smartDriveDuo30.control(speed1*dir1, speed2*dir1);
-    }
-    else
-      smartDriveDuo30.control(0,0);
-  }
+  digitalWrite(13,LOW);
+  while (Serial.available()<2);
+  speed1  = ((int)Serial.read())-127;
+  speed2  = ((int)Serial.read())-127;    
+  smartDriveDuo30.control(speed1,speed2);
+  digitalWrite(13,HIGH);
   Serial.flush();
+  delay(1000);
 }
