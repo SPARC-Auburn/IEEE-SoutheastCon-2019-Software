@@ -9,6 +9,7 @@
 template <typename T> int sign(T val){return (T(0)<val)-(val<T(0));}
 const long turnTimePerDegree = 2;
 void startupRoutine();
+void testMovement();
 struct threadableVision{
         double angle=0;
 	int imgs=0;
@@ -24,7 +25,8 @@ struct threadableVision{
 };
 int main()
 {
-        startupRoutine();
+	testMovement();
+       /*startupRoutine();
         cout << "Connecting to Arduino..." << endl;
         serialPort arduino("/dev/ttyUSB0");
         threadableVision vis;
@@ -60,7 +62,7 @@ int main()
                 }
 		usleep(100);
 
-        }
+        }*/
         return 0;
 }
 
@@ -82,23 +84,24 @@ void startupRoutine()
 
 void testMovement()
 {
-        serialPort arduino("/dev/ttyACM0");
-        arduino.goForward(22);
-        sleep(3);
-        arduino.stopMotors();
-        sleep(1);
-        arduino.turnRight(19);        
+        serialPort arduino("/dev/ttyUSB0");
+        arduino.goForward(20);
         sleep(1);
         arduino.stopMotors();
         sleep(1);
-        arduino.goForward(25);        
-        sleep(3);
-        arduino.stopMotors();
-        arduino.turnLeft(14);        
+        arduino.turnRight(20);        
         sleep(1);
         arduino.stopMotors();
         sleep(1);
-        arduino.goForward(27);        
+        arduino.goForward(20);        
+        sleep(1);
+        arduino.stopMotors();
+        sleep(1);
+        arduino.turnLeft(20);        
+        sleep(1);
+        arduino.stopMotors();
+        sleep(1);
+        arduino.goForward(20);        
         sleep(1);
         arduino.stopMotors();
 }
