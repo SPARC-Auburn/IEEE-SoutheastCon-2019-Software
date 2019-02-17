@@ -9,11 +9,17 @@ public:
 	void write(std::string text);
 	int available();
 	std::string read();
-	void controlMotors(bool dir1, int speed1, bool dir2, int speed2);
+	void updateMotors();
 	void turnLeft(int speed);
 	void turnRight(int speed);
 	void goForward(int speed);
 	void goBackward(int speed);
+	void raiseGate(int speed);
+	void lowerGate(int speed);
+	void holdGate();
+	void spinForward(int speed);
+	void spinBackward(int speed);
+	void stopSpinner();
 	void stopMotors();
 	~serialPort();
 

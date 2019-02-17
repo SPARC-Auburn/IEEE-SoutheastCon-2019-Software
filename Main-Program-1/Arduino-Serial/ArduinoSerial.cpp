@@ -18,7 +18,7 @@ Controls 2 drive motors and 3 steppers.  Speed ranges are from -127 to 127.
 
 // Constants
 #define DEBUG_TEXT 1
-const char serialPort::typicalPortName[] = "/dev/ttyACM0";
+const char serialPort::typicalPortName[] = "/dev/ttyUSB0";
 
 // Namespaces
 using namespace std;
@@ -81,8 +81,9 @@ int serialPort::available() {
 // Updates the motor speeds according to the state variables
 void serialPort::updateMotors() {
   if (DEBUG_TEXT){
-    cout << "[" << leftDriveSpeed << "," << rightDriveSpeed << "," << leftGateSpeed << "," << rightGateSpeed 
-    << "," << spinnerSpeed << "]" << endl;
+    //cout << "[" << leftDriveSpeed << "," << rightDriveSpeed << "," << leftGateSpeed << "," << rightGateSpeed 
+    //<< "," << spinnerSpeed << "]" << endl;
+    cout << "[" << leftDriveSpeed << "," << rightDriveSpeed << "]" << endl;
   }
 	char x[2] = {(char)(leftDriveSpeed+127),(char)(rightDriveSpeed+127)};
 	::write(fileHandle,x,2);
@@ -92,65 +93,75 @@ void serialPort::updateMotors() {
 }
 
 void serialPort::turnLeft(int speed){
-  if(speed < -127 || speed > 127)
-		throw out_of_range("Motor speed must be between -127 and 127.");
+  if(speed < 0 || speed > 127)
+		throw out_of_range("Motor speed must be between 0 and 127.");
   leftDriveSpeed = speed;
   rightDriveSpeed = -speed;
   updateMotors();
 }
 
 void serialPort::turnRight(int speed){
-  if(speed < -127 || speed > 127)
-		throw out_of_range("Motor speed must be between -127 and 127.");
+  if(speed < 0 || speed > 127)
+		throw out_of_range("Motor speed must be between 0 and 127.");
   leftDriveSpeed = -speed;
   rightDriveSpeed = speed;
   updateMotors();
 }
 
 void serialPort::goForward(int speed){
-  if(speed < -127 || speed > 127)
-		throw out_of_range("Motor speed must be between -127 and 127.");
+  if(speed < 0 || speed > 127)
+		throw out_of_range("Motor speed must be between 0 and 127.");
   leftDriveSpeed = -speed;
   rightDriveSpeed = -speed;
   updateMotors();
 }
 
 void serialPort::goBackward(int speed){
-  if(speed < -127 || speed > 127)
-		throw out_of_range("Motor speed must be between -127 and 127.");
+  if(speed < 0 || speed > 127)
+		throw out_of_range("Motor speed must be between 0 and 127.");
   leftDriveSpeed = speed;
   rightDriveSpeed = speed;
   updateMotors();
 }
 
 void serialPort::raiseGate(int speed){
-  if(speed < -127 || speed > 127)
-		throw out_of_range("Motor speed must be between -127 and 127.");
+  if(speed < 0 || speed > 127)
+		throw out_of_range("Motor speed must be between 0 and 127.");
   rightGateSpeed = speed;
   leftGateSpeed = speed;
   updateMotors();
 }
 
-void serialPort::holdGate(int speed){
-  if(speed < -127 || speed > 127)
-		throw out_of_range("Motor speed must be between -127 and 127.");
+void serialPort::holdGate(){
   rightGateSpeed = 0;
   leftGateSpeed = 0;
   updateMotors();
 }
 
 void serialPort::lowerGate(int speed){
-  if(speed < -127 || speed > 127)
-		throw out_of_range("Motor speed must be between -127 and 127.");
+  if(speed < 0 || speed > 127)
+		throw out_of_range("Motor speed must be between 0 and 127.");
   rightGateSpeed = -speed;
   leftGateSpeed = -speed;
   updateMotors();
 }
 
-void serialPort::rotateSpinner(int speed){
-  if(speed < -127 || speed > 127)
-		throw out_of_range("Motor speed must be between -127 and 127.");
+void serialPort::spinForward(int speed){
+  if(speed < 0 || speed > 127)
+		throw out_of_range("Motor speed must be between 0 and 127.");
   spinnerSpeed = speed;
+  updateMotors();
+}
+
+void serialPort::spinBackward(int speed){
+  if(speed < 0 || speed > 127)
+		throw out_of_range("Motor speed must be between 0 and 127.");
+  spinnerSpeed = -speed;
+  updateMotors();
+}
+
+void serialPort::stopSpinner(){
+  spinnerSpeed = 0;
   updateMotors();
 }
 

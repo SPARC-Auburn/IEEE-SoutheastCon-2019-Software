@@ -37,9 +37,11 @@ struct threadableVision{
 
 int main()
 {
-	testMovement();
-       /*startupRoutine();
+        startupRoutine();
         cout << "Connecting to Arduino..." << endl;
+	testMovement();
+        /*
+        
         serialPort arduino("/dev/ttyUSB0");
         threadableVision vis;
         thread visThread = thread(ref(vis));
