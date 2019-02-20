@@ -64,6 +64,10 @@ void serialPort::write(string text) {
   ::write(fileHandle, text.c_str(), text.length());
 }
 
+void serialPort::write(char data[], int length) {
+  ::write(fileHandle, data, length);
+}
+
 string serialPort::read() {
   string input;
   int bytes = available();
@@ -86,7 +90,7 @@ void serialPort::updateMotors() {
     cout << "[" << leftDriveSpeed << "," << rightDriveSpeed << "]" << endl;
   }
 	char x[2] = {(char)(leftDriveSpeed+127),(char)(rightDriveSpeed+127)};
-	::write(fileHandle,x,2);
+	write(x);
   // char x[5] = {(char)(leftDriveSpeed+127),(char)(rightDriveSpeed+127),(char)(leftGateSpeed+127),
   //(char)(rightGateSpeed+127),(char)(spinnerSpeed+127)};
 	// ::write(fileHandle,x,5);

@@ -6,7 +6,11 @@
 class serialPort {
 public:
 	serialPort(const char* portName);
+	
 	void write(std::string text);
+	template<int size>
+	void write(char data[size]) { write(data, size); }
+	
 	int available();
 	std::string read();
 	void updateMotors();
@@ -28,4 +32,6 @@ public:
 private:
 	int fileHandle;
 	termios config;
+	
+	void write(char data[], int length);		//Only exists so that template's ::write call does not have to go in the header
 };
