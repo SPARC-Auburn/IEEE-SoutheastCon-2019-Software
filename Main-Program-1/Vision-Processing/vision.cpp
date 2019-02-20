@@ -92,8 +92,7 @@ struct VisionHandle
 		Camera.set(CAP_PROP_FRAME_HEIGHT, 480);
 		if (!Camera.open())
 		{
-			cerr << "Error opening the camera" << endl;
-			return;
+			throw std::runtime_error("Error opening the camera");
 		}
 	}
 	~VisionHandle()
