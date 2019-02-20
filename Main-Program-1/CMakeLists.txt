@@ -10,6 +10,6 @@ find_package( OpenCV REQUIRED )
 set(raspicam_DIR "raspicam/build")
 find_package(raspicam REQUIRED)
 
-add_executable( MainProgram main.cpp )
+add_executable( MainProgram main.cpp Arduino-Serial/ArduinoSerial.cpp)
 
 target_link_libraries( MainProgram ${OpenCV_LIBS} ${raspicam_CV_LIBS} pthread)

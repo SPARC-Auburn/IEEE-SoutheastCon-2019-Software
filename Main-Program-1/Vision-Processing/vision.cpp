@@ -42,37 +42,26 @@ namespace IEEE_VISION
 {
 struct DebrisObject
 {
-	int x;
-	int y;
+	Point center;
 	int width;
 	int height;
 	int colorIndex;
 	int angle;
 	double distance;
 
-	DebrisObject()
+	DebrisObject(Rect boundingRect, int new_colorIndex, int new_angle, double new_distance)
 	{
-		x = 0;
-		y = 0;
-		width = 0;
-		height = 0;
-		colorIndex = 0;
-		angle = 0;
-		distance = 0;
-	}
-	DebrisObject(int new_x, int new_y, int new_width, int new_height, int new_colorIndex, int new_angle, double new_distance)
-	{
-		x = new_x;
-		y = new_y;
-		width = new_width;
-		height = new_height;
+		center.x = boundingRect.x + boundingRect.width / 2;
+		center.y = boundingRect.y + boundingRect.height / 2;
+		width = boundingRect.width;
+		height = boundingRect.height;
 		colorIndex = new_colorIndex;
 		angle = new_angle;
 		distance = new_distance;
 	}
 	void printProperties()
 	{
-		cout << "X=" << x << " Y=" << y << " Width=" << width << " Height=" << height << " colorIndex=" << colorIndex 
+		cout << "X=" << center.x << " Y=" << center.y << " Width=" << width << " Height=" << height << " colorIndex=" << colorIndex 
 		<< " angle=" << angle << " distance=" << distance << "\n";
 	}
 };
@@ -145,7 +134,7 @@ struct VisionHandle
 			int largestDebris = findLargestObject();
 			if (VISION_DEBUG_IMAGE)
 			{
-				line(image, Point(image.cols / 2, image.rows), Point(objectProperties[largestDebris].x, objectProperties[largestDebris].y), colors[objectProperties[largestDebris].colorIndex], 4, 8, 0); // draw line from bottom center of image to center of object
+				line(image, Point(image.cols / 2, image.rows), Point(objectProperties[largestDebris].center.x, objectProperties[largestDebris].center.y), colors[objectProperties[largestDebris].colorIndex], 4, 8, 0); // draw line from bottom center of image to center of object
 				line(image, Point(image.cols / 2, image.rows), Point(image.cols / 2, 0), Scalar(256, 256, 256), 4, 8, 0);
 			}
 			if (VISION_DEBUG_TEXT)
@@ -216,7 +205,7 @@ struct VisionHandle
 				Rect boundRect = boundingRect(contours[i]);
 				float r;
 				Point2f cent;
-				w2h = (double)boundRect.width / boundRect.height;					 // Find width to height ratio, 100 is square
+				w2h = (double)boundRect.width / boundRect.height;					 // Find width to height ratio, 1.0 is square
 				percentFilled = area / (double)(boundRect.width * boundRect.height); // amount of rectangle consumed by contour
 				// Determine shape
 				if (w2h > DEBRIS_MAX_W2H || w2h < DEBRIS_MIN_W2H) // wrong size ratio
@@ -235,7 +224,7 @@ struct VisionHandle
 						rectangle(image, boundRect.tl(), boundRect.br(), colors[index], 4, 8, 0);
 					angle = atan((double)(boundRect.x - image.cols / 2) / (double)(image.rows - boundRect.y)) * 180 / PI; // Find angle to center of object from centerline
 					distance = (1/(double)boundRect.width) * DISTANCE_MULTIPLIER;
-					objectProperties.push_back(DebrisObject(int(boundRect.x + boundRect.width / 2), int(boundRect.y + boundRect.height / 2), int(boundRect.width), int(boundRect.height), index, angle, distance));
+					objectProperties.push_back(DebrisObject(boundRect, index, angle, distance));
 				}
 			}
 		}
@@ -269,7 +258,7 @@ struct VisionHandle
 			index = objectProperties[i].colorIndex;
 			if (index < 4)
 			{
-				colorOccurrences[index] = colorOccurrences[index] + 1;
+				colorOccurrences[index] += 1;
 			}
 		}
 		for (int i = 0; i < 4; i++)

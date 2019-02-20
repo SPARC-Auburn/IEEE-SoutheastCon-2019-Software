@@ -6,7 +6,6 @@ Organization: Student Projects and Research Committee (SPARC)
 Description:  Main development program for competition.
 ------------------------------------------------------------------------------*/
 #include "Arduino-Serial/ArduinoSerial.h"
-#include "Arduino-Serial/ArduinoSerial.cpp"
 #include "Vision-Processing/vision.cpp"
 #include <thread>
 #include <unistd.h>
