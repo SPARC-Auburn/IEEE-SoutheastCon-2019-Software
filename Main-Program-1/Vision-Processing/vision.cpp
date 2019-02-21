@@ -130,9 +130,9 @@ struct VisionHandle
 				double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
 				double frequency = 1 / elapsed_secs;
 				cout << "Elapsed Time = " << elapsed_secs << "s, Frequency = " << frequency << "Hz \n";
+				cout << "Distance = " << objectProperties[largestDebris].distance << "\n";
 			}
 			displayImage("image window");
-			cout << "Distance = " << objectProperties[largestDebris].distance << "\n";
 			return int(objectProperties[largestDebris].angle);
 		}
 		else // No objects found
@@ -151,9 +151,10 @@ struct VisionHandle
 	// Takes a picture, flips it, saves it in image, and converts it to HSV
 	void takePicture()
 	{
-		if (VISION_DEBUG_TEXT)
+		if (VISION_DEBUG_TEXT){
 			begin = clock();
 			cout << "getting picture..." << endl;
+		}
 		Camera.grab();
 		Camera.retrieve(image);
 		//Camera.retrieve(temp);
@@ -173,6 +174,7 @@ struct VisionHandle
 	// Populates vector array of object's properties; previously "GetObjectProperties"
 	void findObjectsOfColor(int index)
 	{
+		objectProperties.clear(); // needs removed when using findObjects()
 		double area, angle, w2h, percentFilled, distance;
 		// Generate contours
 		contours.clear();

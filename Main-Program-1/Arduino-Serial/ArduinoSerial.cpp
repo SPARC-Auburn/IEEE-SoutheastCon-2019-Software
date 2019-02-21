@@ -17,7 +17,7 @@ Controls 2 drive motors and 3 steppers.  Speed ranges are from -127 to 127.
 #include <iostream>
 
 // Constants
-#define DEBUG_TEXT 0
+#define DEBUG_TEXT 1
 const char serialPort::typicalPortName[] = "/dev/ttyUSB0";
 
 // Namespaces
@@ -42,8 +42,8 @@ serialPort::serialPort(const char* portName) {
 
   cfmakeraw(&config);     //Sets various parameters for non-canonical mode; disables parity
 
-  cfsetospeed (&config, B115200);    //Baud rate
-  cfsetispeed (&config, B115200);
+  cfsetospeed (&config, B9600);    //Baud rate
+  cfsetispeed (&config, B9600);
 
   config.c_cflag     &=  ~CSTOPB;    //One stop bit
 
@@ -179,5 +179,6 @@ void serialPort::stopMotors(){
 }
 
 serialPort::~serialPort() {
+  cout << "Disconnecting from Arduino..." << endl;
   close(fileHandle);
 }
