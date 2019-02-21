@@ -13,7 +13,7 @@ Speed Order = leftDriveSpeed,rightDriveSpeed,leftGateSpeed,rightGateSpeed,
 // Constants
 #define IN1 4 // Arduino pin 4 is connected to MDDS60 pin IN1.
 #define MOTOR_CONTROLLER_BAUDRATE  9600
-#define RASPBERRY_PI_BAUDRATE  115200
+#define RASPBERRY_PI_BAUDRATE  9600
 
 // Variables
 char streamIn[2] = "00";
