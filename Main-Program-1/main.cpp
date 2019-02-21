@@ -28,7 +28,9 @@ struct threadableVision{
         IEEE_VISION::VisionHandle vis;
         void operator()(){
 		while(1) {
-                	this->angle = vis.angle2LargestDebris(1); 
+                        vis.takePicture();
+                        vis.findObjects();
+                	this->angle = vis.angle2LargestDebris();
 			imgs++;
                 	updated = true;
 		}
