@@ -92,9 +92,10 @@ struct VisionHandle
 	Size resolution;
 	clock_t begin;
 	vector<Rect> boundRect;
-	vector<DebrisObject> objectProperties;
+	
 
   public:
+	vector<DebrisObject> objectProperties;
 	VisionHandle()
 	{
 		Camera.set(CV_CPU_POPCNT, CV_8UC3);
@@ -174,7 +175,7 @@ struct VisionHandle
 	// Populates vector array of object's properties; previously "GetObjectProperties"
 	void findObjectsOfColor(int index)
 	{
-		objectProperties.clear(); // needs removed when using findObjects()
+		//objectProperties.clear(); // needs removed when using findObjects()
 		double area, angle, w2h, percentFilled, distance;
 		// Generate contours
 		contours.clear();

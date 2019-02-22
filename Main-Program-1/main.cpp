@@ -140,34 +140,48 @@ void testPointToObject()
         //thread visThread = thread(ref(vis));
         IEEE_VISION::VisionHandle vis;
         double angle = 0;
+        double distance = 0;
         //long startTime,temp;
         while (0 == 0)
         {       
                 vis.takePicture();
-                //vis.findObjects();
-                vis.findObjectsOfColor(1);
-                angle = vis.angle2LargestDebris(1);
+                vis.findObjects();
+                //vis.findObjectsOfColor(1);
+                angle = vis.angle2LargestDebris(vis.findMostOccuringColor());
                 cout << "Angle to Debris: " << angle << endl;
-                if (angle > 4 && angle < 120)
+                cout << "Largest object: " << vis.findLargestObject()  << endl;
+                if (vis.findLargestObject() >= 0){
+                        distance = vis.objectProperties[vis.findLargestObject()].distance;
+                }
+                else {
+                        distance = 0;
+                }
+                cout << "Distance to Debris: " << distance << endl;
+                if (angle > 10 && angle < 120)
                 {
                         cout << "Turning Right\n";
-                        arduino.turnRight(23);
-                        usleep(80*1000);
+                        arduino.turnRight(25);
+                        usleep(120*1000);
                         arduino.stopMotors();
                 }
-                else if (angle < -4 && angle > -120)
+                else if (angle < -10 && angle > -120)
                 {
                         cout << "Turning Left\n";
-                        arduino.turnLeft(23);
-                        usleep(80*1000);
+                        arduino.turnLeft(25);
+                        usleep(120*1000);
                         arduino.stopMotors();
                 }
                 else
                 {
                         cout << "Stopping Motors\n";
                         arduino.stopMotors();
+                        if (distance > 0.25 && distance < 2){
+                                cout << "Going Forward\n";
+                                arduino.goForward(25);
+                                //usleep(120*1000);
+                                //arduino.stopMotors();
+                        }                        
                 }
-
                     
         }
 }
