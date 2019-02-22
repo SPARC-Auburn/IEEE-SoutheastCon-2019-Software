@@ -17,7 +17,7 @@ Controls 2 drive motors and 3 steppers.  Speed ranges are from -127 to 127.
 #include <iostream>
 
 // Constants
-#define DEBUG_TEXT 1
+#define DEBUG_TEXT 0
 const char serialPort::typicalPortName[] = "/dev/ttyUSB0";
 
 // Namespaces
@@ -42,8 +42,8 @@ serialPort::serialPort(const char* portName) {
 
   cfmakeraw(&config);     //Sets various parameters for non-canonical mode; disables parity
 
-  cfsetospeed (&config, B9600);    //Baud rate
-  cfsetispeed (&config, B9600);
+  cfsetospeed (&config, B115200);    //Baud rate
+  cfsetispeed (&config, B115200);
 
   config.c_cflag     &=  ~CSTOPB;    //One stop bit
 
@@ -53,11 +53,13 @@ serialPort::serialPort(const char* portName) {
   config.c_cc[VMIN]   =  0;
   config.c_cc[VTIME]  =  0;
 
-  tcflush(fileHandle, TCIFLUSH);    //clear input buffer
   if(tcsetattr(fileHandle, TCSANOW, &config) != 0) {
     close(fileHandle);
     throw std::runtime_error("Setting attributes failed.");
   }
+  usleep(1000*1000*1); // wait 1 sec for arduino to reset
+  tcflush(fileHandle, TCIFLUSH);    //clear input buffer
+  usleep(1000*1000*1); // wait 1 sec for arduino to reset
 }
 
 void serialPort::write(string text) {
@@ -84,16 +86,17 @@ int serialPort::available() {
 
 // Updates the motor speeds according to the state variables
 void serialPort::updateMotors() {
+  signed char char1 = (signed char)(leftDriveSpeed);
+  signed char char2 = (signed char)(rightDriveSpeed);
+  signed char char3 = char1 + char2 + 1;
+	signed char x[3] = {char1,char2,char3};
   if (DEBUG_TEXT){
-    //cout << "[" << leftDriveSpeed << "," << rightDriveSpeed << "," << leftGateSpeed << "," << rightGateSpeed 
-    //<< "," << spinnerSpeed << "]" << endl;
-    cout << "[" << leftDriveSpeed << "," << rightDriveSpeed << "]" << endl;
+    cout << "Sending to Arduino: " << (int)char1 << "," << (int)char2 << "," << (int)char3 << endl;
   }
-	char x[2] = {(char)(leftDriveSpeed+127),(char)(rightDriveSpeed+127)};
-	write(x);
-  // char x[5] = {(char)(leftDriveSpeed+127),(char)(rightDriveSpeed+127),(char)(leftGateSpeed+127),
-  //(char)(rightGateSpeed+127),(char)(spinnerSpeed+127)};
-	// ::write(fileHandle,x,5);
+  ::write(fileHandle, x, 3);
+  if (DEBUG_TEXT){
+    cout << "Received from Arduino: " << read() << endl;
+  } 
 }
 
 void serialPort::turnLeft(int speed){

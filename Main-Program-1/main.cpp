@@ -48,16 +48,14 @@ struct threadableVision{
 int main()
 {
         startupRoutine();    
-	testMovement();  
-        //testPointToObject();    
+	//testMovement();  
+        testPointToObject();    
          
         return 0;
 }
 
 void my_handler(int s){
         arduino.stopMotors(); 
-        arduino.stopMotors();
-        arduino.stopMotors();
         cout << "Forcing Stop..." << endl;
         exit(1); 
 
@@ -92,11 +90,8 @@ void testMovement()
 {
         
         arduino.turnRight(25);
-        usleep(1000*1000*1);
+        usleep(1000*500);
         arduino.stopMotors();
-        arduino.stopMotors();
-        arduino.stopMotors();
-        usleep(1000*1000*1);
 }
 
 void testPointToObjectSmart()
@@ -153,27 +148,26 @@ void testPointToObject()
                 vis.findObjectsOfColor(1);
                 angle = vis.angle2LargestDebris(1);
                 cout << "Angle to Debris: " << angle << endl;
-                if(angle < -5 && angle > -120)
+                if (angle > 4 && angle < 120)
                 {
-                        cout <<"Turning Left" << endl;
-                        arduino.turnLeft(25);
-                        usleep(1000*100);
-                        arduino.stopMotors();
+                        cout << "Turning Right\n";
+                        arduino.turnRight(23);
+                        usleep(80*1000);
                         arduino.stopMotors();
                 }
-                else if(5 < angle && angle < 120)
+                else if (angle < -4 && angle > -120)
                 {
-                        cout <<"Turning Right" << endl;
-                        arduino.turnRight(25);
-                        usleep(1000*100);
-                        arduino.stopMotors();
+                        cout << "Turning Left\n";
+                        arduino.turnLeft(23);
+                        usleep(80*1000);
                         arduino.stopMotors();
                 }
-                else {
-                        cout <<"Stopped Turning" << endl;
+                else
+                {
+                        cout << "Stopping Motors\n";
                         arduino.stopMotors();
-                        arduino.stopMotors();
-                }                        
-		usleep(1000*1000);
+                }
+
+                    
         }
 }
