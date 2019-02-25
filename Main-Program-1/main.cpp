@@ -142,45 +142,62 @@ void testPointToObject()
         double angle = 0;
         double distance = 0;
         //long startTime,temp;
+        bool isInactive = false;
+        long beginInactive = 0;
         while (0 == 0)
         {       
                 vis.takePicture();
                 vis.findObjects();
                 //vis.findObjectsOfColor(1);
-                angle = vis.angle2LargestDebris(vis.findMostOccuringColor());
-                cout << "Angle to Debris: " << angle << endl;
-                cout << "Largest object: " << vis.findLargestObject()  << endl;
+                angle = vis.angle2LargestDebris();
+                //cout << "Angle to Debris: " << angle << endl;
+                //cout << "Largest object: " << vis.findLargestObject()  << endl;
                 if (vis.findLargestObject() >= 0){
                         distance = vis.objectProperties[vis.findLargestObject()].distance;
                 }
                 else {
                         distance = 0;
                 }
-                cout << "Distance to Debris: " << distance << endl;
-                if (angle > 10 && angle < 120)
+                //cout << "Distance to Debris: " << distance << endl;
+                if (angle > (distance < .6 ? 55 : 10) && angle < 120)
                 {
-                        cout << "Turning Right\n";
+                        //cout << "Turning Right\n";
                         arduino.turnRight(25);
                         usleep(120*1000);
                         arduino.stopMotors();
+                        isInactive = false;
                 }
-                else if (angle < -10 && angle > -120)
+                else if (angle < (distance < .6 ? -55 : -10) && angle > -120)
                 {
-                        cout << "Turning Left\n";
+                        //cout << "Turning Left\n";
                         arduino.turnLeft(25);
                         usleep(120*1000);
                         arduino.stopMotors();
+                        isInactive = false;
                 }
                 else
                 {
-                        cout << "Stopping Motors\n";
+                        //cout << "Stopping Motors\n";
                         arduino.stopMotors();
+                        if(!isInactive) {
+                                isInactive = true;
+                                beginInactive = getms();
+                                cout << "Time reset\n";
+                        }
                         if (distance > 0.25 && distance < 2){
                                 cout << "Going Forward\n";
                                 arduino.goForward(25);
                                 //usleep(120*1000);
                                 //arduino.stopMotors();
-                        }                        
+                        }
+                        else {
+                                if(getms() - beginInactive > 4000) {
+                                        cout << getms() - beginInactive << '\n';
+                                        arduino.turnRight(25);
+                                        usleep(1000*200);
+                                        arduino.stopMotors();
+                                }
+                        }          
                 }
                     
         }
