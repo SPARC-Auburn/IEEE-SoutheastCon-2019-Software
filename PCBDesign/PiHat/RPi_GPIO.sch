@@ -1,10 +1,10 @@
 EESchema Schematic File Version 4
-LIBS:RPi_Hat-cache
+LIBS:RPi_GPIO-cache
 EELAYER 26 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 1 2
+Sheet 1 1
 Title ""
 Date ""
 Rev ""
@@ -52,34 +52,12 @@ F 3 "https://www.pololu.com/product/2980/pictures" H 4150 4450 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Driver_Motor:Pololu_Breakout_A4988 SMC3
-U 1 1 5C782A2D
-P 4050 6550
-F 0 "SMC3" H 4100 7428 50  0000 C CNN
-F 1 "Pololu_Breakout_A4988" H 4100 7337 50  0000 C CNN
-F 2 "Module:Pololu_Breakout-16_15.2x20.3mm" H 4325 5800 50  0001 L CNN
-F 3 "https://www.pololu.com/product/2980/pictures" H 4150 6250 50  0001 C CNN
-	1    4050 6550
-	1    0    0    -1  
-$EndComp
-$Comp
-L arduino_micro_shield:ARDUINO_MICRO_SHIELD U1
-U 1 1 5C782D02
-P 10000 6200
-F 0 "U1" V 11993 6675 60  0000 C CNN
-F 1 "ARDUINO_MICRO_SHIELD" V 11887 6675 60  0000 C CNN
-F 2 "arduino_micro_shield:ARDUINO_MICRO_SHIELD" V 11781 6675 60  0000 C CNN
-F 3 "" H 10400 6150 60  0000 C CNN
-	1    10000 6200
-	0    -1   -1   0   
-$EndComp
-$Comp
 L pspice:CAP 12VCap1
 U 1 1 5C782DDC
 P 2250 2100
 F 0 "12VCap1" H 2428 2146 50  0000 L CNN
 F 1 "CAP" H 2428 2055 50  0000 L CNN
-F 2 "Capacitor_THT:CP_Axial_L10.0mm_D4.5mm_P15.00mm_Horizontal" H 2250 2100 50  0001 C CNN
+F 2 "Capacitor_THT:C_Rect_L9.0mm_W6.7mm_P7.50mm_MKT" H 2250 2100 50  0001 C CNN
 F 3 "~" H 2250 2100 50  0001 C CNN
 	1    2250 2100
 	1    0    0    -1  
@@ -160,28 +138,9 @@ Wire Wire Line
 Connection ~ 4000 3800
 Wire Wire Line
 	3450 3800 3450 5550
-Wire Wire Line
-	3450 5550 4050 5550
 Connection ~ 3450 3800
 Wire Wire Line
 	3450 3800 4000 3800
-Wire Wire Line
-	4250 5550 4050 5550
-Connection ~ 4050 5550
-Wire Wire Line
-	3450 5550 3450 7350
-Wire Wire Line
-	3450 7350 4050 7350
-Connection ~ 3450 5550
-Wire Wire Line
-	4250 7350 4050 7350
-Connection ~ 4050 7350
-Wire Wire Line
-	4200 3800 6850 3800
-Wire Wire Line
-	6850 3800 6850 4600
-Wire Wire Line
-	6850 4600 7300 4600
 Connection ~ 4200 3800
 Wire Wire Line
 	1750 1400 3200 1400
@@ -196,17 +155,9 @@ Wire Wire Line
 Text Label 3800 1400 0    50   ~ 0
 5V
 Wire Wire Line
-	7300 4600 7300 2750
-Wire Wire Line
 	7300 2750 8750 2750
 Wire Wire Line
-	4850 4950 4550 4950
-Wire Wire Line
-	4850 4850 4550 4850
-Wire Wire Line
-	4850 4750 4550 4750
-Wire Wire Line
-	4850 4650 4550 4650
+	4850 4950 4650 4950
 Wire Wire Line
 	4900 3200 4500 3200
 Wire Wire Line
@@ -249,25 +200,12 @@ Wire Wire Line
 Wire Wire Line
 	6750 7550 6750 6400
 Wire Wire Line
-	6750 6400 10650 6400
-Wire Wire Line
-	10650 6400 10650 5450
-Wire Wire Line
-	10650 5450 10200 5450
-Wire Wire Line
 	4050 4050 3300 4050
 Wire Wire Line
 	3300 4050 3300 2300
 Connection ~ 3300 1400
 Wire Wire Line
 	3300 1400 4700 1400
-Wire Wire Line
-	3300 4050 3300 5800
-Wire Wire Line
-	3300 5800 4050 5800
-Wire Wire Line
-	4050 5800 4050 5850
-Connection ~ 3300 4050
 Wire Wire Line
 	3300 2300 4000 2300
 Connection ~ 3300 2300
@@ -285,17 +223,6 @@ Wire Wire Line
 Wire Wire Line
 	5800 4050 4250 4050
 Connection ~ 4200 1850
-Wire Wire Line
-	5800 4050 5800 5850
-Wire Wire Line
-	5800 5850 4250 5850
-Connection ~ 5800 4050
-Wire Wire Line
-	3650 6150 3600 6150
-Wire Wire Line
-	3600 6150 3600 6250
-Wire Wire Line
-	3600 6250 3650 6250
 Wire Wire Line
 	3650 4350 3600 4350
 Wire Wire Line
@@ -315,13 +242,7 @@ Wire Wire Line
 Wire Wire Line
 	3400 2000 7900 2000
 Wire Wire Line
-	7900 2000 7900 3800
-Wire Wire Line
-	7900 3800 10900 3800
-Wire Wire Line
-	10900 3800 10900 4950
-Wire Wire Line
-	10900 4950 10200 4950
+	7900 2000 7900 3650
 Wire Wire Line
 	3600 3000 3500 3000
 Wire Wire Line
@@ -331,22 +252,6 @@ Wire Wire Line
 Wire Wire Line
 	7800 2100 7800 3900
 Wire Wire Line
-	7800 3900 10800 3900
-Wire Wire Line
-	10800 3900 10800 4850
-Wire Wire Line
-	10800 4850 10200 4850
-Wire Wire Line
-	10200 4550 10600 4550
-Wire Wire Line
-	10600 4550 10600 4100
-Wire Wire Line
-	10600 4100 6950 4100
-Wire Wire Line
-	6950 4100 6950 5650
-Wire Wire Line
-	6950 5650 3600 5650
-Wire Wire Line
 	3600 5650 3600 4850
 Wire Wire Line
 	3600 4850 3650 4850
@@ -354,61 +259,128 @@ Wire Wire Line
 	3650 4750 3550 4750
 Wire Wire Line
 	3550 4750 3550 5700
-Wire Wire Line
-	3550 5700 7000 5700
-Wire Wire Line
-	7000 5700 7000 4150
-Wire Wire Line
-	7000 4150 10550 4150
-Wire Wire Line
-	10550 4150 10550 4650
-Wire Wire Line
-	10550 4650 10200 4650
-Wire Wire Line
-	3650 6650 3550 6650
-Wire Wire Line
-	3550 6650 3550 7650
-Wire Wire Line
-	3550 7650 6500 7650
-Wire Wire Line
-	6500 7650 6500 6350
-Wire Wire Line
-	6500 6350 10450 6350
-Wire Wire Line
-	10450 6350 10450 5350
-Wire Wire Line
-	10450 5350 10200 5350
-Wire Wire Line
-	3650 6550 3500 6550
-Wire Wire Line
-	3500 6550 3500 7700
-Wire Wire Line
-	3500 7700 6600 7700
-Wire Wire Line
-	6600 7700 6600 6450
-Wire Wire Line
-	6600 6450 10750 6450
-Wire Wire Line
-	10750 6450 10750 5250
-Wire Wire Line
-	10750 5250 10200 5250
 $Comp
 L Connector:Conn_01x04_Male SM3
 U 1 1 5C7AD885
-P 5350 6650
-F 0 "SM3" H 5323 6530 50  0000 R CNN
-F 1 "Conn_01x04_Male" H 5323 6621 50  0000 R CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical" H 5350 6650 50  0001 C CNN
-F 3 "~" H 5350 6650 50  0001 C CNN
-	1    5350 6650
+P 5050 5250
+F 0 "SM3" H 5023 5130 50  0000 R CNN
+F 1 "Conn_01x04_Male" H 5023 5221 50  0000 R CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical" H 5050 5250 50  0001 C CNN
+F 3 "~" H 5050 5250 50  0001 C CNN
+	1    5050 5250
 	-1   0    0    1   
 $EndComp
 Wire Wire Line
-	4550 6450 5150 6450
+	4550 4850 4700 4850
 Wire Wire Line
-	4550 6550 5150 6550
+	3450 5550 4050 5550
 Wire Wire Line
-	4550 6650 5150 6650
+	4250 5550 4050 5550
+Connection ~ 4050 5550
 Wire Wire Line
-	4550 6750 5150 6750
+	4550 4650 4800 4650
+Wire Wire Line
+	4550 4750 4750 4750
+Wire Wire Line
+	4800 4650 4800 5050
+Wire Wire Line
+	4800 5050 4850 5050
+Connection ~ 4800 4650
+Wire Wire Line
+	4800 4650 4850 4650
+Wire Wire Line
+	4750 4750 4750 5150
+Wire Wire Line
+	4750 5150 4850 5150
+Connection ~ 4750 4750
+Wire Wire Line
+	4750 4750 4850 4750
+Wire Wire Line
+	4700 4850 4700 5250
+Wire Wire Line
+	4700 5250 4850 5250
+Connection ~ 4700 4850
+Wire Wire Line
+	4700 4850 4850 4850
+Wire Wire Line
+	4650 4950 4650 5350
+Wire Wire Line
+	4650 5350 4850 5350
+Connection ~ 4650 4950
+Wire Wire Line
+	4650 4950 4550 4950
+$Comp
+L MCU_Module:Arduino_Nano_v3.x A?
+U 1 1 5C80A084
+P 8050 5200
+F 0 "A?" H 8050 4114 50  0000 C CNN
+F 1 "Arduino_Nano_v3.x" H 8050 4023 50  0000 C CNN
+F 2 "Module:Arduino_Nano" H 8200 4250 50  0001 L CNN
+F 3 "http://www.mouser.com/pdfdocs/Gravitech_Arduino_Nano3_0.pdf" H 8050 4200 50  0001 C CNN
+	1    8050 5200
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6750 6400 7300 6400
+Wire Wire Line
+	7300 6400 7300 4900
+Wire Wire Line
+	7300 4900 7550 4900
+Wire Wire Line
+	3550 5700 7550 5700
+Wire Wire Line
+	7250 5650 7250 5800
+Wire Wire Line
+	7250 5800 7550 5800
+Wire Wire Line
+	3600 5650 7250 5650
+Wire Wire Line
+	7800 3900 7450 3900
+Wire Wire Line
+	7450 3900 7450 5500
+Wire Wire Line
+	7450 5500 7550 5500
+Wire Wire Line
+	7900 3650 7500 3650
+Wire Wire Line
+	7500 3650 7500 5400
+Wire Wire Line
+	7500 5400 7550 5400
+Wire Wire Line
+	7300 2750 7300 3800
+Wire Wire Line
+	4200 3800 7300 3800
+$Comp
+L Connector:Conn_01x04_Male MMC
+U 1 1 5C83F9B6
+P 9800 3200
+F 0 "MMC" H 9906 3478 50  0000 C CNN
+F 1 "Conn_01x04_Male" H 9906 3387 50  0000 C CNN
+F 2 "Connector:NS-Tech_Grove_1x04_P2mm_Vertical" H 9800 3200 50  0001 C CNN
+F 3 "~" H 9800 3200 50  0001 C CNN
+	1    9800 3200
+	-1   0    0    1   
+$EndComp
+$Comp
+L Connector:Conn_01x05_Male ENC1
+U 1 1 5C84907A
+P 9800 3850
+F 0 "ENC1" H 9773 3780 50  0000 R CNN
+F 1 "Conn_01x05_Male" H 9773 3871 50  0000 R CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical" H 9800 3850 50  0001 C CNN
+F 3 "~" H 9800 3850 50  0001 C CNN
+	1    9800 3850
+	-1   0    0    1   
+$EndComp
+$Comp
+L Connector:Conn_01x05_Male ENC2
+U 1 1 5C8526DD
+P 9800 4450
+F 0 "ENC2" H 9773 4380 50  0000 R CNN
+F 1 "Conn_01x05_Male" H 9773 4471 50  0000 R CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical" H 9800 4450 50  0001 C CNN
+F 3 "~" H 9800 4450 50  0001 C CNN
+	1    9800 4450
+	-1   0    0    1   
+$EndComp
 $EndSCHEMATC
