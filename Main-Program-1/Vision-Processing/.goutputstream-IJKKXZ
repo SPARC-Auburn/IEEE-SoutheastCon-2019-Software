@@ -29,7 +29,7 @@ Color Indices = Red(0), Blue(1), Yellow(2), Green(3)
 #define MAX_AREA 30000
 #define VISION_DEBUG_IMAGE 1
 #define VISION_DEBUG_COLOR_IMAGE -1 // -1 to disable (0 red,1 blue,2 yellow,3 green)
-#define VISION_DEBUG_TEXT 0
+#define VISION_DEBUG_TEXT 1
 #define DEBRIS_MIN_W2H 0.75
 #define DEBRIS_MAX_W2H 1.5
 #define CORNER_MIN_W2H .1
@@ -92,10 +92,9 @@ struct VisionHandle
 	Size resolution;
 	clock_t begin;
 	vector<Rect> boundRect;
-	
+	vector<DebrisObject> objectProperties;
 
   public:
-	vector<DebrisObject> objectProperties;
 	VisionHandle()
 	{
 		Camera.set(CV_CPU_POPCNT, CV_8UC3);
@@ -175,7 +174,7 @@ struct VisionHandle
 	// Populates vector array of object's properties; previously "GetObjectProperties"
 	void findObjectsOfColor(int index)
 	{
-		//objectProperties.clear(); // needs removed when using findObjects()
+		objectProperties.clear(); // needs removed when using findObjects()
 		double area, angle, w2h, percentFilled, distance;
 		// Generate contours
 		contours.clear();

@@ -53,11 +53,13 @@ serialPort::serialPort(const char* portName) {
   config.c_cc[VMIN]   =  0;
   config.c_cc[VTIME]  =  0;
 
-  tcflush(fileHandle, TCIFLUSH);    //clear input buffer
   if(tcsetattr(fileHandle, TCSANOW, &config) != 0) {
     close(fileHandle);
     throw std::runtime_error("Setting attributes failed.");
   }
+  usleep(1000*1000*1); // wait 1 sec for arduino to reset
+  tcflush(fileHandle, TCIFLUSH);    //clear input buffer
+  usleep(1000*1000*1); // wait 1 sec for arduino to reset
 }
 
 void serialPort::write(string text) {
@@ -84,16 +86,17 @@ int serialPort::available() {
 
 // Updates the motor speeds according to the state variables
 void serialPort::updateMotors() {
+  signed char char1 = (signed char)(leftDriveSpeed);
+  signed char char2 = (signed char)(rightDriveSpeed);
+  signed char char3 = char1 + char2 + 1;
+	signed char x[3] = {char1,char2,char3};
   if (DEBUG_TEXT){
-    //cout << "[" << leftDriveSpeed << "," << rightDriveSpeed << "," << leftGateSpeed << "," << rightGateSpeed 
-    //<< "," << spinnerSpeed << "]" << endl;
-    cout << "[" << leftDriveSpeed << "," << rightDriveSpeed << "]" << endl;
+    cout << "Sending to Arduino: " << (int)char1 << "," << (int)char2 << "," << (int)char3 << endl;
   }
-	char x[2] = {(char)(leftDriveSpeed+127),(char)(rightDriveSpeed+127)};
-	write(x);
-  // char x[5] = {(char)(leftDriveSpeed+127),(char)(rightDriveSpeed+127),(char)(leftGateSpeed+127),
-  //(char)(rightGateSpeed+127),(char)(spinnerSpeed+127)};
-	// ::write(fileHandle,x,5);
+  ::write(fileHandle, x, 3);
+  if (DEBUG_TEXT){
+    cout << "Received from Arduino: " << read() << endl;
+  } 
 }
 
 void serialPort::turnLeft(int speed){
@@ -179,5 +182,6 @@ void serialPort::stopMotors(){
 }
 
 serialPort::~serialPort() {
+  cout << "Disconnecting from Arduino..." << endl;
   close(fileHandle);
 }
