@@ -1,2 +1,2 @@
-beginner_tutorials
+beginner_tutorials:main_node:opencv_node
 -DCATKIN_DEVEL_PREFIX=/home/matthew/ieee-2019-electrical-software/Main-Program-2/devel -DCMAKE_INSTALL_PREFIX=/home/matthew/ieee-2019-electrical-software/Main-Program-2/install -G Unix Makefiles

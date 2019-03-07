@@ -345,8 +345,20 @@ gtest_main_LIB_DEPENDS:STATIC=general;-lpthread;general;gtest;
 //Path to a library.
 lib:FILEPATH=/opt/ros/melodic/lib/libxmlrpcpp.so
 
+//Value Computed by CMake
+main_node_BINARY_DIR:STATIC=/home/matthew/ieee-2019-electrical-software/Main-Program-2/build/main_node
+
+//Value Computed by CMake
+main_node_SOURCE_DIR:STATIC=/home/matthew/ieee-2019-electrical-software/Main-Program-2/src/main_node
+
 //The directory containing a CMake configuration file for message_runtime.
 message_runtime_DIR:PATH=/opt/ros/melodic/share/message_runtime/cmake
+
+//Value Computed by CMake
+opencv_node_BINARY_DIR:STATIC=/home/matthew/ieee-2019-electrical-software/Main-Program-2/build/opencv_node
+
+//Value Computed by CMake
+opencv_node_SOURCE_DIR:STATIC=/home/matthew/ieee-2019-electrical-software/Main-Program-2/src/opencv_node
 
 //The directory containing a CMake configuration file for rosconsole.
 rosconsole_DIR:PATH=/opt/ros/melodic/share/rosconsole/cmake
@@ -487,7 +499,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=5
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=7
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP

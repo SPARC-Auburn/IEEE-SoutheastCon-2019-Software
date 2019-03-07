@@ -675,7 +675,7 @@ clean: beginner_tutorials/CMakeFiles/roscpp_generate_messages_cpp.dir/clean
 beginner_tutorials/CMakeFiles/talker.dir/all:
 	$(MAKE) -f beginner_tutorials/CMakeFiles/talker.dir/build.make beginner_tutorials/CMakeFiles/talker.dir/depend
 	$(MAKE) -f beginner_tutorials/CMakeFiles/talker.dir/build.make beginner_tutorials/CMakeFiles/talker.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/matthew/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles --progress-num=14,15 "Built target talker"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/matthew/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles --progress-num=16,17 "Built target talker"
 .PHONY : beginner_tutorials/CMakeFiles/talker.dir/all
 
 # Include target in all.
@@ -990,6 +990,116 @@ beginner_tutorials/CMakeFiles/std_msgs_generate_messages_py.dir/clean:
 
 # clean rule for target.
 clean: beginner_tutorials/CMakeFiles/std_msgs_generate_messages_py.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Directory level rules for directory main_node
+
+# Convenience name for "all" pass in the directory.
+main_node/all: main_node/CMakeFiles/main.dir/all
+
+.PHONY : main_node/all
+
+# Convenience name for "clean" pass in the directory.
+main_node/clean: main_node/CMakeFiles/main.dir/clean
+
+.PHONY : main_node/clean
+
+# Convenience name for "preinstall" pass in the directory.
+main_node/preinstall:
+
+.PHONY : main_node/preinstall
+
+#=============================================================================
+# Target rules for target main_node/CMakeFiles/main.dir
+
+# All Build rule for target.
+main_node/CMakeFiles/main.dir/all:
+	$(MAKE) -f main_node/CMakeFiles/main.dir/build.make main_node/CMakeFiles/main.dir/depend
+	$(MAKE) -f main_node/CMakeFiles/main.dir/build.make main_node/CMakeFiles/main.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/matthew/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles --progress-num=14,15 "Built target main"
+.PHONY : main_node/CMakeFiles/main.dir/all
+
+# Include target in all.
+all: main_node/CMakeFiles/main.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+main_node/CMakeFiles/main.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/matthew/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 main_node/CMakeFiles/main.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/matthew/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles 0
+.PHONY : main_node/CMakeFiles/main.dir/rule
+
+# Convenience name for target.
+main: main_node/CMakeFiles/main.dir/rule
+
+.PHONY : main
+
+# clean rule for target.
+main_node/CMakeFiles/main.dir/clean:
+	$(MAKE) -f main_node/CMakeFiles/main.dir/build.make main_node/CMakeFiles/main.dir/clean
+.PHONY : main_node/CMakeFiles/main.dir/clean
+
+# clean rule for target.
+clean: main_node/CMakeFiles/main.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Directory level rules for directory opencv_node
+
+# Convenience name for "all" pass in the directory.
+opencv_node/all: opencv_node/CMakeFiles/vision_talker.dir/all
+
+.PHONY : opencv_node/all
+
+# Convenience name for "clean" pass in the directory.
+opencv_node/clean: opencv_node/CMakeFiles/vision_talker.dir/clean
+
+.PHONY : opencv_node/clean
+
+# Convenience name for "preinstall" pass in the directory.
+opencv_node/preinstall:
+
+.PHONY : opencv_node/preinstall
+
+#=============================================================================
+# Target rules for target opencv_node/CMakeFiles/vision_talker.dir
+
+# All Build rule for target.
+opencv_node/CMakeFiles/vision_talker.dir/all:
+	$(MAKE) -f opencv_node/CMakeFiles/vision_talker.dir/build.make opencv_node/CMakeFiles/vision_talker.dir/depend
+	$(MAKE) -f opencv_node/CMakeFiles/vision_talker.dir/build.make opencv_node/CMakeFiles/vision_talker.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/matthew/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles --progress-num=18,19 "Built target vision_talker"
+.PHONY : opencv_node/CMakeFiles/vision_talker.dir/all
+
+# Include target in all.
+all: opencv_node/CMakeFiles/vision_talker.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+opencv_node/CMakeFiles/vision_talker.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/matthew/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 opencv_node/CMakeFiles/vision_talker.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/matthew/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles 0
+.PHONY : opencv_node/CMakeFiles/vision_talker.dir/rule
+
+# Convenience name for target.
+vision_talker: opencv_node/CMakeFiles/vision_talker.dir/rule
+
+.PHONY : vision_talker
+
+# clean rule for target.
+opencv_node/CMakeFiles/vision_talker.dir/clean:
+	$(MAKE) -f opencv_node/CMakeFiles/vision_talker.dir/build.make opencv_node/CMakeFiles/vision_talker.dir/clean
+.PHONY : opencv_node/CMakeFiles/vision_talker.dir/clean
+
+# clean rule for target.
+clean: opencv_node/CMakeFiles/vision_talker.dir/clean
 
 .PHONY : clean
 

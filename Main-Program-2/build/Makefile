@@ -505,6 +505,32 @@ std_msgs_generate_messages_py/fast:
 	$(MAKE) -f beginner_tutorials/CMakeFiles/std_msgs_generate_messages_py.dir/build.make beginner_tutorials/CMakeFiles/std_msgs_generate_messages_py.dir/build
 .PHONY : std_msgs_generate_messages_py/fast
 
+#=============================================================================
+# Target rules for targets named main
+
+# Build rule for target.
+main: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 main
+.PHONY : main
+
+# fast build rule for target.
+main/fast:
+	$(MAKE) -f main_node/CMakeFiles/main.dir/build.make main_node/CMakeFiles/main.dir/build
+.PHONY : main/fast
+
+#=============================================================================
+# Target rules for targets named vision_talker
+
+# Build rule for target.
+vision_talker: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 vision_talker
+.PHONY : vision_talker
+
+# fast build rule for target.
+vision_talker/fast:
+	$(MAKE) -f opencv_node/CMakeFiles/vision_talker.dir/build.make opencv_node/CMakeFiles/vision_talker.dir/build
+.PHONY : vision_talker/fast
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -544,6 +570,8 @@ help:
 	@echo "... std_msgs_generate_messages_nodejs"
 	@echo "... roscpp_generate_messages_nodejs"
 	@echo "... std_msgs_generate_messages_py"
+	@echo "... main"
+	@echo "... vision_talker"
 .PHONY : help
 
 

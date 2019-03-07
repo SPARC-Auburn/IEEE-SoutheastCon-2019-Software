@@ -15,9 +15,17 @@ set(CMAKE_MAKEFILE_DEPENDS
   "catkin/catkin_generated/version/package.cmake"
   "catkin_generated/installspace/_setup_util.py"
   "catkin_generated/order_packages.cmake"
+  "main_node/catkin_generated/ordered_paths.cmake"
+  "main_node/catkin_generated/package.cmake"
+  "opencv_node/catkin_generated/ordered_paths.cmake"
+  "opencv_node/catkin_generated/package.cmake"
   "/home/matthew/ieee-2019-electrical-software/Main-Program-2/src/CMakeLists.txt"
   "/home/matthew/ieee-2019-electrical-software/Main-Program-2/src/beginner_tutorials/CMakeLists.txt"
   "/home/matthew/ieee-2019-electrical-software/Main-Program-2/src/beginner_tutorials/package.xml"
+  "/home/matthew/ieee-2019-electrical-software/Main-Program-2/src/main_node/CMakeLists.txt"
+  "/home/matthew/ieee-2019-electrical-software/Main-Program-2/src/main_node/package.xml"
+  "/home/matthew/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/CMakeLists.txt"
+  "/home/matthew/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/package.xml"
   "/opt/ros/melodic/share/catkin/cmake/../package.xml"
   "/opt/ros/melodic/share/catkin/cmake/all.cmake"
   "/opt/ros/melodic/share/catkin/cmake/assert.cmake"
@@ -158,6 +166,8 @@ set(CMAKE_MAKEFILE_PRODUCTS
   "gtest/googlemock/CMakeFiles/CMakeDirectoryInformation.cmake"
   "gtest/googlemock/gtest/CMakeFiles/CMakeDirectoryInformation.cmake"
   "beginner_tutorials/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "main_node/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "opencv_node/CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 
 # Dependency information for all targets:
@@ -188,4 +198,6 @@ set(CMAKE_DEPEND_INFO_FILES
   "beginner_tutorials/CMakeFiles/std_msgs_generate_messages_nodejs.dir/DependInfo.cmake"
   "beginner_tutorials/CMakeFiles/roscpp_generate_messages_nodejs.dir/DependInfo.cmake"
   "beginner_tutorials/CMakeFiles/std_msgs_generate_messages_py.dir/DependInfo.cmake"
+  "main_node/CMakeFiles/main.dir/DependInfo.cmake"
+  "opencv_node/CMakeFiles/vision_talker.dir/DependInfo.cmake"
   )
