@@ -6,6 +6,22 @@
 
 #IncludeRegexTransform: 
 
+/home/matthew/ieee-2019-electrical-software/Main-Program-2/devel/include/opencv_node/vision_msg.h
+string
+-
+vector
+-
+map
+-
+ros/types.h
+-
+ros/serialization.h
+-
+ros/builtin_message_traits.h
+-
+ros/message_operations.h
+-
+
 /home/matthew/ieee-2019-electrical-software/Main-Program-2/src/main_node/src/main.cpp
 ros/ros.h
 /home/matthew/ieee-2019-electrical-software/Main-Program-2/src/main_node/src/ros/ros.h
@@ -25,6 +41,8 @@ stdlib.h
 -
 stdio.h
 -
+opencv_node/vision_msg.h
+/home/matthew/ieee-2019-electrical-software/Main-Program-2/src/main_node/src/opencv_node/vision_msg.h
 
 /opt/ros/melodic/include/ros/advertise_options.h
 ros/forwards.h

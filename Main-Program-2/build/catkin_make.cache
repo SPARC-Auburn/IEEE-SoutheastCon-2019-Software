@@ -1,2 +1,2 @@
-beginner_tutorials:main_node:opencv_node
+beginner_tutorials:main_node:opencv_node:razor_imu_9dof
 -DCATKIN_DEVEL_PREFIX=/home/matthew/ieee-2019-electrical-software/Main-Program-2/devel -DCMAKE_INSTALL_PREFIX=/home/matthew/ieee-2019-electrical-software/Main-Program-2/install -G Unix Makefiles

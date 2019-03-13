@@ -123,8 +123,9 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/home/matthew/ieee-2019-electrical-software/Main-Program-2/build/gtest/cmake_install.cmake")
   include("/home/matthew/ieee-2019-electrical-software/Main-Program-2/build/beginner_tutorials/cmake_install.cmake")
-  include("/home/matthew/ieee-2019-electrical-software/Main-Program-2/build/main_node/cmake_install.cmake")
   include("/home/matthew/ieee-2019-electrical-software/Main-Program-2/build/opencv_node/cmake_install.cmake")
+  include("/home/matthew/ieee-2019-electrical-software/Main-Program-2/build/main_node/cmake_install.cmake")
+  include("/home/matthew/ieee-2019-electrical-software/Main-Program-2/build/razor_imu_9dof/cmake_install.cmake")
 
 endif()
 

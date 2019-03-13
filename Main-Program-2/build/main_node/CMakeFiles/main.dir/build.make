@@ -90,6 +90,7 @@ main_EXTERNAL_OBJECTS =
 
 /home/matthew/ieee-2019-electrical-software/Main-Program-2/devel/lib/main_node/main: main_node/CMakeFiles/main.dir/src/main.cpp.o
 /home/matthew/ieee-2019-electrical-software/Main-Program-2/devel/lib/main_node/main: main_node/CMakeFiles/main.dir/build.make
+/home/matthew/ieee-2019-electrical-software/Main-Program-2/devel/lib/main_node/main: /home/matthew/ieee-2019-electrical-software/Main-Program-2/devel/lib/libopencv_node.so
 /home/matthew/ieee-2019-electrical-software/Main-Program-2/devel/lib/main_node/main: /opt/ros/melodic/lib/libroscpp.so
 /home/matthew/ieee-2019-electrical-software/Main-Program-2/devel/lib/main_node/main: /usr/lib/x86_64-linux-gnu/libboost_filesystem.so
 /home/matthew/ieee-2019-electrical-software/Main-Program-2/devel/lib/main_node/main: /usr/lib/x86_64-linux-gnu/libboost_signals.so

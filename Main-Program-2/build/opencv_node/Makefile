@@ -68,39 +68,6 @@ install/strip/fast: preinstall/fast
 	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
 .PHONY : install/strip/fast
 
-# Special rule for the target install/local
-install/local: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local
-
-# Special rule for the target install/local
-install/local/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local/fast
-
-# Special rule for the target test
-test:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
-	/usr/bin/ctest --force-new-ctest-process $(ARGS)
-.PHONY : test
-
-# Special rule for the target test
-test/fast: test
-
-.PHONY : test/fast
-
-# Special rule for the target list_install_components
-list_install_components:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
-.PHONY : list_install_components
-
-# Special rule for the target list_install_components
-list_install_components/fast: list_install_components
-
-.PHONY : list_install_components/fast
-
 # Special rule for the target install
 install: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
@@ -113,6 +80,39 @@ install/fast: preinstall/fast
 	/usr/bin/cmake -P cmake_install.cmake
 .PHONY : install/fast
 
+# Special rule for the target rebuild_cache
+rebuild_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
+	/usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : rebuild_cache
+
+# Special rule for the target rebuild_cache
+rebuild_cache/fast: rebuild_cache
+
+.PHONY : rebuild_cache/fast
+
+# Special rule for the target install/local
+install/local: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local
+
+# Special rule for the target install/local
+install/local/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local/fast
+
+# Special rule for the target list_install_components
+list_install_components:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
+.PHONY : list_install_components
+
+# Special rule for the target list_install_components
+list_install_components/fast: list_install_components
+
+.PHONY : list_install_components/fast
+
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
@@ -124,16 +124,16 @@ edit_cache/fast: edit_cache
 
 .PHONY : edit_cache/fast
 
-# Special rule for the target rebuild_cache
-rebuild_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : rebuild_cache
+# Special rule for the target test
+test:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
+	/usr/bin/ctest --force-new-ctest-process $(ARGS)
+.PHONY : test
 
-# Special rule for the target rebuild_cache
-rebuild_cache/fast: rebuild_cache
+# Special rule for the target test
+test/fast: test
 
-.PHONY : rebuild_cache/fast
+.PHONY : test/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -168,6 +168,186 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
+opencv_node/CMakeFiles/_opencv_node_generate_messages_check_deps_vision_msg.dir/rule:
+	cd /home/matthew/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f CMakeFiles/Makefile2 opencv_node/CMakeFiles/_opencv_node_generate_messages_check_deps_vision_msg.dir/rule
+.PHONY : opencv_node/CMakeFiles/_opencv_node_generate_messages_check_deps_vision_msg.dir/rule
+
+# Convenience name for target.
+_opencv_node_generate_messages_check_deps_vision_msg: opencv_node/CMakeFiles/_opencv_node_generate_messages_check_deps_vision_msg.dir/rule
+
+.PHONY : _opencv_node_generate_messages_check_deps_vision_msg
+
+# fast build rule for target.
+_opencv_node_generate_messages_check_deps_vision_msg/fast:
+	cd /home/matthew/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/_opencv_node_generate_messages_check_deps_vision_msg.dir/build.make opencv_node/CMakeFiles/_opencv_node_generate_messages_check_deps_vision_msg.dir/build
+.PHONY : _opencv_node_generate_messages_check_deps_vision_msg/fast
+
+# Convenience name for target.
+opencv_node/CMakeFiles/opencv_node_gencpp.dir/rule:
+	cd /home/matthew/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f CMakeFiles/Makefile2 opencv_node/CMakeFiles/opencv_node_gencpp.dir/rule
+.PHONY : opencv_node/CMakeFiles/opencv_node_gencpp.dir/rule
+
+# Convenience name for target.
+opencv_node_gencpp: opencv_node/CMakeFiles/opencv_node_gencpp.dir/rule
+
+.PHONY : opencv_node_gencpp
+
+# fast build rule for target.
+opencv_node_gencpp/fast:
+	cd /home/matthew/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/opencv_node_gencpp.dir/build.make opencv_node/CMakeFiles/opencv_node_gencpp.dir/build
+.PHONY : opencv_node_gencpp/fast
+
+# Convenience name for target.
+opencv_node/CMakeFiles/opencv_node_genpy.dir/rule:
+	cd /home/matthew/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f CMakeFiles/Makefile2 opencv_node/CMakeFiles/opencv_node_genpy.dir/rule
+.PHONY : opencv_node/CMakeFiles/opencv_node_genpy.dir/rule
+
+# Convenience name for target.
+opencv_node_genpy: opencv_node/CMakeFiles/opencv_node_genpy.dir/rule
+
+.PHONY : opencv_node_genpy
+
+# fast build rule for target.
+opencv_node_genpy/fast:
+	cd /home/matthew/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/opencv_node_genpy.dir/build.make opencv_node/CMakeFiles/opencv_node_genpy.dir/build
+.PHONY : opencv_node_genpy/fast
+
+# Convenience name for target.
+opencv_node/CMakeFiles/opencv_node_generate_messages_cpp.dir/rule:
+	cd /home/matthew/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f CMakeFiles/Makefile2 opencv_node/CMakeFiles/opencv_node_generate_messages_cpp.dir/rule
+.PHONY : opencv_node/CMakeFiles/opencv_node_generate_messages_cpp.dir/rule
+
+# Convenience name for target.
+opencv_node_generate_messages_cpp: opencv_node/CMakeFiles/opencv_node_generate_messages_cpp.dir/rule
+
+.PHONY : opencv_node_generate_messages_cpp
+
+# fast build rule for target.
+opencv_node_generate_messages_cpp/fast:
+	cd /home/matthew/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/opencv_node_generate_messages_cpp.dir/build.make opencv_node/CMakeFiles/opencv_node_generate_messages_cpp.dir/build
+.PHONY : opencv_node_generate_messages_cpp/fast
+
+# Convenience name for target.
+opencv_node/CMakeFiles/opencv_node_geneus.dir/rule:
+	cd /home/matthew/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f CMakeFiles/Makefile2 opencv_node/CMakeFiles/opencv_node_geneus.dir/rule
+.PHONY : opencv_node/CMakeFiles/opencv_node_geneus.dir/rule
+
+# Convenience name for target.
+opencv_node_geneus: opencv_node/CMakeFiles/opencv_node_geneus.dir/rule
+
+.PHONY : opencv_node_geneus
+
+# fast build rule for target.
+opencv_node_geneus/fast:
+	cd /home/matthew/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/opencv_node_geneus.dir/build.make opencv_node/CMakeFiles/opencv_node_geneus.dir/build
+.PHONY : opencv_node_geneus/fast
+
+# Convenience name for target.
+opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/rule:
+	cd /home/matthew/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f CMakeFiles/Makefile2 opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/rule
+.PHONY : opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+opencv_node_generate_messages_lisp: opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/rule
+
+.PHONY : opencv_node_generate_messages_lisp
+
+# fast build rule for target.
+opencv_node_generate_messages_lisp/fast:
+	cd /home/matthew/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/build.make opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/build
+.PHONY : opencv_node_generate_messages_lisp/fast
+
+# Convenience name for target.
+opencv_node/CMakeFiles/opencv_node_genlisp.dir/rule:
+	cd /home/matthew/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f CMakeFiles/Makefile2 opencv_node/CMakeFiles/opencv_node_genlisp.dir/rule
+.PHONY : opencv_node/CMakeFiles/opencv_node_genlisp.dir/rule
+
+# Convenience name for target.
+opencv_node_genlisp: opencv_node/CMakeFiles/opencv_node_genlisp.dir/rule
+
+.PHONY : opencv_node_genlisp
+
+# fast build rule for target.
+opencv_node_genlisp/fast:
+	cd /home/matthew/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/opencv_node_genlisp.dir/build.make opencv_node/CMakeFiles/opencv_node_genlisp.dir/build
+.PHONY : opencv_node_genlisp/fast
+
+# Convenience name for target.
+opencv_node/CMakeFiles/opencv_node_generate_messages.dir/rule:
+	cd /home/matthew/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f CMakeFiles/Makefile2 opencv_node/CMakeFiles/opencv_node_generate_messages.dir/rule
+.PHONY : opencv_node/CMakeFiles/opencv_node_generate_messages.dir/rule
+
+# Convenience name for target.
+opencv_node_generate_messages: opencv_node/CMakeFiles/opencv_node_generate_messages.dir/rule
+
+.PHONY : opencv_node_generate_messages
+
+# fast build rule for target.
+opencv_node_generate_messages/fast:
+	cd /home/matthew/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/opencv_node_generate_messages.dir/build.make opencv_node/CMakeFiles/opencv_node_generate_messages.dir/build
+.PHONY : opencv_node_generate_messages/fast
+
+# Convenience name for target.
+opencv_node/CMakeFiles/opencv_node_gennodejs.dir/rule:
+	cd /home/matthew/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f CMakeFiles/Makefile2 opencv_node/CMakeFiles/opencv_node_gennodejs.dir/rule
+.PHONY : opencv_node/CMakeFiles/opencv_node_gennodejs.dir/rule
+
+# Convenience name for target.
+opencv_node_gennodejs: opencv_node/CMakeFiles/opencv_node_gennodejs.dir/rule
+
+.PHONY : opencv_node_gennodejs
+
+# fast build rule for target.
+opencv_node_gennodejs/fast:
+	cd /home/matthew/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/opencv_node_gennodejs.dir/build.make opencv_node/CMakeFiles/opencv_node_gennodejs.dir/build
+.PHONY : opencv_node_gennodejs/fast
+
+# Convenience name for target.
+opencv_node/CMakeFiles/opencv_node_generate_messages_nodejs.dir/rule:
+	cd /home/matthew/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f CMakeFiles/Makefile2 opencv_node/CMakeFiles/opencv_node_generate_messages_nodejs.dir/rule
+.PHONY : opencv_node/CMakeFiles/opencv_node_generate_messages_nodejs.dir/rule
+
+# Convenience name for target.
+opencv_node_generate_messages_nodejs: opencv_node/CMakeFiles/opencv_node_generate_messages_nodejs.dir/rule
+
+.PHONY : opencv_node_generate_messages_nodejs
+
+# fast build rule for target.
+opencv_node_generate_messages_nodejs/fast:
+	cd /home/matthew/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/opencv_node_generate_messages_nodejs.dir/build.make opencv_node/CMakeFiles/opencv_node_generate_messages_nodejs.dir/build
+.PHONY : opencv_node_generate_messages_nodejs/fast
+
+# Convenience name for target.
+opencv_node/CMakeFiles/opencv_node_generate_messages_py.dir/rule:
+	cd /home/matthew/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f CMakeFiles/Makefile2 opencv_node/CMakeFiles/opencv_node_generate_messages_py.dir/rule
+.PHONY : opencv_node/CMakeFiles/opencv_node_generate_messages_py.dir/rule
+
+# Convenience name for target.
+opencv_node_generate_messages_py: opencv_node/CMakeFiles/opencv_node_generate_messages_py.dir/rule
+
+.PHONY : opencv_node_generate_messages_py
+
+# fast build rule for target.
+opencv_node_generate_messages_py/fast:
+	cd /home/matthew/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/opencv_node_generate_messages_py.dir/build.make opencv_node/CMakeFiles/opencv_node_generate_messages_py.dir/build
+.PHONY : opencv_node_generate_messages_py/fast
+
+# Convenience name for target.
+opencv_node/CMakeFiles/opencv_node_generate_messages_eus.dir/rule:
+	cd /home/matthew/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f CMakeFiles/Makefile2 opencv_node/CMakeFiles/opencv_node_generate_messages_eus.dir/rule
+.PHONY : opencv_node/CMakeFiles/opencv_node_generate_messages_eus.dir/rule
+
+# Convenience name for target.
+opencv_node_generate_messages_eus: opencv_node/CMakeFiles/opencv_node_generate_messages_eus.dir/rule
+
+.PHONY : opencv_node_generate_messages_eus
+
+# fast build rule for target.
+opencv_node_generate_messages_eus/fast:
+	cd /home/matthew/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/opencv_node_generate_messages_eus.dir/build.make opencv_node/CMakeFiles/opencv_node_generate_messages_eus.dir/build
+.PHONY : opencv_node_generate_messages_eus/fast
+
+# Convenience name for target.
 opencv_node/CMakeFiles/vision_talker.dir/rule:
 	cd /home/matthew/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f CMakeFiles/Makefile2 opencv_node/CMakeFiles/vision_talker.dir/rule
 .PHONY : opencv_node/CMakeFiles/vision_talker.dir/rule
@@ -182,6 +362,21 @@ vision_talker/fast:
 	cd /home/matthew/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/vision_talker.dir/build.make opencv_node/CMakeFiles/vision_talker.dir/build
 .PHONY : vision_talker/fast
 
+# Convenience name for target.
+opencv_node/CMakeFiles/opencv_node.dir/rule:
+	cd /home/matthew/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f CMakeFiles/Makefile2 opencv_node/CMakeFiles/opencv_node.dir/rule
+.PHONY : opencv_node/CMakeFiles/opencv_node.dir/rule
+
+# Convenience name for target.
+opencv_node: opencv_node/CMakeFiles/opencv_node.dir/rule
+
+.PHONY : opencv_node
+
+# fast build rule for target.
+opencv_node/fast:
+	cd /home/matthew/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/opencv_node.dir/build.make opencv_node/CMakeFiles/opencv_node.dir/build
+.PHONY : opencv_node/fast
+
 src/vision_talker.o: src/vision_talker.cpp.o
 
 .PHONY : src/vision_talker.o
@@ -189,6 +384,7 @@ src/vision_talker.o: src/vision_talker.cpp.o
 # target to build an object file
 src/vision_talker.cpp.o:
 	cd /home/matthew/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/vision_talker.dir/build.make opencv_node/CMakeFiles/vision_talker.dir/src/vision_talker.cpp.o
+	cd /home/matthew/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/opencv_node.dir/build.make opencv_node/CMakeFiles/opencv_node.dir/src/vision_talker.cpp.o
 .PHONY : src/vision_talker.cpp.o
 
 src/vision_talker.i: src/vision_talker.cpp.i
@@ -198,6 +394,7 @@ src/vision_talker.i: src/vision_talker.cpp.i
 # target to preprocess a source file
 src/vision_talker.cpp.i:
 	cd /home/matthew/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/vision_talker.dir/build.make opencv_node/CMakeFiles/vision_talker.dir/src/vision_talker.cpp.i
+	cd /home/matthew/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/opencv_node.dir/build.make opencv_node/CMakeFiles/opencv_node.dir/src/vision_talker.cpp.i
 .PHONY : src/vision_talker.cpp.i
 
 src/vision_talker.s: src/vision_talker.cpp.s
@@ -207,6 +404,7 @@ src/vision_talker.s: src/vision_talker.cpp.s
 # target to generate assembly for a file
 src/vision_talker.cpp.s:
 	cd /home/matthew/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/vision_talker.dir/build.make opencv_node/CMakeFiles/vision_talker.dir/src/vision_talker.cpp.s
+	cd /home/matthew/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/opencv_node.dir/build.make opencv_node/CMakeFiles/opencv_node.dir/src/vision_talker.cpp.s
 .PHONY : src/vision_talker.cpp.s
 
 # Help Target
@@ -216,13 +414,26 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... install/strip"
-	@echo "... install/local"
-	@echo "... test"
-	@echo "... list_install_components"
-	@echo "... vision_talker"
 	@echo "... install"
-	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... install/local"
+	@echo "... _opencv_node_generate_messages_check_deps_vision_msg"
+	@echo "... opencv_node_gencpp"
+	@echo "... opencv_node_genpy"
+	@echo "... opencv_node_generate_messages_cpp"
+	@echo "... opencv_node_geneus"
+	@echo "... opencv_node_generate_messages_lisp"
+	@echo "... list_install_components"
+	@echo "... opencv_node_genlisp"
+	@echo "... opencv_node_generate_messages"
+	@echo "... opencv_node_gennodejs"
+	@echo "... opencv_node_generate_messages_nodejs"
+	@echo "... edit_cache"
+	@echo "... opencv_node_generate_messages_py"
+	@echo "... opencv_node_generate_messages_eus"
+	@echo "... vision_talker"
+	@echo "... opencv_node"
+	@echo "... test"
 	@echo "... src/vision_talker.o"
 	@echo "... src/vision_talker.i"
 	@echo "... src/vision_talker.s"

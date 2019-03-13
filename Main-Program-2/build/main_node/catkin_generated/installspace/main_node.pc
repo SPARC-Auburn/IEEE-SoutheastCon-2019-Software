@@ -5,4 +5,4 @@ Description: Description of main_node
 Version: 0.0.0
 Cflags: 
 Libs: -L/home/matthew/ieee-2019-electrical-software/Main-Program-2/install/lib 
-Requires: 
+Requires: roscpp rospy std_msgs opencv_node

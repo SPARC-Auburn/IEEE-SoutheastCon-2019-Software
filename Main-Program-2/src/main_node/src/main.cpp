@@ -7,14 +7,15 @@
 #include <signal.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "opencv_node/vision_msg.h"
 
 using namespace std;
 /**
  * This tutorial demonstrates simple receipt of messages over the ROS system.
  */
-void chatterCallback(const std_msgs::String::ConstPtr& msg)
+void visionCallback(const opencv_node::vision_msg::ConstPtr& msg)
 {
-  ROS_INFO("Main>>> I heard: [%s]", msg->data.c_str());
+  ROS_INFO("Main>>> I heard: [%d]", msg->x_position);
 }
 
 int main(int argc, char **argv)
@@ -64,7 +65,7 @@ int main(int argc, char **argv)
    * is the number of messages that will be buffered up before beginning to throw
    * away the oldest ones.
    */
-  ros::Subscriber sub = n.subscribe("chatter", 1000, chatterCallback);
+  ros::Subscriber sub = n.subscribe("vision_info", 1000, visionCallback);
 
   /**
    * ros::spin() will enter a loop, pumping callbacks.  With this version, all

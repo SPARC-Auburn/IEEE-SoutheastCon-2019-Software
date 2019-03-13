@@ -21,7 +21,17 @@ add_dependencies(file-name pacakge_name_generate_messages_cpp)
 ```
 cd ~/ieee-2019-electrical-software/Main-Program-2/
 catkin_make
-. ~/ieee-2019-electrical-software/Main-Program-2/devel/setup.bash
+source ~/ieee-2019-electrical-software/Main-Program-2/devel/setup.bash
+```
+### Adding source to .bashrc
+* Open .bashrc
+```
+cd ~
+nano .bashrc
+```
+* Add the following line
+```
+source ~/ieee-2019-electrical-software/Main-Program-2/devel/setup.bash
 ```
 ### Running Package: [Subscribing Tutorial](http://wiki.ros.org/ROS/Tutorials/ExaminingPublisherSubscriber)
 * In separate terminal session run:
@@ -31,14 +41,28 @@ roscore
 * In the other terminal run:
 ```
 cd ~/ieee-2019-electrical-software/Main-Program-2/
-. ~/ieee-2019-electrical-software/Main-Program-2/devel/setup.bash
+source ~/ieee-2019-electrical-software/Main-Program-2/devel/setup.bash
 rosrun package_name file_name
 rosrun package_name file_name2
 ```
 
-### Current Setup: Run these commands in separate terminals
+### Run Individual nodes
 ```
 rosrun main_node main
 rosrun opencv_node vision_talker
-rosrun beginner_tutorials talker
 ```
+
+### Run Launch File
+```
+roslaunch main_node main.launch
+```
+
+## Vision Messages
+### Stucture
+* x_position (uint32): position in pixels on screen
+* y_position (uint32): position in pixels on screen
+* width (uint32): width of object
+* height (uint32): height of object
+* distance (float): approximate distance in meters to object
+* color_index (uint8): color index of object [Red(0), Blue(1), Yellow(2), Green(3)]
+* object_type (uint8): type of object detected [Debris(0), Corner(1), CenterFace(2), Unknown(3)]

@@ -1,85 +1,60 @@
+/*------------------------------------------------------------------------------
+Filename:     vision.cpp
+Project:      IEEE SoutheastCon Hardware Competition 2019
+School:       Auburn University
+Organization: Student Projects and Research Committee (SPARC)
+Description:  Takes pictures on the Raspberry Pi Camera V2 and processes them
+with OpenCV2 via color recognition.
+
+Color Indices = Red(0), Blue(1), Yellow(2), Green(3)
+Object Indices = Debris(0), Corner(1), CenterFace(2), Unknown(3)
+------------------------------------------------------------------------------*/
 #include "ros/ros.h"
 #include "std_msgs/String.h"
-#include <iostream>
 #include <sstream>
+// #include "vision.cpp"
+#include <opencv_node/vision_msg.h>
 
-/**
- * This tutorial demonstrates simple sending of messages over the ROS system.
- */
 int main(int argc, char **argv)
 {
-  /**
-   * The ros::init() function needs to see argc and argv so that it can perform
-   * any ROS arguments and name remapping that were provided at the command line.
-   * For programmatic remappings you can use a different version of init() which takes
-   * remappings directly, but for most command-line programs, passing argc and argv is
-   * the easiest way to do it.  The third argument to init() is the name of the node.
-   *
-   * You must call one of the versions of ros::init() before using any other
-   * part of the ROS system.
-   */
-  ros::init(argc, argv, "vision_talker");
-
-  /**
-   * NodeHandle is the main access point to communications with the ROS system.
-   * The first NodeHandle constructed will fully initialize this node, and the last
-   * NodeHandle destructed will close down the node.
-   */
+  ros::init(argc, argv, "vision_talker");  // initialize ROS
   ros::NodeHandle n;
-
-  /**
-   * The advertise() function is how you tell ROS that you want to
-   * publish on a given topic name. This invokes a call to the ROS
-   * master node, which keeps a registry of who is publishing and who
-   * is subscribing. After this advertise() call is made, the master
-   * node will notify anyone who is trying to subscribe to this topic name,
-   * and they will in turn negotiate a peer-to-peer connection with this
-   * node.  advertise() returns a Publisher object which allows you to
-   * publish messages on that topic through a call to publish().  Once
-   * all copies of the returned Publisher object are destroyed, the topic
-   * will be automatically unadvertised.
-   *
-   * The second parameter to advertise() is the size of the message queue
-   * used for publishing messages.  If messages are published more quickly
-   * than we can send them, the number here specifies how many messages to
-   * buffer up before throwing some away.
-   */
-  ros::Publisher chatter_pub = n.advertise<std_msgs::String>("chatter", 1000);
-
+  ros::Publisher pub = n.advertise<opencv_node::vision_msg>("vision_info", 1000);  // start publishing chatter
   ros::Rate loop_rate(10);
+  // IEEE_VISION::VisionHandle vis; // initialize vision 
 
-  /**
-   * A count of how many messages we have sent. This is used to create
-   * a unique string for each message.
-   */
-  int count = 0;
   while (ros::ok())
   {
-    /**
-     * This is a message object. You stuff it with data, and then publish it.
-     */
-    std_msgs::String msg;
+//    std::stringstream ss;
+    // vis.takePicture();
+    // vis.findObjects();
+    // angle = vis.angle2LargestDebris();
+    // ss << "The angle is " << angle;
+    uint32_t x_position = 1000;
+    uint32_t y_position = 2000;
+    uint32_t width = 300;
+    uint32_t height = 400;
+    float_t distance = 0.5;
+    uint8_t color_index = 1;
+    uint8_t object_type = 0;
 
-    std::stringstream ss;
-    ss << "I am vision talker " << count;
-    msg.data = ss.str();
+    opencv_node::vision_msg msg;
+    msg.x_position = x_position;
+    msg.y_position = y_position;
+    msg.width = width;
+    msg.height = height;
+    msg.distance = distance;
+    msg.color_index = color_index;
+    msg.object_type = object_type;
 
-    ROS_INFO("%s", msg.data.c_str());
+    ROS_INFO("%s", "Sending message");
 
-    /**
-     * The publish() function is how you send messages. The parameter
-     * is the message object. The type of this object must agree with the type
-     * given as a template parameter to the advertise<>() call, as was done
-     * in the constructor above.
-     */
-    chatter_pub.publish(msg);
+    pub.publish(msg);  // Sends messages
 
     ros::spinOnce();
 
     loop_rate.sleep();
-    ++count;
   }
-
 
   return 0;
 }
