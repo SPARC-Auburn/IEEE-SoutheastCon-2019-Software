@@ -5,6 +5,7 @@ cd ieee-2019-electrical-software/Main-Program-2
 catkin_make
 . ~/ieee-2019-electrical-software/Main-Program-2
 ```
+> You may have to delete the build and devel directories if they exist
 ### Create New Package: [Package Tutorial](http://wiki.ros.org/ROS/Tutorials/CreatingPackage)
 * Initialize New Package with name "package_name" and corresponding dependencies
 ```

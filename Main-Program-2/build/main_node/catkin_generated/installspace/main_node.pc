@@ -1,8 +1,8 @@
-prefix=/home/matthew/ieee-2019-electrical-software/Main-Program-2/install
+prefix=/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/install
 
 Name: main_node
 Description: Description of main_node
 Version: 0.0.0
 Cflags: 
-Libs: -L/home/matthew/ieee-2019-electrical-software/Main-Program-2/install/lib 
-Requires: roscpp rospy std_msgs opencv_node
+Libs: -L/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/install/lib 
+Requires: roscpp std_msgs opencv_node

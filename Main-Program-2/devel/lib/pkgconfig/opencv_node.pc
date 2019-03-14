@@ -1,8 +1,8 @@
-prefix=/home/matthew/ieee-2019-electrical-software/Main-Program-2/devel
+prefix=/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel
 
 Name: opencv_node
 Description: Description of opencv_node
 Version: 0.0.0
-Cflags: -I/home/matthew/ieee-2019-electrical-software/Main-Program-2/devel/include -I/home/matthew/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/include
-Libs: -L/home/matthew/ieee-2019-electrical-software/Main-Program-2/devel/lib -lopencv_node
-Requires: roscpp rospy std_msgs message_runtime
+Cflags: -I/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/include
+Libs: -L/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/lib -lopencv_node
+Requires: roscpp std_msgs message_runtime
