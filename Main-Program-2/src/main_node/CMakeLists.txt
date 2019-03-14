@@ -30,7 +30,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES main_node
-  CATKIN_DEPENDS roscpp std_msgs opencv_node
+  CATKIN_DEPENDS roscpp std_msgs opencv_node 
 #  DEPENDS system_lib
 )
 

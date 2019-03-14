@@ -3,6 +3,8 @@
 
 main_node/CMakeFiles/main.dir/src/main.cpp.o: /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/include/opencv_node/vision_msg.h
 main_node/CMakeFiles/main.dir/src/main.cpp.o: /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/main_node/src/main.cpp
+main_node/CMakeFiles/main.dir/src/main.cpp.o: /opt/ros/kinetic/include/geometry_msgs/Quaternion.h
+main_node/CMakeFiles/main.dir/src/main.cpp.o: /opt/ros/kinetic/include/geometry_msgs/Vector3.h
 main_node/CMakeFiles/main.dir/src/main.cpp.o: /opt/ros/kinetic/include/ros/advertise_options.h
 main_node/CMakeFiles/main.dir/src/main.cpp.o: /opt/ros/kinetic/include/ros/advertise_service_options.h
 main_node/CMakeFiles/main.dir/src/main.cpp.o: /opt/ros/kinetic/include/ros/assert.h
@@ -59,6 +61,8 @@ main_node/CMakeFiles/main.dir/src/main.cpp.o: /opt/ros/kinetic/include/ros/types
 main_node/CMakeFiles/main.dir/src/main.cpp.o: /opt/ros/kinetic/include/ros/wall_timer.h
 main_node/CMakeFiles/main.dir/src/main.cpp.o: /opt/ros/kinetic/include/ros/wall_timer_options.h
 main_node/CMakeFiles/main.dir/src/main.cpp.o: /opt/ros/kinetic/include/rosconsole/macros_generated.h
+main_node/CMakeFiles/main.dir/src/main.cpp.o: /opt/ros/kinetic/include/sensor_msgs/Imu.h
+main_node/CMakeFiles/main.dir/src/main.cpp.o: /opt/ros/kinetic/include/std_msgs/Header.h
 main_node/CMakeFiles/main.dir/src/main.cpp.o: /opt/ros/kinetic/include/std_msgs/String.h
 main_node/CMakeFiles/main.dir/src/main.cpp.o: /opt/ros/kinetic/include/xmlrpcpp/XmlRpcDecl.h
 main_node/CMakeFiles/main.dir/src/main.cpp.o: /opt/ros/kinetic/include/xmlrpcpp/XmlRpcValue.h

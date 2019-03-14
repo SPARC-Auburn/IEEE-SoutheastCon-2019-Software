@@ -326,6 +326,9 @@ gtest_force_shared_crt:BOOL=OFF
 //Dependencies for the target
 gtest_main_LIB_DEPENDS:STATIC=general;-lpthread;general;gtest;
 
+//The directory containing a CMake configuration file for imu_node.
+imu_node_DIR:PATH=imu_node_DIR-NOTFOUND
+
 //Path to a library.
 lib:FILEPATH=/opt/ros/kinetic/lib/librostime.so
 
@@ -356,8 +359,13 @@ opencv_node_SOURCE_DIR:STATIC=/home/ubuntu/ieee-2019-electrical-software/Main-Pr
 //Value Computed by CMake
 razor_imu_9dof_BINARY_DIR:STATIC=/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/razor_imu_9dof
 
+razor_imu_9dof_DIR:PATH=
+
 //Value Computed by CMake
 razor_imu_9dof_SOURCE_DIR:STATIC=/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/razor_imu_9dof
+
+//The directory containing a CMake configuration file for razor_node.
+razor_node_DIR:PATH=razor_node_DIR-NOTFOUND
 
 //The directory containing a CMake configuration file for rosconsole.
 rosconsole_DIR:PATH=/opt/ros/kinetic/share/rosconsole/cmake
