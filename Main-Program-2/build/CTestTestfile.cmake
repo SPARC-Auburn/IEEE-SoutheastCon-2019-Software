@@ -7,3 +7,4 @@
 subdirs(gtest)
 subdirs(opencv_node)
 subdirs(main_node)
+subdirs(razor_imu_9dof)

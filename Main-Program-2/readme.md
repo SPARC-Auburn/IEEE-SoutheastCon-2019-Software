@@ -58,6 +58,40 @@ rosrun opencv_node vision_talker
 roslaunch main_node main.launch
 ```
 
+## Debug Tools
+### rqt_graph
+```
+rosrun rqt_graph rqt_graph
+```
+### rostopic examples
+```
+rostopic echo [topic]
+rostopic echo /turtle1/cmd_vel
+rostopic list -v
+rostopic type [topic]
+rostopic type /turtle1/cmd_vel
+```
+### rostopic refresh rate
+```
+rostopic hz [topic]
+rostopic hz /turtle1/cmd_vel
+```
+### rosmsg examples
+```
+rosmsg show [msg]
+rosmsg show geometry_msgs/Twist
+```
+### rqt_plot
+```
+rosrun rqt_graph rqt_graph
+```
+### console logger
+Run the following 2 lines in seperate terminals before running launch file
+```
+rosrun rqt_console rqt_console
+rosrun rqt_logger_level rqt_logger_level
+```
+
 ## Vision Messages
 ### Stucture
 * x_position (uint32): position in pixels on screen

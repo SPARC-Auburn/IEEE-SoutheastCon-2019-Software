@@ -166,6 +166,21 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
+opencv_node/CMakeFiles/opencv_node.dir/rule:
+	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f CMakeFiles/Makefile2 opencv_node/CMakeFiles/opencv_node.dir/rule
+.PHONY : opencv_node/CMakeFiles/opencv_node.dir/rule
+
+# Convenience name for target.
+opencv_node: opencv_node/CMakeFiles/opencv_node.dir/rule
+
+.PHONY : opencv_node
+
+# fast build rule for target.
+opencv_node/fast:
+	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/opencv_node.dir/build.make opencv_node/CMakeFiles/opencv_node.dir/build
+.PHONY : opencv_node/fast
+
+# Convenience name for target.
 opencv_node/CMakeFiles/opencv_node_genpy.dir/rule:
 	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f CMakeFiles/Makefile2 opencv_node/CMakeFiles/opencv_node_genpy.dir/rule
 .PHONY : opencv_node/CMakeFiles/opencv_node_genpy.dir/rule
@@ -194,21 +209,6 @@ opencv_node_generate_messages_py: opencv_node/CMakeFiles/opencv_node_generate_me
 opencv_node_generate_messages_py/fast:
 	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/opencv_node_generate_messages_py.dir/build.make opencv_node/CMakeFiles/opencv_node_generate_messages_py.dir/build
 .PHONY : opencv_node_generate_messages_py/fast
-
-# Convenience name for target.
-opencv_node/CMakeFiles/opencv_node_genlisp.dir/rule:
-	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f CMakeFiles/Makefile2 opencv_node/CMakeFiles/opencv_node_genlisp.dir/rule
-.PHONY : opencv_node/CMakeFiles/opencv_node_genlisp.dir/rule
-
-# Convenience name for target.
-opencv_node_genlisp: opencv_node/CMakeFiles/opencv_node_genlisp.dir/rule
-
-.PHONY : opencv_node_genlisp
-
-# fast build rule for target.
-opencv_node_genlisp/fast:
-	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/opencv_node_genlisp.dir/build.make opencv_node/CMakeFiles/opencv_node_genlisp.dir/build
-.PHONY : opencv_node_genlisp/fast
 
 # Convenience name for target.
 opencv_node/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule:
@@ -421,36 +421,6 @@ roscpp_generate_messages_lisp/fast:
 .PHONY : roscpp_generate_messages_lisp/fast
 
 # Convenience name for target.
-opencv_node/CMakeFiles/opencv_node_generate_messages_nodejs.dir/rule:
-	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f CMakeFiles/Makefile2 opencv_node/CMakeFiles/opencv_node_generate_messages_nodejs.dir/rule
-.PHONY : opencv_node/CMakeFiles/opencv_node_generate_messages_nodejs.dir/rule
-
-# Convenience name for target.
-opencv_node_generate_messages_nodejs: opencv_node/CMakeFiles/opencv_node_generate_messages_nodejs.dir/rule
-
-.PHONY : opencv_node_generate_messages_nodejs
-
-# fast build rule for target.
-opencv_node_generate_messages_nodejs/fast:
-	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/opencv_node_generate_messages_nodejs.dir/build.make opencv_node/CMakeFiles/opencv_node_generate_messages_nodejs.dir/build
-.PHONY : opencv_node_generate_messages_nodejs/fast
-
-# Convenience name for target.
-opencv_node/CMakeFiles/opencv_node_gencpp.dir/rule:
-	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f CMakeFiles/Makefile2 opencv_node/CMakeFiles/opencv_node_gencpp.dir/rule
-.PHONY : opencv_node/CMakeFiles/opencv_node_gencpp.dir/rule
-
-# Convenience name for target.
-opencv_node_gencpp: opencv_node/CMakeFiles/opencv_node_gencpp.dir/rule
-
-.PHONY : opencv_node_gencpp
-
-# fast build rule for target.
-opencv_node_gencpp/fast:
-	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/opencv_node_gencpp.dir/build.make opencv_node/CMakeFiles/opencv_node_gencpp.dir/build
-.PHONY : opencv_node_gencpp/fast
-
-# Convenience name for target.
 opencv_node/CMakeFiles/std_msgs_generate_messages_nodejs.dir/rule:
 	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f CMakeFiles/Makefile2 opencv_node/CMakeFiles/std_msgs_generate_messages_nodejs.dir/rule
 .PHONY : opencv_node/CMakeFiles/std_msgs_generate_messages_nodejs.dir/rule
@@ -571,34 +541,34 @@ opencv_node_geneus/fast:
 .PHONY : opencv_node_geneus/fast
 
 # Convenience name for target.
-opencv_node/CMakeFiles/opencv_node.dir/rule:
-	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f CMakeFiles/Makefile2 opencv_node/CMakeFiles/opencv_node.dir/rule
-.PHONY : opencv_node/CMakeFiles/opencv_node.dir/rule
+opencv_node/CMakeFiles/opencv_node_gencpp.dir/rule:
+	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f CMakeFiles/Makefile2 opencv_node/CMakeFiles/opencv_node_gencpp.dir/rule
+.PHONY : opencv_node/CMakeFiles/opencv_node_gencpp.dir/rule
 
 # Convenience name for target.
-opencv_node: opencv_node/CMakeFiles/opencv_node.dir/rule
+opencv_node_gencpp: opencv_node/CMakeFiles/opencv_node_gencpp.dir/rule
 
-.PHONY : opencv_node
+.PHONY : opencv_node_gencpp
 
 # fast build rule for target.
-opencv_node/fast:
-	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/opencv_node.dir/build.make opencv_node/CMakeFiles/opencv_node.dir/build
-.PHONY : opencv_node/fast
+opencv_node_gencpp/fast:
+	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/opencv_node_gencpp.dir/build.make opencv_node/CMakeFiles/opencv_node_gencpp.dir/build
+.PHONY : opencv_node_gencpp/fast
 
 # Convenience name for target.
-opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/rule:
-	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f CMakeFiles/Makefile2 opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/rule
-.PHONY : opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/rule
+opencv_node/CMakeFiles/opencv_node_generate_messages_nodejs.dir/rule:
+	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f CMakeFiles/Makefile2 opencv_node/CMakeFiles/opencv_node_generate_messages_nodejs.dir/rule
+.PHONY : opencv_node/CMakeFiles/opencv_node_generate_messages_nodejs.dir/rule
 
 # Convenience name for target.
-opencv_node_generate_messages_lisp: opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/rule
+opencv_node_generate_messages_nodejs: opencv_node/CMakeFiles/opencv_node_generate_messages_nodejs.dir/rule
 
-.PHONY : opencv_node_generate_messages_lisp
+.PHONY : opencv_node_generate_messages_nodejs
 
 # fast build rule for target.
-opencv_node_generate_messages_lisp/fast:
-	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/build.make opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/build
-.PHONY : opencv_node_generate_messages_lisp/fast
+opencv_node_generate_messages_nodejs/fast:
+	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/opencv_node_generate_messages_nodejs.dir/build.make opencv_node/CMakeFiles/opencv_node_generate_messages_nodejs.dir/build
+.PHONY : opencv_node_generate_messages_nodejs/fast
 
 src/vision_talker.o: src/vision_talker.cpp.o
 
@@ -606,8 +576,8 @@ src/vision_talker.o: src/vision_talker.cpp.o
 
 # target to build an object file
 src/vision_talker.cpp.o:
-	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/vision_talker.dir/build.make opencv_node/CMakeFiles/vision_talker.dir/src/vision_talker.cpp.o
 	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/opencv_node.dir/build.make opencv_node/CMakeFiles/opencv_node.dir/src/vision_talker.cpp.o
+	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/vision_talker.dir/build.make opencv_node/CMakeFiles/vision_talker.dir/src/vision_talker.cpp.o
 .PHONY : src/vision_talker.cpp.o
 
 src/vision_talker.i: src/vision_talker.cpp.i
@@ -616,8 +586,8 @@ src/vision_talker.i: src/vision_talker.cpp.i
 
 # target to preprocess a source file
 src/vision_talker.cpp.i:
-	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/vision_talker.dir/build.make opencv_node/CMakeFiles/vision_talker.dir/src/vision_talker.cpp.i
 	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/opencv_node.dir/build.make opencv_node/CMakeFiles/opencv_node.dir/src/vision_talker.cpp.i
+	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/vision_talker.dir/build.make opencv_node/CMakeFiles/vision_talker.dir/src/vision_talker.cpp.i
 .PHONY : src/vision_talker.cpp.i
 
 src/vision_talker.s: src/vision_talker.cpp.s
@@ -626,8 +596,8 @@ src/vision_talker.s: src/vision_talker.cpp.s
 
 # target to generate assembly for a file
 src/vision_talker.cpp.s:
-	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/vision_talker.dir/build.make opencv_node/CMakeFiles/vision_talker.dir/src/vision_talker.cpp.s
 	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/opencv_node.dir/build.make opencv_node/CMakeFiles/opencv_node.dir/src/vision_talker.cpp.s
+	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/vision_talker.dir/build.make opencv_node/CMakeFiles/vision_talker.dir/src/vision_talker.cpp.s
 .PHONY : src/vision_talker.cpp.s
 
 # Help Target
@@ -641,9 +611,9 @@ help:
 	@echo "... test"
 	@echo "... install"
 	@echo "... install/local"
+	@echo "... opencv_node"
 	@echo "... opencv_node_genpy"
 	@echo "... opencv_node_generate_messages_py"
-	@echo "... opencv_node_genlisp"
 	@echo "... rosgraph_msgs_generate_messages_lisp"
 	@echo "... rosgraph_msgs_generate_messages_cpp"
 	@echo "... install/strip"
@@ -660,8 +630,6 @@ help:
 	@echo "... rosgraph_msgs_generate_messages_eus"
 	@echo "... opencv_node_generate_messages"
 	@echo "... roscpp_generate_messages_lisp"
-	@echo "... opencv_node_generate_messages_nodejs"
-	@echo "... opencv_node_gencpp"
 	@echo "... std_msgs_generate_messages_nodejs"
 	@echo "... roscpp_generate_messages_nodejs"
 	@echo "... std_msgs_generate_messages_eus"
@@ -670,8 +638,8 @@ help:
 	@echo "... opencv_node_gennodejs"
 	@echo "... std_msgs_generate_messages_lisp"
 	@echo "... opencv_node_geneus"
-	@echo "... opencv_node"
-	@echo "... opencv_node_generate_messages_lisp"
+	@echo "... opencv_node_gencpp"
+	@echo "... opencv_node_generate_messages_nodejs"
 	@echo "... src/vision_talker.o"
 	@echo "... src/vision_talker.i"
 	@echo "... src/vision_talker.s"
