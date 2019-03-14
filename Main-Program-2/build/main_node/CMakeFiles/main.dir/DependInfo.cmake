@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/matthew/ieee-2019-electrical-software/Main-Program-2/src/main_node/src/main.cpp" "/home/matthew/ieee-2019-electrical-software/Main-Program-2/build/main_node/CMakeFiles/main.dir/src/main.cpp.o"
+  "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/main_node/src/main.cpp" "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/main_node/CMakeFiles/main.dir/src/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -17,15 +17,14 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
-  "/home/matthew/ieee-2019-electrical-software/Main-Program-2/devel/include"
-  "/home/matthew/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/include"
-  "/opt/ros/melodic/include"
-  "/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp"
+  "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/include"
+  "/opt/ros/kinetic/include"
+  "/opt/ros/kinetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp"
   )
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/home/matthew/ieee-2019-electrical-software/Main-Program-2/build/opencv_node/CMakeFiles/opencv_node.dir/DependInfo.cmake"
+  "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/opencv_node/CMakeFiles/opencv_node.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

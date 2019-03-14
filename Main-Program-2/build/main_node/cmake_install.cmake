@@ -1,8 +1,8 @@
-# Install script for directory: /home/matthew/ieee-2019-electrical-software/Main-Program-2/src/main_node
+# Install script for directory: /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/main_node
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/matthew/ieee-2019-electrical-software/Main-Program-2/install")
+  set(CMAKE_INSTALL_PREFIX "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -32,23 +32,18 @@ if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
   set(CMAKE_INSTALL_SO_NO_EXE "1")
 endif()
 
-# Is this installation the result of a crosscompile?
-if(NOT DEFINED CMAKE_CROSSCOMPILING)
-  set(CMAKE_CROSSCOMPILING "FALSE")
+if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/main_node/catkin_generated/installspace/main_node.pc")
 endif()
 
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/matthew/ieee-2019-electrical-software/Main-Program-2/build/main_node/catkin_generated/installspace/main_node.pc")
-endif()
-
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/main_node/cmake" TYPE FILE FILES
-    "/home/matthew/ieee-2019-electrical-software/Main-Program-2/build/main_node/catkin_generated/installspace/main_nodeConfig.cmake"
-    "/home/matthew/ieee-2019-electrical-software/Main-Program-2/build/main_node/catkin_generated/installspace/main_nodeConfig-version.cmake"
+    "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/main_node/catkin_generated/installspace/main_nodeConfig.cmake"
+    "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/main_node/catkin_generated/installspace/main_nodeConfig-version.cmake"
     )
 endif()
 
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/main_node" TYPE FILE FILES "/home/matthew/ieee-2019-electrical-software/Main-Program-2/src/main_node/package.xml")
+if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/main_node" TYPE FILE FILES "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/main_node/package.xml")
 endif()
 

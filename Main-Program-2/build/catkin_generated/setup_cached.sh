@@ -7,4 +7,4 @@
 # new environment variables
 
 # modified environment variables
-export PWD="/home/matthew/ieee-2019-electrical-software/Main-Program-2/build"
+export PWD="/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build"

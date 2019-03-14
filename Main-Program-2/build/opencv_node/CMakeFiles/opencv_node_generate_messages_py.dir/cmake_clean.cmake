@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/opencv_node_generate_messages_py"
-  "/home/matthew/ieee-2019-electrical-software/Main-Program-2/devel/lib/python2.7/dist-packages/opencv_node/msg/_vision_msg.py"
-  "/home/matthew/ieee-2019-electrical-software/Main-Program-2/devel/lib/python2.7/dist-packages/opencv_node/msg/__init__.py"
+  "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/lib/python2.7/dist-packages/opencv_node/msg/_vision_msg.py"
+  "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/lib/python2.7/dist-packages/opencv_node/msg/__init__.py"
 )
 
 # Per-language clean rules from dependency scanning.
