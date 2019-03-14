@@ -5,7 +5,9 @@
         "*.tcc": "cpp",
         "system_error": "cpp",
         "iostream": "cpp",
-        "sstream": "cpp"
+        "sstream": "cpp",
+        "array": "cpp",
+        "string_view": "cpp"
     },
     "C_Cpp.default.intelliSenseMode": "msvc-x64",
     "C_Cpp.errorSquiggles": "Enabled"

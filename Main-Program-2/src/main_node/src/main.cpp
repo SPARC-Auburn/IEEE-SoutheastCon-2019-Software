@@ -12,24 +12,28 @@
 
 using namespace std;
 
-void visionCallback(const opencv_node::vision_msg::ConstPtr& msg)
+void visionCallback(const opencv_node::vision_msg::ConstPtr &msg)
 {
-  ROS_INFO("Main>>>Position of Object: (%d,%d)", msg->x_position, msg->y_position);
+  ROS_INFO("Main>>>Number of Objects: %d", msg->objects.size);
+  for (int i = 0; i < msg->objects.size; ++i)
+  {
+    const opencv_node::vision_msg &prop = msg->objects[i];
+    ROS_INFO_STREAM("Position: " << prop.x_position << "," << prop.y_position);
+  }  
 }
 
-void imuCallback(const sensor_msgs::Imu::ConstPtr& msg)
+void imuCallback(const sensor_msgs::Imu::ConstPtr &msg)
 {
   float gyro_x = msg->angular_velocity.x;
   float gyro_y = msg->angular_velocity.y;
-  float  gyro_z = msg->angular_velocity.z;
+  float gyro_z = msg->angular_velocity.z;
   float orientation_x = msg->orientation.x;
   float orientation_y = msg->orientation.y;
-  float  orientation_z = msg->orientation.z;
-  float  orientation_w = msg->orientation.w;
+  float orientation_z = msg->orientation.z;
+  float orientation_w = msg->orientation.w;
   //ROS_INFO("Main>>>Angular Velocity: x(%f),y(%f),z(%f)", gyro_x,gyro_y,gyro_z);
- ROS_INFO("Main>>>Orientation: x(%f),y(%f),z(%f)", orientation_x,orientation_y,orientation_z);
+  ROS_INFO("Main>>>Orientation: x(%f),y(%f),z(%f)", orientation_x, orientation_y, orientation_z);
 }
-
 
 int main(int argc, char **argv)
 {
