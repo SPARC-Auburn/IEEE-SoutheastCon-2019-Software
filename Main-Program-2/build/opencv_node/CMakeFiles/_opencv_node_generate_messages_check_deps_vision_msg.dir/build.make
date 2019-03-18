@@ -54,7 +54,7 @@ CMAKE_BINARY_DIR = /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/bui
 include opencv_node/CMakeFiles/_opencv_node_generate_messages_check_deps_vision_msg.dir/progress.make
 
 opencv_node/CMakeFiles/_opencv_node_generate_messages_check_deps_vision_msg:
-	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/opencv_node && ../catkin_generated/env_cached.sh /usr/bin/python /opt/ros/kinetic/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py opencv_node /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/vision_msg.msg 
+	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/opencv_node && ../catkin_generated/env_cached.sh /usr/bin/python /opt/ros/kinetic/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py opencv_node /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/vision_msg.msg opencv_node/object
 
 _opencv_node_generate_messages_check_deps_vision_msg: opencv_node/CMakeFiles/_opencv_node_generate_messages_check_deps_vision_msg
 _opencv_node_generate_messages_check_deps_vision_msg: opencv_node/CMakeFiles/_opencv_node_generate_messages_check_deps_vision_msg.dir/build.make

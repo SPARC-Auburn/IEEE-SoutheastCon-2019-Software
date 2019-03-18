@@ -54,21 +54,30 @@ CMAKE_BINARY_DIR = /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/bui
 include opencv_node/CMakeFiles/opencv_node_generate_messages_py.dir/progress.make
 
 opencv_node/CMakeFiles/opencv_node_generate_messages_py: /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/lib/python2.7/dist-packages/opencv_node/msg/_vision_msg.py
+opencv_node/CMakeFiles/opencv_node_generate_messages_py: /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/lib/python2.7/dist-packages/opencv_node/msg/_object.py
 opencv_node/CMakeFiles/opencv_node_generate_messages_py: /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/lib/python2.7/dist-packages/opencv_node/msg/__init__.py
 
 
 /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/lib/python2.7/dist-packages/opencv_node/msg/_vision_msg.py: /opt/ros/kinetic/lib/genpy/genmsg_py.py
 /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/lib/python2.7/dist-packages/opencv_node/msg/_vision_msg.py: /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/vision_msg.msg
+/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/lib/python2.7/dist-packages/opencv_node/msg/_vision_msg.py: /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating Python from MSG opencv_node/vision_msg"
 	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/opencv_node && ../catkin_generated/env_cached.sh /usr/bin/python /opt/ros/kinetic/share/genpy/cmake/../../../lib/genpy/genmsg_py.py /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/vision_msg.msg -Iopencv_node:/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg -Istd_msgs:/opt/ros/kinetic/share/std_msgs/cmake/../msg -Iopencv_node:/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg -p opencv_node -o /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/lib/python2.7/dist-packages/opencv_node/msg
 
+/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/lib/python2.7/dist-packages/opencv_node/msg/_object.py: /opt/ros/kinetic/lib/genpy/genmsg_py.py
+/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/lib/python2.7/dist-packages/opencv_node/msg/_object.py: /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating Python from MSG opencv_node/object"
+	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/opencv_node && ../catkin_generated/env_cached.sh /usr/bin/python /opt/ros/kinetic/share/genpy/cmake/../../../lib/genpy/genmsg_py.py /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg -Iopencv_node:/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg -Istd_msgs:/opt/ros/kinetic/share/std_msgs/cmake/../msg -Iopencv_node:/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg -p opencv_node -o /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/lib/python2.7/dist-packages/opencv_node/msg
+
 /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/lib/python2.7/dist-packages/opencv_node/msg/__init__.py: /opt/ros/kinetic/lib/genpy/genmsg_py.py
 /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/lib/python2.7/dist-packages/opencv_node/msg/__init__.py: /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/lib/python2.7/dist-packages/opencv_node/msg/_vision_msg.py
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating Python msg __init__.py for opencv_node"
+/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/lib/python2.7/dist-packages/opencv_node/msg/__init__.py: /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/lib/python2.7/dist-packages/opencv_node/msg/_object.py
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Generating Python msg __init__.py for opencv_node"
 	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/opencv_node && ../catkin_generated/env_cached.sh /usr/bin/python /opt/ros/kinetic/share/genpy/cmake/../../../lib/genpy/genmsg_py.py -o /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/lib/python2.7/dist-packages/opencv_node/msg --initpy
 
 opencv_node_generate_messages_py: opencv_node/CMakeFiles/opencv_node_generate_messages_py
 opencv_node_generate_messages_py: /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/lib/python2.7/dist-packages/opencv_node/msg/_vision_msg.py
+opencv_node_generate_messages_py: /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/lib/python2.7/dist-packages/opencv_node/msg/_object.py
 opencv_node_generate_messages_py: /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/lib/python2.7/dist-packages/opencv_node/msg/__init__.py
 opencv_node_generate_messages_py: opencv_node/CMakeFiles/opencv_node_generate_messages_py.dir/build.make
 

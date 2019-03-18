@@ -18,6 +18,7 @@
   <exec_depend>message_runtime</exec_depend>
 
   <depend>vision_msg</depend>
+  <depend>object</depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

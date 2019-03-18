@@ -54,20 +54,28 @@ CMAKE_BINARY_DIR = /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/bui
 include opencv_node/CMakeFiles/opencv_node_generate_messages_eus.dir/progress.make
 
 opencv_node/CMakeFiles/opencv_node_generate_messages_eus: /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/share/roseus/ros/opencv_node/msg/vision_msg.l
+opencv_node/CMakeFiles/opencv_node_generate_messages_eus: /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/share/roseus/ros/opencv_node/msg/object.l
 opencv_node/CMakeFiles/opencv_node_generate_messages_eus: /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/share/roseus/ros/opencv_node/manifest.l
 
 
 /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/share/roseus/ros/opencv_node/msg/vision_msg.l: /opt/ros/kinetic/lib/geneus/gen_eus.py
 /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/share/roseus/ros/opencv_node/msg/vision_msg.l: /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/vision_msg.msg
+/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/share/roseus/ros/opencv_node/msg/vision_msg.l: /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating EusLisp code from opencv_node/vision_msg.msg"
 	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/opencv_node && ../catkin_generated/env_cached.sh /usr/bin/python /opt/ros/kinetic/share/geneus/cmake/../../../lib/geneus/gen_eus.py /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/vision_msg.msg -Iopencv_node:/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg -Istd_msgs:/opt/ros/kinetic/share/std_msgs/cmake/../msg -Iopencv_node:/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg -p opencv_node -o /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/share/roseus/ros/opencv_node/msg
 
+/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/share/roseus/ros/opencv_node/msg/object.l: /opt/ros/kinetic/lib/geneus/gen_eus.py
+/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/share/roseus/ros/opencv_node/msg/object.l: /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating EusLisp code from opencv_node/object.msg"
+	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/opencv_node && ../catkin_generated/env_cached.sh /usr/bin/python /opt/ros/kinetic/share/geneus/cmake/../../../lib/geneus/gen_eus.py /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg -Iopencv_node:/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg -Istd_msgs:/opt/ros/kinetic/share/std_msgs/cmake/../msg -Iopencv_node:/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg -p opencv_node -o /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/share/roseus/ros/opencv_node/msg
+
 /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/share/roseus/ros/opencv_node/manifest.l: /opt/ros/kinetic/lib/geneus/gen_eus.py
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating EusLisp manifest code for opencv_node"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Generating EusLisp manifest code for opencv_node"
 	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/opencv_node && ../catkin_generated/env_cached.sh /usr/bin/python /opt/ros/kinetic/share/geneus/cmake/../../../lib/geneus/gen_eus.py -m -o /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/share/roseus/ros/opencv_node opencv_node std_msgs opencv_node
 
 opencv_node_generate_messages_eus: opencv_node/CMakeFiles/opencv_node_generate_messages_eus
 opencv_node_generate_messages_eus: /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/share/roseus/ros/opencv_node/msg/vision_msg.l
+opencv_node_generate_messages_eus: /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/share/roseus/ros/opencv_node/msg/object.l
 opencv_node_generate_messages_eus: /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/share/roseus/ros/opencv_node/manifest.l
 opencv_node_generate_messages_eus: opencv_node/CMakeFiles/opencv_node_generate_messages_eus.dir/build.make
 

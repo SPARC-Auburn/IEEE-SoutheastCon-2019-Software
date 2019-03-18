@@ -1,14 +1,19 @@
 # Hashes of file build rules.
+fc861d8a7cff1b6836a3a7e513e8dad8 /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/include/opencv_node/object.h
 5d27fe24065375745ae54c4d457a907c /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/include/opencv_node/vision_msg.h
 7fd7a94fcbaa99380fc2ef1330c635ba /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/include/razor_imu_9dof/imuConfig.h
 fdb84029689a00da78f442cd48fba93d /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/lib/python2.7/dist-packages/opencv_node/msg/__init__.py
+853fbb3d6c4b7f1bc8d12fe44d0cffc9 /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/lib/python2.7/dist-packages/opencv_node/msg/_object.py
 687e724f129781000dd98da2e9d74cdc /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/lib/python2.7/dist-packages/opencv_node/msg/_vision_msg.py
 8a6cde535ad56724d177dd17fe6c35a8 /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/share/common-lisp/ros/opencv_node/msg/vision_msg.lisp
+40f12e760d4f71261e5ca6d386667f43 /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/share/gennodejs/ros/opencv_node/msg/object.js
 f548cb54f22d82c3eeab50df6726e9cb /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/share/gennodejs/ros/opencv_node/msg/vision_msg.js
 dc77587f3bdf14b11388a383104ec9c5 /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/share/roseus/ros/opencv_node/manifest.l
+95884450a4167ffa39251bf840dd46e9 /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/share/roseus/ros/opencv_node/msg/object.l
 f7777fb5e2c9878eac5a0e3eed01508d /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/share/roseus/ros/opencv_node/msg/vision_msg.l
 a0d1b5d76fe87495be0b2cba71e68fd3 CMakeFiles/clean_test_results
-9da7d3a3c819b78db9f0e9cdaf50fd2b opencv_node/CMakeFiles/_opencv_node_generate_messages_check_deps_vision_msg
+40020f51bebe8aacccb4372fb4765032 opencv_node/CMakeFiles/_opencv_node_generate_messages_check_deps_object
+7f172d2991bcf9e84cdb38e8dfa7492e opencv_node/CMakeFiles/_opencv_node_generate_messages_check_deps_vision_msg
 8a94883a359a3cdb1a47cbd9e721fabb opencv_node/CMakeFiles/opencv_node_generate_messages_cpp
 8a94883a359a3cdb1a47cbd9e721fabb opencv_node/CMakeFiles/opencv_node_generate_messages_eus
 8a94883a359a3cdb1a47cbd9e721fabb opencv_node/CMakeFiles/opencv_node_generate_messages_nodejs

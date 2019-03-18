@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "opencv_node/vision_msg.h"
+#include "opencv_node/object.h"
 #include "sensor_msgs/Imu.h"
 
 using namespace std;

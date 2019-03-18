@@ -1,6 +1,6 @@
 # generated from genmsg/cmake/pkg-genmsg.context.in
 
-messages_str = "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/vision_msg.msg"
+messages_str = "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/vision_msg.msg;/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg"
 services_str = ""
 pkg_name = "opencv_node"
 dependencies_str = "std_msgs;opencv_node"

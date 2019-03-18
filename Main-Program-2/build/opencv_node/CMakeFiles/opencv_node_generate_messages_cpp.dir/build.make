@@ -54,16 +54,25 @@ CMAKE_BINARY_DIR = /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/bui
 include opencv_node/CMakeFiles/opencv_node_generate_messages_cpp.dir/progress.make
 
 opencv_node/CMakeFiles/opencv_node_generate_messages_cpp: /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/include/opencv_node/vision_msg.h
+opencv_node/CMakeFiles/opencv_node_generate_messages_cpp: /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/include/opencv_node/object.h
 
 
 /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/include/opencv_node/vision_msg.h: /opt/ros/kinetic/lib/gencpp/gen_cpp.py
 /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/include/opencv_node/vision_msg.h: /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/vision_msg.msg
+/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/include/opencv_node/vision_msg.h: /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg
 /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/include/opencv_node/vision_msg.h: /opt/ros/kinetic/share/gencpp/msg.h.template
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating C++ code from opencv_node/vision_msg.msg"
 	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node && /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/catkin_generated/env_cached.sh /usr/bin/python /opt/ros/kinetic/share/gencpp/cmake/../../../lib/gencpp/gen_cpp.py /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/vision_msg.msg -Iopencv_node:/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg -Istd_msgs:/opt/ros/kinetic/share/std_msgs/cmake/../msg -Iopencv_node:/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg -p opencv_node -o /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/include/opencv_node -e /opt/ros/kinetic/share/gencpp/cmake/..
 
+/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/include/opencv_node/object.h: /opt/ros/kinetic/lib/gencpp/gen_cpp.py
+/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/include/opencv_node/object.h: /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg
+/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/include/opencv_node/object.h: /opt/ros/kinetic/share/gencpp/msg.h.template
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating C++ code from opencv_node/object.msg"
+	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node && /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/catkin_generated/env_cached.sh /usr/bin/python /opt/ros/kinetic/share/gencpp/cmake/../../../lib/gencpp/gen_cpp.py /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg -Iopencv_node:/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg -Istd_msgs:/opt/ros/kinetic/share/std_msgs/cmake/../msg -Iopencv_node:/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg -p opencv_node -o /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/include/opencv_node -e /opt/ros/kinetic/share/gencpp/cmake/..
+
 opencv_node_generate_messages_cpp: opencv_node/CMakeFiles/opencv_node_generate_messages_cpp
 opencv_node_generate_messages_cpp: /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/include/opencv_node/vision_msg.h
+opencv_node_generate_messages_cpp: /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/include/opencv_node/object.h
 opencv_node_generate_messages_cpp: opencv_node/CMakeFiles/opencv_node_generate_messages_cpp.dir/build.make
 
 .PHONY : opencv_node_generate_messages_cpp

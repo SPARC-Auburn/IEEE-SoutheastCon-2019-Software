@@ -54,15 +54,23 @@ CMAKE_BINARY_DIR = /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/bui
 include opencv_node/CMakeFiles/opencv_node_generate_messages_nodejs.dir/progress.make
 
 opencv_node/CMakeFiles/opencv_node_generate_messages_nodejs: /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/share/gennodejs/ros/opencv_node/msg/vision_msg.js
+opencv_node/CMakeFiles/opencv_node_generate_messages_nodejs: /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/share/gennodejs/ros/opencv_node/msg/object.js
 
 
 /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/share/gennodejs/ros/opencv_node/msg/vision_msg.js: /opt/ros/kinetic/lib/gennodejs/gen_nodejs.py
 /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/share/gennodejs/ros/opencv_node/msg/vision_msg.js: /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/vision_msg.msg
+/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/share/gennodejs/ros/opencv_node/msg/vision_msg.js: /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating Javascript code from opencv_node/vision_msg.msg"
 	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/opencv_node && ../catkin_generated/env_cached.sh /usr/bin/python /opt/ros/kinetic/share/gennodejs/cmake/../../../lib/gennodejs/gen_nodejs.py /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/vision_msg.msg -Iopencv_node:/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg -Istd_msgs:/opt/ros/kinetic/share/std_msgs/cmake/../msg -Iopencv_node:/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg -p opencv_node -o /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/share/gennodejs/ros/opencv_node/msg
 
+/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/share/gennodejs/ros/opencv_node/msg/object.js: /opt/ros/kinetic/lib/gennodejs/gen_nodejs.py
+/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/share/gennodejs/ros/opencv_node/msg/object.js: /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating Javascript code from opencv_node/object.msg"
+	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/opencv_node && ../catkin_generated/env_cached.sh /usr/bin/python /opt/ros/kinetic/share/gennodejs/cmake/../../../lib/gennodejs/gen_nodejs.py /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg -Iopencv_node:/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg -Istd_msgs:/opt/ros/kinetic/share/std_msgs/cmake/../msg -Iopencv_node:/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg -p opencv_node -o /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/share/gennodejs/ros/opencv_node/msg
+
 opencv_node_generate_messages_nodejs: opencv_node/CMakeFiles/opencv_node_generate_messages_nodejs
 opencv_node_generate_messages_nodejs: /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/share/gennodejs/ros/opencv_node/msg/vision_msg.js
+opencv_node_generate_messages_nodejs: /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/share/gennodejs/ros/opencv_node/msg/object.js
 opencv_node_generate_messages_nodejs: opencv_node/CMakeFiles/opencv_node_generate_messages_nodejs.dir/build.make
 
 .PHONY : opencv_node_generate_messages_nodejs

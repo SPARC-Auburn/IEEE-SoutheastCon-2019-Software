@@ -20,35 +20,22 @@ The programming language we are choosing for this project is C++.  It is very po
 
 ### Operating System
 
-The Raspberry Pi runs best with Raspbian Linux.  If you are developing on another machine, we recommend using Ubuntu Linux as either a virtual machine.
+We are using a version of the Debian Linux operating system Ubuntu 16.04, called Lubuntu.  The image from Ubiquity Robotics has a precompiled version of Robot Operating System (ROS).  If you are developing on another machine, we recommend using Ubuntu Linux.
 
 ### Vision Recognition
 
-We are using Open CV (C++ variant) for image processing.
+We are using Open CV (C++ variant) for image processing.  We are running OpenCV version 3.3.0.  You can check your version by running `pkg-config --modversion opencv`.  Install OpenCV on Raspberry Pi (2 or better): https://www.pyimagesearch.com/2017/09/04/raspbian-stretch-install-opencv-3-python-on-your-raspberry-pi/.  The camera being used is the Raspi-Camera V2.1.
 
-### Simulation
+### Control Software Suite
 
-We are using [Gazebo](http://gazebosim.org/) to simulate the robot to test code, mechanical design, and algorithmic strategy.  We recommend using Ubuntu prefably on a desktop or laptop that is more powerful than a Raspberry Pi (prefably Intel Core i5 equivalent or better).
+For the overall systems control software, we are using a framework called Robot Operating System (ROS).  We are using ROS  Kinetic 1.12.14.  Check your version with 
+```
+rosversion -d
+rosversion roscpp
+```
 
-* Install Gazebo on Ubuntu: `curl -ssL http://get.gazebosim.org | sh`
-* Edit .bashrc file: `nano ~/.bashrc`
-* Add environmental variables to bottom of file (replace "username" with your username):
-```
-export GAZEBO_MODEL_PATH="${GAZEBO_MODEL_PATH}:/home/username/IEEE-SoutheastCon-2019/Electrical-Software/GazeboSimulation/models"
-export GAZEBO_PLUGIN_PATH="${GAZEBO_PLUGIN_PATH}:/home/username/IEEE-SoutheastCon-2019/Electrical-Software/GazeboSimulation/plugins/build"
-```
-* Press CRTL + X and Enter to save the file.
-* Change directory into repository.  For example: `cd ~/IEEE-SoutheastCon-2019/Electrical-Software/GazeboSimulation/`
-* Type the following commands
-```
-mkdir plugins/build
-cd plugins/build
-cmake ../
-make
-```
-* Change directory into world directory and start server:
-```
-cd ~/IEEE-SoutheastCon-2019/Electrical-Software/GazeboSimulation/world
-gzserver --verbose world.sdf
-```
-* Open up another terminal (CRTL-ALT-T) and type: `gzclient --verbose`
+### Programs
+
+* [Main-Program-1](Main-Program-1): The demo program for E-Day 2019 Demonstration.  This program uses OpenCV to extrapolate information of the debris objects.  It uses this information to turn towards the largest object and drive towards it.  Once it reaches it, it then turns right and goes towards the next object.  This configuration does not utilize ROS or localization.
+
+*[Main-Program-2](Main-Program-2): This program is the next developmental step for the software utilizing full ROS with localization.

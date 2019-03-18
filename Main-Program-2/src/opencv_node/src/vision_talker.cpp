@@ -13,7 +13,7 @@ Color Indices = Red(0), Blue(1), Yellow(2), Green(3)
 #include <iostream>
 #include <string>
 #include <opencv2/opencv.hpp>
-#include <opencv2/core.hpp>
+#include <opencv2/core/core.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/videoio.hpp>
 #include <opencv2/imgproc.hpp>
