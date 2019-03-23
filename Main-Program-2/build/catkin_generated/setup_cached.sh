@@ -7,4 +7,8 @@
 # new environment variables
 
 # modified environment variables
-export PWD="/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build"
+export CMAKE_PREFIX_PATH="/home/pi/ieee-2019-electrical-software/Main-Program-2/devel:$CMAKE_PREFIX_PATH"
+export LD_LIBRARY_PATH="/home/pi/ieee-2019-electrical-software/Main-Program-2/devel/lib:$LD_LIBRARY_PATH"
+export PWD="/home/pi/ieee-2019-electrical-software/Main-Program-2/build"
+export ROSLISP_PACKAGE_DIRECTORIES="/home/pi/ieee-2019-electrical-software/Main-Program-2/devel/share/common-lisp"
+export ROS_PACKAGE_PATH="/home/pi/ieee-2019-electrical-software/Main-Program-2/src:$ROS_PACKAGE_PATH"

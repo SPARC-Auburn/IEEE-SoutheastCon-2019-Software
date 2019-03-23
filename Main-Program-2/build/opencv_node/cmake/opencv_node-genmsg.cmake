@@ -2,11 +2,12 @@
 
 message(STATUS "opencv_node: 2 messages, 0 services")
 
-set(MSG_I_FLAGS "-Iopencv_node:/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg;-Istd_msgs:/opt/ros/kinetic/share/std_msgs/cmake/../msg;-Iopencv_node:/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg")
+set(MSG_I_FLAGS "-Iopencv_node:/home/pi/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg;-Istd_msgs:/opt/ros/kinetic/share/std_msgs/cmake/../msg;-Iopencv_node:/home/pi/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg")
 
 # Find all generators
 find_package(gencpp REQUIRED)
 find_package(geneus REQUIRED)
+find_package(genlisp REQUIRED)
 find_package(gennodejs REQUIRED)
 find_package(genpy REQUIRED)
 
@@ -16,32 +17,32 @@ add_custom_target(opencv_node_generate_messages ALL)
 
 
 
-get_filename_component(_filename "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/vision_msg.msg" NAME_WE)
+get_filename_component(_filename "/home/pi/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg" NAME_WE)
 add_custom_target(_opencv_node_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "opencv_node" "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/vision_msg.msg" "opencv_node/object"
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "opencv_node" "/home/pi/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg" ""
 )
 
-get_filename_component(_filename "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg" NAME_WE)
+get_filename_component(_filename "/home/pi/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/vision_msg.msg" NAME_WE)
 add_custom_target(_opencv_node_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "opencv_node" "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg" ""
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "opencv_node" "/home/pi/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/vision_msg.msg" "opencv_node/object"
 )
 
 #
-#  langs = gencpp;geneus;gennodejs;genpy
+#  langs = gencpp;geneus;genlisp;gennodejs;genpy
 #
 
 ### Section generating for lang: gencpp
 ### Generating Messages
 _generate_msg_cpp(opencv_node
-  "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/vision_msg.msg"
+  "/home/pi/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg"
   "${MSG_I_FLAGS}"
-  "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg"
+  ""
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/opencv_node
 )
 _generate_msg_cpp(opencv_node
-  "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg"
+  "/home/pi/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/vision_msg.msg"
   "${MSG_I_FLAGS}"
-  ""
+  "/home/pi/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg"
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/opencv_node
 )
 
@@ -59,9 +60,9 @@ add_custom_target(opencv_node_generate_messages_cpp
 add_dependencies(opencv_node_generate_messages opencv_node_generate_messages_cpp)
 
 # add dependencies to all check dependencies targets
-get_filename_component(_filename "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/vision_msg.msg" NAME_WE)
+get_filename_component(_filename "/home/pi/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg" NAME_WE)
 add_dependencies(opencv_node_generate_messages_cpp _opencv_node_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg" NAME_WE)
+get_filename_component(_filename "/home/pi/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/vision_msg.msg" NAME_WE)
 add_dependencies(opencv_node_generate_messages_cpp _opencv_node_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -74,15 +75,15 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS opencv_node_generate_messages_cpp)
 ### Section generating for lang: geneus
 ### Generating Messages
 _generate_msg_eus(opencv_node
-  "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/vision_msg.msg"
+  "/home/pi/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg"
   "${MSG_I_FLAGS}"
-  "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg"
+  ""
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/opencv_node
 )
 _generate_msg_eus(opencv_node
-  "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg"
+  "/home/pi/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/vision_msg.msg"
   "${MSG_I_FLAGS}"
-  ""
+  "/home/pi/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg"
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/opencv_node
 )
 
@@ -100,9 +101,9 @@ add_custom_target(opencv_node_generate_messages_eus
 add_dependencies(opencv_node_generate_messages opencv_node_generate_messages_eus)
 
 # add dependencies to all check dependencies targets
-get_filename_component(_filename "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/vision_msg.msg" NAME_WE)
+get_filename_component(_filename "/home/pi/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg" NAME_WE)
 add_dependencies(opencv_node_generate_messages_eus _opencv_node_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg" NAME_WE)
+get_filename_component(_filename "/home/pi/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/vision_msg.msg" NAME_WE)
 add_dependencies(opencv_node_generate_messages_eus _opencv_node_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -112,18 +113,59 @@ add_dependencies(opencv_node_geneus opencv_node_generate_messages_eus)
 # register target for catkin_package(EXPORTED_TARGETS)
 list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS opencv_node_generate_messages_eus)
 
+### Section generating for lang: genlisp
+### Generating Messages
+_generate_msg_lisp(opencv_node
+  "/home/pi/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/opencv_node
+)
+_generate_msg_lisp(opencv_node
+  "/home/pi/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/vision_msg.msg"
+  "${MSG_I_FLAGS}"
+  "/home/pi/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/opencv_node
+)
+
+### Generating Services
+
+### Generating Module File
+_generate_module_lisp(opencv_node
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/opencv_node
+  "${ALL_GEN_OUTPUT_FILES_lisp}"
+)
+
+add_custom_target(opencv_node_generate_messages_lisp
+  DEPENDS ${ALL_GEN_OUTPUT_FILES_lisp}
+)
+add_dependencies(opencv_node_generate_messages opencv_node_generate_messages_lisp)
+
+# add dependencies to all check dependencies targets
+get_filename_component(_filename "/home/pi/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg" NAME_WE)
+add_dependencies(opencv_node_generate_messages_lisp _opencv_node_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/pi/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/vision_msg.msg" NAME_WE)
+add_dependencies(opencv_node_generate_messages_lisp _opencv_node_generate_messages_check_deps_${_filename})
+
+# target for backward compatibility
+add_custom_target(opencv_node_genlisp)
+add_dependencies(opencv_node_genlisp opencv_node_generate_messages_lisp)
+
+# register target for catkin_package(EXPORTED_TARGETS)
+list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS opencv_node_generate_messages_lisp)
+
 ### Section generating for lang: gennodejs
 ### Generating Messages
 _generate_msg_nodejs(opencv_node
-  "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/vision_msg.msg"
+  "/home/pi/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg"
   "${MSG_I_FLAGS}"
-  "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg"
+  ""
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/opencv_node
 )
 _generate_msg_nodejs(opencv_node
-  "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg"
+  "/home/pi/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/vision_msg.msg"
   "${MSG_I_FLAGS}"
-  ""
+  "/home/pi/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg"
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/opencv_node
 )
 
@@ -141,9 +183,9 @@ add_custom_target(opencv_node_generate_messages_nodejs
 add_dependencies(opencv_node_generate_messages opencv_node_generate_messages_nodejs)
 
 # add dependencies to all check dependencies targets
-get_filename_component(_filename "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/vision_msg.msg" NAME_WE)
+get_filename_component(_filename "/home/pi/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg" NAME_WE)
 add_dependencies(opencv_node_generate_messages_nodejs _opencv_node_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg" NAME_WE)
+get_filename_component(_filename "/home/pi/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/vision_msg.msg" NAME_WE)
 add_dependencies(opencv_node_generate_messages_nodejs _opencv_node_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -156,15 +198,15 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS opencv_node_generate_messages_nodej
 ### Section generating for lang: genpy
 ### Generating Messages
 _generate_msg_py(opencv_node
-  "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/vision_msg.msg"
+  "/home/pi/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg"
   "${MSG_I_FLAGS}"
-  "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg"
+  ""
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/opencv_node
 )
 _generate_msg_py(opencv_node
-  "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg"
+  "/home/pi/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/vision_msg.msg"
   "${MSG_I_FLAGS}"
-  ""
+  "/home/pi/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg"
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/opencv_node
 )
 
@@ -182,9 +224,9 @@ add_custom_target(opencv_node_generate_messages_py
 add_dependencies(opencv_node_generate_messages opencv_node_generate_messages_py)
 
 # add dependencies to all check dependencies targets
-get_filename_component(_filename "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/vision_msg.msg" NAME_WE)
+get_filename_component(_filename "/home/pi/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg" NAME_WE)
 add_dependencies(opencv_node_generate_messages_py _opencv_node_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/object.msg" NAME_WE)
+get_filename_component(_filename "/home/pi/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg/vision_msg.msg" NAME_WE)
 add_dependencies(opencv_node_generate_messages_py _opencv_node_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -222,6 +264,20 @@ if(TARGET std_msgs_generate_messages_eus)
 endif()
 if(TARGET opencv_node_generate_messages_eus)
   add_dependencies(opencv_node_generate_messages_eus opencv_node_generate_messages_eus)
+endif()
+
+if(genlisp_INSTALL_DIR AND EXISTS ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/opencv_node)
+  # install generated code
+  install(
+    DIRECTORY ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/opencv_node
+    DESTINATION ${genlisp_INSTALL_DIR}
+  )
+endif()
+if(TARGET std_msgs_generate_messages_lisp)
+  add_dependencies(opencv_node_generate_messages_lisp std_msgs_generate_messages_lisp)
+endif()
+if(TARGET opencv_node_generate_messages_lisp)
+  add_dependencies(opencv_node_generate_messages_lisp opencv_node_generate_messages_lisp)
 endif()
 
 if(gennodejs_INSTALL_DIR AND EXISTS ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/opencv_node)

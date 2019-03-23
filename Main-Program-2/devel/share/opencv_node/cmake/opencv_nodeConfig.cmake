@@ -67,14 +67,14 @@ set(opencv_node_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("TRUE" STREQUAL "TRUE")
-  set(opencv_node_SOURCE_PREFIX /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node)
-  set(opencv_node_DEVEL_PREFIX /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel)
+  set(opencv_node_SOURCE_PREFIX /home/pi/ieee-2019-electrical-software/Main-Program-2/src/opencv_node)
+  set(opencv_node_DEVEL_PREFIX /home/pi/ieee-2019-electrical-software/Main-Program-2/devel)
   set(opencv_node_INSTALL_PREFIX "")
   set(opencv_node_PREFIX ${opencv_node_DEVEL_PREFIX})
 else()
   set(opencv_node_SOURCE_PREFIX "")
   set(opencv_node_DEVEL_PREFIX "")
-  set(opencv_node_INSTALL_PREFIX /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/install)
+  set(opencv_node_INSTALL_PREFIX /home/pi/ieee-2019-electrical-software/Main-Program-2/install)
   set(opencv_node_PREFIX ${opencv_node_INSTALL_PREFIX})
 endif()
 
@@ -91,9 +91,9 @@ endif()
 # flag project as catkin-based to distinguish if a find_package()-ed project is a catkin project
 set(opencv_node_FOUND_CATKIN_PROJECT TRUE)
 
-if(NOT "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/include " STREQUAL " ")
+if(NOT "/home/pi/ieee-2019-electrical-software/Main-Program-2/devel/include " STREQUAL " ")
   set(opencv_node_INCLUDE_DIRS "")
-  set(_include_dirs "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/include")
+  set(_include_dirs "/home/pi/ieee-2019-electrical-software/Main-Program-2/devel/include")
   if(NOT " " STREQUAL " ")
     set(_report "Check the issue tracker '' and consider creating a ticket if the problem has not been reported yet.")
   elseif(NOT " " STREQUAL " ")
@@ -110,7 +110,7 @@ if(NOT "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/include 
         message(FATAL_ERROR "Project 'opencv_node' specifies '${idir}' as an include dir, which is not found.  It does not exist in '${include}'.  ${_report}")
       endif()
     else()
-      message(FATAL_ERROR "Project 'opencv_node' specifies '${idir}' as an include dir, which is not found.  It does neither exist as an absolute directory nor in '/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/${idir}'.  ${_report}")
+      message(FATAL_ERROR "Project 'opencv_node' specifies '${idir}' as an include dir, which is not found.  It does neither exist as an absolute directory nor in '/home/pi/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/${idir}'.  ${_report}")
     endif()
     _list_append_unique(opencv_node_INCLUDE_DIRS ${include})
   endforeach()
@@ -129,7 +129,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/lib;/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/lib;/home/ubuntu/catkin_ws/devel/lib;/opt/ros/kinetic/lib)
+    foreach(path /home/pi/ieee-2019-electrical-software/Main-Program-2/devel/lib;/opt/ros/kinetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
@@ -152,7 +152,7 @@ foreach(library ${libraries})
   endif()
 endforeach()
 
-set(opencv_node_EXPORTED_TARGETS "opencv_node_generate_messages_cpp;opencv_node_generate_messages_eus;opencv_node_generate_messages_nodejs;opencv_node_generate_messages_py")
+set(opencv_node_EXPORTED_TARGETS "opencv_node_generate_messages_cpp;opencv_node_generate_messages_eus;opencv_node_generate_messages_lisp;opencv_node_generate_messages_nodejs;opencv_node_generate_messages_py")
 # create dummy targets for exported code generation targets to make life of users easier
 foreach(t ${opencv_node_EXPORTED_TARGETS})
   if(NOT TARGET ${t})

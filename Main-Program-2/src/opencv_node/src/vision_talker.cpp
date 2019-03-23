@@ -46,8 +46,6 @@ Color Indices = Red(0), Blue(1), Yellow(2), Green(3)
 using namespace cv;
 using namespace std;
 
-vector<DebrisObject> objectProperties;
-
 // Debris Object Namespace
 namespace IEEE_VISION
 {
@@ -84,6 +82,9 @@ struct DebrisObject
 		<< " angle=" << angle << " distance=" << distance << "\n";
 	}
 };
+
+vector<DebrisObject> objectProperties;
+
 struct VisionHandle
 {
 	raspicam::RaspiCam_Cv Camera;
@@ -135,7 +136,8 @@ struct VisionHandle
 	}
 	
 	//Finds objects of all colors; assumes a picture has been taken
-	void findObjects() {
+	void findObjects() 
+	{
 		objectProperties.clear();
 		for (int i = 0; i < 4; i++) {
 			findObjectsOfColor(i);
@@ -222,37 +224,38 @@ struct VisionHandle
 
   int main(int argc, char **argv)
   {
-    ros::init(argc, argv, "vision_talker"); // initialize ROS
-    ros::NodeHandle n;
-    ros::Publisher pub = n.advertise<opencv_node::vision_msg>("vision_info", 1000); // start publishing chatter
-    ros::Rate loop_rate(10);
-    // IEEE_VISION::VisionHandle vis; // initialize vision
+	ros::init(argc, argv, "vision_talker"); // initialize ROS
+	ros::NodeHandle n;
+	ros::Publisher pub = n.advertise<opencv_node::vision_msg>("vision_info", 1000); // start publishing chatter
+	ros::Rate loop_rate(10);
+	IEEE_VISION::VisionHandle vis; // initialize vision
 
-    while (ros::ok())
-    {
-      vis.takePicture();
-      vis.findObjects();
+	while (ros::ok())
+	{
+	  vis.takePicture();
+	  vis.findObjects();
 
-      opencv_node::vision_msg msg;
-      opencv_node::object data;
+	  opencv_node::vision_msg msg;
+	  opencv_node::object data;
 
-      for(std::size_t i=0; i<objectProperties.size(); ++i){
-        data.x_position = objectProperties.center.x;
-        data.y_position = objectProperties.center.y;
-        data.width = objectProperties.width;
-        data.height = objectProperties.height;
-        msg.objects.push_back(data);
-      } 
+	  for(std::size_t i=0; i<objectProperties.size(); ++i){
+		data.x_position = objectProperties[i].center.x;
+		data.y_position = objectProperties[i].center.y;
+		data.width = objectProperties[i].width;
+		data.height = objectProperties[i].height;
+		msg.objects.push_back(data);
+	  } 
 
-      ROS_INFO("%s", "Sending object properties");
+	  ROS_INFO("%s", "Sending object properties");
 
-      pub.publish(msg); // Sends messages
+	  pub.publish(msg); // Sends messages
 
-      ros::spinOnce();
+	  ros::spinOnce();
 
-      loop_rate.sleep();
-    }
+	  loop_rate.sleep();
+	}
 
-    return 0;
+	return 0;
   }
 };
+}

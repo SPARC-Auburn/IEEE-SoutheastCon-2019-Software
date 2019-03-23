@@ -1,8 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/opencv_node_generate_messages_eus"
-  "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/share/roseus/ros/opencv_node/msg/vision_msg.l"
-  "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/share/roseus/ros/opencv_node/msg/object.l"
-  "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/share/roseus/ros/opencv_node/manifest.l"
+  "/home/pi/ieee-2019-electrical-software/Main-Program-2/devel/share/roseus/ros/opencv_node/msg/object.l"
+  "/home/pi/ieee-2019-electrical-software/Main-Program-2/devel/share/roseus/ros/opencv_node/msg/vision_msg.l"
+  "/home/pi/ieee-2019-electrical-software/Main-Program-2/devel/share/roseus/ros/opencv_node/manifest.l"
 )
 
 # Per-language clean rules from dependency scanning.

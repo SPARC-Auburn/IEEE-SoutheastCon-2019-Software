@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/include/opencv_node/vision_msg.h
+/home/pi/ieee-2019-electrical-software/Main-Program-2/devel/include/opencv_node/object.h
 string
 -
 vector
@@ -22,7 +22,25 @@ ros/builtin_message_traits.h
 ros/message_operations.h
 -
 
-/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/src/vision_talker.cpp
+/home/pi/ieee-2019-electrical-software/Main-Program-2/devel/include/opencv_node/vision_msg.h
+string
+-
+vector
+-
+map
+-
+ros/types.h
+-
+ros/serialization.h
+-
+ros/builtin_message_traits.h
+-
+ros/message_operations.h
+-
+opencv_node/object.h
+-
+
+/home/pi/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/src/vision_talker.cpp
 stdio.h
 -
 stdlib.h
@@ -52,9 +70,9 @@ ctime
 math.h
 -
 ros/ros.h
-/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/src/ros/ros.h
+/home/pi/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/src/ros/ros.h
 std_msgs/String.h
-/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/src/std_msgs/String.h
+/home/pi/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/src/std_msgs/String.h
 sstream
 -
 opencv_node/vision_msg.h

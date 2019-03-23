@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/main.dir/src/main.cpp.o"
-  "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/lib/main_node/main.pdb"
-  "/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/lib/main_node/main"
+  "/home/pi/ieee-2019-electrical-software/Main-Program-2/devel/lib/main_node/main.pdb"
+  "/home/pi/ieee-2019-electrical-software/Main-Program-2/devel/lib/main_node/main"
 )
 
 # Per-language clean rules from dependency scanning.

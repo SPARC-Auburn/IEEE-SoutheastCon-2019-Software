@@ -1,25 +1,24 @@
 Determining if the pthread_create exist failed with the following output:
-Change Dir: /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles/CMakeTmp
+Change Dir: /home/pi/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_fd8c2/fast"
-/usr/bin/make -f CMakeFiles/cmTC_fd8c2.dir/build.make CMakeFiles/cmTC_fd8c2.dir/build
-make[1]: Entering directory '/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_fd8c2.dir/CheckSymbolExists.c.o
-/usr/bin/cc     -o CMakeFiles/cmTC_fd8c2.dir/CheckSymbolExists.c.o   -c /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
-Linking C executable cmTC_fd8c2
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_fd8c2.dir/link.txt --verbose=1
-/usr/bin/cc       CMakeFiles/cmTC_fd8c2.dir/CheckSymbolExists.c.o  -o cmTC_fd8c2 -rdynamic 
-CMakeFiles/cmTC_fd8c2.dir/CheckSymbolExists.c.o: In function `main':
-CheckSymbolExists.c:(.text+0xe): undefined reference to `pthread_create'
-CheckSymbolExists.c:(.text+0x12): undefined reference to `pthread_create'
+Run Build Command:"/usr/bin/make" "cmTC_16772/fast"
+/usr/bin/make -f CMakeFiles/cmTC_16772.dir/build.make CMakeFiles/cmTC_16772.dir/build
+make[1]: Entering directory '/home/pi/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_16772.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_16772.dir/CheckSymbolExists.c.o   -c /home/pi/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_16772
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_16772.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_16772.dir/CheckSymbolExists.c.o  -o cmTC_16772 -rdynamic 
+CMakeFiles/cmTC_16772.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x38): undefined reference to `pthread_create'
 collect2: error: ld returned 1 exit status
-CMakeFiles/cmTC_fd8c2.dir/build.make:97: recipe for target 'cmTC_fd8c2' failed
-make[1]: *** [cmTC_fd8c2] Error 1
-make[1]: Leaving directory '/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles/CMakeTmp'
-Makefile:126: recipe for target 'cmTC_fd8c2/fast' failed
-make: *** [cmTC_fd8c2/fast] Error 2
+CMakeFiles/cmTC_16772.dir/build.make:97: recipe for target 'cmTC_16772' failed
+make[1]: *** [cmTC_16772] Error 1
+make[1]: Leaving directory '/home/pi/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_16772/fast' failed
+make: *** [cmTC_16772/fast] Error 2
 
-File /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+File /home/pi/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
 /* */
 #include <pthread.h>
 
@@ -35,22 +34,22 @@ int main(int argc, char** argv)
 }
 
 Determining if the function pthread_create exists in the pthreads failed with the following output:
-Change Dir: /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles/CMakeTmp
+Change Dir: /home/pi/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_e8c11/fast"
-/usr/bin/make -f CMakeFiles/cmTC_e8c11.dir/build.make CMakeFiles/cmTC_e8c11.dir/build
-make[1]: Entering directory '/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_e8c11.dir/CheckFunctionExists.c.o
-/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_e8c11.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
-Linking C executable cmTC_e8c11
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e8c11.dir/link.txt --verbose=1
-/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_e8c11.dir/CheckFunctionExists.c.o  -o cmTC_e8c11 -rdynamic -lpthreads 
+Run Build Command:"/usr/bin/make" "cmTC_1dedc/fast"
+/usr/bin/make -f CMakeFiles/cmTC_1dedc.dir/build.make CMakeFiles/cmTC_1dedc.dir/build
+make[1]: Entering directory '/home/pi/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_1dedc.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_1dedc.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.7/Modules/CheckFunctionExists.c
+Linking C executable cmTC_1dedc
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_1dedc.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_1dedc.dir/CheckFunctionExists.c.o  -o cmTC_1dedc -rdynamic -lpthreads 
 /usr/bin/ld: cannot find -lpthreads
 collect2: error: ld returned 1 exit status
-CMakeFiles/cmTC_e8c11.dir/build.make:97: recipe for target 'cmTC_e8c11' failed
-make[1]: *** [cmTC_e8c11] Error 1
-make[1]: Leaving directory '/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles/CMakeTmp'
-Makefile:126: recipe for target 'cmTC_e8c11/fast' failed
-make: *** [cmTC_e8c11/fast] Error 2
+CMakeFiles/cmTC_1dedc.dir/build.make:97: recipe for target 'cmTC_1dedc' failed
+make[1]: *** [cmTC_1dedc] Error 1
+make[1]: Leaving directory '/home/pi/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_1dedc/fast' failed
+make: *** [cmTC_1dedc/fast] Error 2
 
 
