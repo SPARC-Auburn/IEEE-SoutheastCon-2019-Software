@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include "opencv_node/vision_msg.h"
 #include "opencv_node/object.h"
-#include "sensor_msgs/Imu.h"
+//#include "sensor_msgs/Imu.h"
 
 using namespace std;
 
@@ -23,7 +23,7 @@ void visionCallback(const opencv_node::vision_msg::ConstPtr &msg)
   }  
 }
 
-void imuCallback(const sensor_msgs::Imu::ConstPtr &msg)
+/*void imuCallback(const sensor_msgs::Imu::ConstPtr &msg)
 {
   float gyro_x = msg->angular_velocity.x;
   float gyro_y = msg->angular_velocity.y;
@@ -34,7 +34,7 @@ void imuCallback(const sensor_msgs::Imu::ConstPtr &msg)
   float orientation_w = msg->orientation.w;
   //ROS_INFO("Main>>>Angular Velocity: x(%f),y(%f),z(%f)", gyro_x,gyro_y,gyro_z);
   ROS_INFO("Main>>>Orientation: x(%f),y(%f),z(%f)", orientation_x, orientation_y, orientation_z);
-}
+}*/
 
 int main(int argc, char **argv)
 {
@@ -54,7 +54,7 @@ int main(int argc, char **argv)
   ros::NodeHandle n;
 
   ros::Subscriber sub = n.subscribe("vision_info", 1000, visionCallback);
-  ros::Subscriber sub2 = n.subscribe("sensor_msgs/Imu", 1000, imuCallback);
+  //ros::Subscriber sub2 = n.subscribe("sensor_msgs/Imu", 1000, imuCallback);
 
   ros::spin();
 

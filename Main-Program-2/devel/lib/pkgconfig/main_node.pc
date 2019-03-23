@@ -1,8 +1,0 @@
-prefix=/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel
-
-Name: main_node
-Description: Description of main_node
-Version: 0.0.0
-Cflags: 
-Libs: -L/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/lib 
-Requires: roscpp std_msgs opencv_node
