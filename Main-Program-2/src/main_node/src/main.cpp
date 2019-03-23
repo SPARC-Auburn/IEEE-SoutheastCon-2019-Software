@@ -15,10 +15,10 @@ using namespace std;
 
 void visionCallback(const opencv_node::vision_msg::ConstPtr &msg)
 {
-  ROS_INFO("Main>>>Number of Objects: %d", msg->objects.size);
-  for (int i = 0; i < msg->objects.size; ++i)
+  ROS_INFO("Main>>>Number of Objects: %d", msg->objects.size());
+  for (int i = 0; i < msg->objects.size(); ++i)
   {
-    const opencv_node::vision_msg &prop = msg->objects[i];
+    const opencv_node::object &prop = msg->objects[i];
     ROS_INFO_STREAM("Position: " << prop.x_position << "," << prop.y_position);
   }  
 }

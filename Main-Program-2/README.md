@@ -110,7 +110,7 @@ rosrun rqt_logger_level rqt_logger_level
 ```
 
 ## Vision Messages
-### Stucture
+### Structure
 * x_position (uint32): position in pixels on screen
 * y_position (uint32): position in pixels on screen
 * width (uint32): width of object
@@ -118,3 +118,13 @@ rosrun rqt_logger_level rqt_logger_level
 * distance (float): approximate distance in meters to object
 * color_index (uint8): color index of object [Red(0), Blue(1), Yellow(2), Green(3)]
 * object_type (uint8): type of object detected [Debris(0), Corner(1), CenterFace(2), Unknown(3)]
+
+
+## GCC Version
+The project must be compiled with a version of GCC that is later than GCC 4 (at least on Raspbian). Otherwise, there are compiler errors about undefined references to ROS functions that use std::string.
+The following commands can be used to switch versions (by changing the symlinks in /usr/bin), if two versions of GCC are installed. Be sure to delete the "build" and "devel" folders after switching.
+```
+sudo update-alternatives --config gcc
+sudo update-alternatives --config g++
+```
+If a symlink alternative does not exist, the --install flag for the above command can be used add it. More info [here](https://askubuntu.com/questions/26498/how-to-choose-the-default-gcc-and-g-version). It is not necessary to change the cc and c++ symlinks.
