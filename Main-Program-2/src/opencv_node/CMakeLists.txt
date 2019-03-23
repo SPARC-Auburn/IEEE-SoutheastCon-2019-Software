@@ -43,13 +43,17 @@ catkin_package(
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
+find_package(OpenCV REQUIRED)
+
 include_directories(
 # include
   ${catkin_INCLUDE_DIRS}
+  ${OpenCV_INCLUDE_DIRS}
 )
 
+
 add_executable(vision_talker src/vision_talker.cpp)
-target_link_libraries(vision_talker ${catkin_LIBRARIES})
+target_link_libraries(vision_talker ${catkin_LIBRARIES} ${OpenCV_LIBS})
 add_dependencies(vision_talker opencv_node_generate_messages_cpp)
 
 add_library(opencv_node src/vision_talker.cpp )

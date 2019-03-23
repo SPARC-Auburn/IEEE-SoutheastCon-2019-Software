@@ -397,9 +397,11 @@ opencv_node/all: opencv_node/CMakeFiles/opencv_node_generate_messages.dir/all
 .PHONY : opencv_node/all
 
 # Convenience name for "clean" pass in the directory.
-opencv_node/clean: opencv_node/CMakeFiles/opencv_node.dir/clean
 opencv_node/clean: opencv_node/CMakeFiles/opencv_node_genpy.dir/clean
 opencv_node/clean: opencv_node/CMakeFiles/opencv_node_generate_messages_py.dir/clean
+opencv_node/clean: opencv_node/CMakeFiles/opencv_node_genlisp.dir/clean
+opencv_node/clean: opencv_node/CMakeFiles/opencv_node.dir/clean
+opencv_node/clean: opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/clean
 opencv_node/clean: opencv_node/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/clean
 opencv_node/clean: opencv_node/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/clean
 opencv_node/clean: opencv_node/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/clean
@@ -432,43 +434,6 @@ opencv_node/clean: opencv_node/CMakeFiles/opencv_node_geneus.dir/clean
 opencv_node/preinstall:
 
 .PHONY : opencv_node/preinstall
-
-#=============================================================================
-# Target rules for target opencv_node/CMakeFiles/opencv_node.dir
-
-# All Build rule for target.
-opencv_node/CMakeFiles/opencv_node.dir/all:
-	$(MAKE) -f opencv_node/CMakeFiles/opencv_node.dir/build.make opencv_node/CMakeFiles/opencv_node.dir/depend
-	$(MAKE) -f opencv_node/CMakeFiles/opencv_node.dir/build.make opencv_node/CMakeFiles/opencv_node.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles --progress-num=14,15 "Built target opencv_node"
-.PHONY : opencv_node/CMakeFiles/opencv_node.dir/all
-
-# Include target in all.
-all: opencv_node/CMakeFiles/opencv_node.dir/all
-
-.PHONY : all
-
-# Build rule for subdir invocation for target.
-opencv_node/CMakeFiles/opencv_node.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles 2
-	$(MAKE) -f CMakeFiles/Makefile2 opencv_node/CMakeFiles/opencv_node.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles 0
-.PHONY : opencv_node/CMakeFiles/opencv_node.dir/rule
-
-# Convenience name for target.
-opencv_node: opencv_node/CMakeFiles/opencv_node.dir/rule
-
-.PHONY : opencv_node
-
-# clean rule for target.
-opencv_node/CMakeFiles/opencv_node.dir/clean:
-	$(MAKE) -f opencv_node/CMakeFiles/opencv_node.dir/build.make opencv_node/CMakeFiles/opencv_node.dir/clean
-.PHONY : opencv_node/CMakeFiles/opencv_node.dir/clean
-
-# clean rule for target.
-clean: opencv_node/CMakeFiles/opencv_node.dir/clean
-
-.PHONY : clean
 
 #=============================================================================
 # Target rules for target opencv_node/CMakeFiles/opencv_node_genpy.dir
@@ -511,7 +476,7 @@ opencv_node/CMakeFiles/opencv_node_generate_messages_py.dir/all: opencv_node/CMa
 opencv_node/CMakeFiles/opencv_node_generate_messages_py.dir/all: opencv_node/CMakeFiles/_opencv_node_generate_messages_check_deps_object.dir/all
 	$(MAKE) -f opencv_node/CMakeFiles/opencv_node_generate_messages_py.dir/build.make opencv_node/CMakeFiles/opencv_node_generate_messages_py.dir/depend
 	$(MAKE) -f opencv_node/CMakeFiles/opencv_node_generate_messages_py.dir/build.make opencv_node/CMakeFiles/opencv_node_generate_messages_py.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles --progress-num=23,24,25 "Built target opencv_node_generate_messages_py"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles --progress-num=25,26,27 "Built target opencv_node_generate_messages_py"
 .PHONY : opencv_node/CMakeFiles/opencv_node_generate_messages_py.dir/all
 
 # Build rule for subdir invocation for target.
@@ -533,6 +498,109 @@ opencv_node/CMakeFiles/opencv_node_generate_messages_py.dir/clean:
 
 # clean rule for target.
 clean: opencv_node/CMakeFiles/opencv_node_generate_messages_py.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target opencv_node/CMakeFiles/opencv_node_genlisp.dir
+
+# All Build rule for target.
+opencv_node/CMakeFiles/opencv_node_genlisp.dir/all: opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/all
+	$(MAKE) -f opencv_node/CMakeFiles/opencv_node_genlisp.dir/build.make opencv_node/CMakeFiles/opencv_node_genlisp.dir/depend
+	$(MAKE) -f opencv_node/CMakeFiles/opencv_node_genlisp.dir/build.make opencv_node/CMakeFiles/opencv_node_genlisp.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles --progress-num= "Built target opencv_node_genlisp"
+.PHONY : opencv_node/CMakeFiles/opencv_node_genlisp.dir/all
+
+# Build rule for subdir invocation for target.
+opencv_node/CMakeFiles/opencv_node_genlisp.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 opencv_node/CMakeFiles/opencv_node_genlisp.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles 0
+.PHONY : opencv_node/CMakeFiles/opencv_node_genlisp.dir/rule
+
+# Convenience name for target.
+opencv_node_genlisp: opencv_node/CMakeFiles/opencv_node_genlisp.dir/rule
+
+.PHONY : opencv_node_genlisp
+
+# clean rule for target.
+opencv_node/CMakeFiles/opencv_node_genlisp.dir/clean:
+	$(MAKE) -f opencv_node/CMakeFiles/opencv_node_genlisp.dir/build.make opencv_node/CMakeFiles/opencv_node_genlisp.dir/clean
+.PHONY : opencv_node/CMakeFiles/opencv_node_genlisp.dir/clean
+
+# clean rule for target.
+clean: opencv_node/CMakeFiles/opencv_node_genlisp.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target opencv_node/CMakeFiles/opencv_node.dir
+
+# All Build rule for target.
+opencv_node/CMakeFiles/opencv_node.dir/all:
+	$(MAKE) -f opencv_node/CMakeFiles/opencv_node.dir/build.make opencv_node/CMakeFiles/opencv_node.dir/depend
+	$(MAKE) -f opencv_node/CMakeFiles/opencv_node.dir/build.make opencv_node/CMakeFiles/opencv_node.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles --progress-num=14,15 "Built target opencv_node"
+.PHONY : opencv_node/CMakeFiles/opencv_node.dir/all
+
+# Include target in all.
+all: opencv_node/CMakeFiles/opencv_node.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+opencv_node/CMakeFiles/opencv_node.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 opencv_node/CMakeFiles/opencv_node.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles 0
+.PHONY : opencv_node/CMakeFiles/opencv_node.dir/rule
+
+# Convenience name for target.
+opencv_node: opencv_node/CMakeFiles/opencv_node.dir/rule
+
+.PHONY : opencv_node
+
+# clean rule for target.
+opencv_node/CMakeFiles/opencv_node.dir/clean:
+	$(MAKE) -f opencv_node/CMakeFiles/opencv_node.dir/build.make opencv_node/CMakeFiles/opencv_node.dir/clean
+.PHONY : opencv_node/CMakeFiles/opencv_node.dir/clean
+
+# clean rule for target.
+clean: opencv_node/CMakeFiles/opencv_node.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir
+
+# All Build rule for target.
+opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/all: opencv_node/CMakeFiles/_opencv_node_generate_messages_check_deps_vision_msg.dir/all
+opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/all: opencv_node/CMakeFiles/_opencv_node_generate_messages_check_deps_object.dir/all
+opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/all: opencv_node/CMakeFiles/std_msgs_generate_messages_lisp.dir/all
+	$(MAKE) -f opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/build.make opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/depend
+	$(MAKE) -f opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/build.make opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles --progress-num=21,22 "Built target opencv_node_generate_messages_lisp"
+.PHONY : opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/all
+
+# Build rule for subdir invocation for target.
+opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles 0
+.PHONY : opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+opencv_node_generate_messages_lisp: opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/rule
+
+.PHONY : opencv_node_generate_messages_lisp
+
+# clean rule for target.
+opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/clean:
+	$(MAKE) -f opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/build.make opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/clean
+.PHONY : opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/clean
+
+# clean rule for target.
+clean: opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/clean
 
 .PHONY : clean
 
@@ -637,6 +705,7 @@ clean: opencv_node/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/clean
 
 # All Build rule for target.
 opencv_node/CMakeFiles/vision_talker.dir/all: opencv_node/CMakeFiles/opencv_node_generate_messages_py.dir/all
+opencv_node/CMakeFiles/vision_talker.dir/all: opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/all
 opencv_node/CMakeFiles/vision_talker.dir/all: opencv_node/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/all
 opencv_node/CMakeFiles/vision_talker.dir/all: opencv_node/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/all
 opencv_node/CMakeFiles/vision_talker.dir/all: opencv_node/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/all
@@ -657,7 +726,7 @@ opencv_node/CMakeFiles/vision_talker.dir/all: opencv_node/CMakeFiles/opencv_node
 opencv_node/CMakeFiles/vision_talker.dir/all: opencv_node/CMakeFiles/std_msgs_generate_messages_lisp.dir/all
 	$(MAKE) -f opencv_node/CMakeFiles/vision_talker.dir/build.make opencv_node/CMakeFiles/vision_talker.dir/depend
 	$(MAKE) -f opencv_node/CMakeFiles/vision_talker.dir/build.make opencv_node/CMakeFiles/vision_talker.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles --progress-num=27,28 "Built target vision_talker"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles --progress-num=29,30 "Built target vision_talker"
 .PHONY : opencv_node/CMakeFiles/vision_talker.dir/all
 
 # Include target in all.
@@ -667,7 +736,7 @@ all: opencv_node/CMakeFiles/vision_talker.dir/all
 
 # Build rule for subdir invocation for target.
 opencv_node/CMakeFiles/vision_talker.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles 12
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles 14
 	$(MAKE) -f CMakeFiles/Makefile2 opencv_node/CMakeFiles/vision_talker.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles 0
 .PHONY : opencv_node/CMakeFiles/vision_talker.dir/rule
@@ -948,6 +1017,7 @@ clean: opencv_node/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/clean
 
 # All Build rule for target.
 opencv_node/CMakeFiles/opencv_node_generate_messages.dir/all: opencv_node/CMakeFiles/opencv_node_generate_messages_py.dir/all
+opencv_node/CMakeFiles/opencv_node_generate_messages.dir/all: opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/all
 opencv_node/CMakeFiles/opencv_node_generate_messages.dir/all: opencv_node/CMakeFiles/opencv_node_generate_messages_nodejs.dir/all
 opencv_node/CMakeFiles/opencv_node_generate_messages.dir/all: opencv_node/CMakeFiles/opencv_node_generate_messages_cpp.dir/all
 opencv_node/CMakeFiles/opencv_node_generate_messages.dir/all: opencv_node/CMakeFiles/opencv_node_generate_messages_eus.dir/all
@@ -963,7 +1033,7 @@ all: opencv_node/CMakeFiles/opencv_node_generate_messages.dir/all
 
 # Build rule for subdir invocation for target.
 opencv_node/CMakeFiles/opencv_node_generate_messages.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles 10
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles 12
 	$(MAKE) -f CMakeFiles/Makefile2 opencv_node/CMakeFiles/opencv_node_generate_messages.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles 0
 .PHONY : opencv_node/CMakeFiles/opencv_node_generate_messages.dir/rule
@@ -1024,7 +1094,7 @@ opencv_node/CMakeFiles/opencv_node_generate_messages_nodejs.dir/all: opencv_node
 opencv_node/CMakeFiles/opencv_node_generate_messages_nodejs.dir/all: opencv_node/CMakeFiles/_opencv_node_generate_messages_check_deps_object.dir/all
 	$(MAKE) -f opencv_node/CMakeFiles/opencv_node_generate_messages_nodejs.dir/build.make opencv_node/CMakeFiles/opencv_node_generate_messages_nodejs.dir/depend
 	$(MAKE) -f opencv_node/CMakeFiles/opencv_node_generate_messages_nodejs.dir/build.make opencv_node/CMakeFiles/opencv_node_generate_messages_nodejs.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles --progress-num=21,22 "Built target opencv_node_generate_messages_nodejs"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles --progress-num=23,24 "Built target opencv_node_generate_messages_nodejs"
 .PHONY : opencv_node/CMakeFiles/opencv_node_generate_messages_nodejs.dir/all
 
 # Build rule for subdir invocation for target.
@@ -1555,7 +1625,7 @@ clean: razor_imu_9dof/CMakeFiles/dynamic_reconfigure_gencfg.dir/clean
 razor_imu_9dof/CMakeFiles/razor_imu_9dof_gencfg.dir/all:
 	$(MAKE) -f razor_imu_9dof/CMakeFiles/razor_imu_9dof_gencfg.dir/build.make razor_imu_9dof/CMakeFiles/razor_imu_9dof_gencfg.dir/depend
 	$(MAKE) -f razor_imu_9dof/CMakeFiles/razor_imu_9dof_gencfg.dir/build.make razor_imu_9dof/CMakeFiles/razor_imu_9dof_gencfg.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles --progress-num=26 "Built target razor_imu_9dof_gencfg"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build/CMakeFiles --progress-num=28 "Built target razor_imu_9dof_gencfg"
 .PHONY : razor_imu_9dof/CMakeFiles/razor_imu_9dof_gencfg.dir/all
 
 # Include target in all.

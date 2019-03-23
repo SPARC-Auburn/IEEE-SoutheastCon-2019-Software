@@ -283,19 +283,6 @@ gtest_main/fast:
 .PHONY : gtest_main/fast
 
 #=============================================================================
-# Target rules for targets named opencv_node
-
-# Build rule for target.
-opencv_node: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 opencv_node
-.PHONY : opencv_node
-
-# fast build rule for target.
-opencv_node/fast:
-	$(MAKE) -f opencv_node/CMakeFiles/opencv_node.dir/build.make opencv_node/CMakeFiles/opencv_node.dir/build
-.PHONY : opencv_node/fast
-
-#=============================================================================
 # Target rules for targets named opencv_node_genpy
 
 # Build rule for target.
@@ -320,6 +307,45 @@ opencv_node_generate_messages_py: cmake_check_build_system
 opencv_node_generate_messages_py/fast:
 	$(MAKE) -f opencv_node/CMakeFiles/opencv_node_generate_messages_py.dir/build.make opencv_node/CMakeFiles/opencv_node_generate_messages_py.dir/build
 .PHONY : opencv_node_generate_messages_py/fast
+
+#=============================================================================
+# Target rules for targets named opencv_node_genlisp
+
+# Build rule for target.
+opencv_node_genlisp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 opencv_node_genlisp
+.PHONY : opencv_node_genlisp
+
+# fast build rule for target.
+opencv_node_genlisp/fast:
+	$(MAKE) -f opencv_node/CMakeFiles/opencv_node_genlisp.dir/build.make opencv_node/CMakeFiles/opencv_node_genlisp.dir/build
+.PHONY : opencv_node_genlisp/fast
+
+#=============================================================================
+# Target rules for targets named opencv_node
+
+# Build rule for target.
+opencv_node: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 opencv_node
+.PHONY : opencv_node
+
+# fast build rule for target.
+opencv_node/fast:
+	$(MAKE) -f opencv_node/CMakeFiles/opencv_node.dir/build.make opencv_node/CMakeFiles/opencv_node.dir/build
+.PHONY : opencv_node/fast
+
+#=============================================================================
+# Target rules for targets named opencv_node_generate_messages_lisp
+
+# Build rule for target.
+opencv_node_generate_messages_lisp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 opencv_node_generate_messages_lisp
+.PHONY : opencv_node_generate_messages_lisp
+
+# fast build rule for target.
+opencv_node_generate_messages_lisp/fast:
+	$(MAKE) -f opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/build.make opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/build
+.PHONY : opencv_node_generate_messages_lisp/fast
 
 #=============================================================================
 # Target rules for targets named rosgraph_msgs_generate_messages_lisp
@@ -772,9 +798,11 @@ help:
 	@echo "... gmock_main"
 	@echo "... gtest"
 	@echo "... gtest_main"
-	@echo "... opencv_node"
 	@echo "... opencv_node_genpy"
 	@echo "... opencv_node_generate_messages_py"
+	@echo "... opencv_node_genlisp"
+	@echo "... opencv_node"
+	@echo "... opencv_node_generate_messages_lisp"
 	@echo "... rosgraph_msgs_generate_messages_lisp"
 	@echo "... rosgraph_msgs_generate_messages_cpp"
 	@echo "... rosgraph_msgs_generate_messages_py"

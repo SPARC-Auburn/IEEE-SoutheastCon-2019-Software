@@ -5,6 +5,7 @@ fc861d8a7cff1b6836a3a7e513e8dad8 /home/ubuntu/ieee-2019-electrical-software/Main
 fdb84029689a00da78f442cd48fba93d /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/lib/python2.7/dist-packages/opencv_node/msg/__init__.py
 853fbb3d6c4b7f1bc8d12fe44d0cffc9 /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/lib/python2.7/dist-packages/opencv_node/msg/_object.py
 687e724f129781000dd98da2e9d74cdc /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/lib/python2.7/dist-packages/opencv_node/msg/_vision_msg.py
+9da37368f7ed7ff6a0a58fa7845a61f9 /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/share/common-lisp/ros/opencv_node/msg/object.lisp
 8a6cde535ad56724d177dd17fe6c35a8 /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/share/common-lisp/ros/opencv_node/msg/vision_msg.lisp
 40f12e760d4f71261e5ca6d386667f43 /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/share/gennodejs/ros/opencv_node/msg/object.js
 f548cb54f22d82c3eeab50df6726e9cb /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/devel/share/gennodejs/ros/opencv_node/msg/vision_msg.js
@@ -16,6 +17,7 @@ a0d1b5d76fe87495be0b2cba71e68fd3 CMakeFiles/clean_test_results
 7f172d2991bcf9e84cdb38e8dfa7492e opencv_node/CMakeFiles/_opencv_node_generate_messages_check_deps_vision_msg
 8a94883a359a3cdb1a47cbd9e721fabb opencv_node/CMakeFiles/opencv_node_generate_messages_cpp
 8a94883a359a3cdb1a47cbd9e721fabb opencv_node/CMakeFiles/opencv_node_generate_messages_eus
+8a94883a359a3cdb1a47cbd9e721fabb opencv_node/CMakeFiles/opencv_node_generate_messages_lisp
 8a94883a359a3cdb1a47cbd9e721fabb opencv_node/CMakeFiles/opencv_node_generate_messages_nodejs
 8a94883a359a3cdb1a47cbd9e721fabb opencv_node/CMakeFiles/opencv_node_generate_messages_py
 e94f16bacce74cb8489781573bbf1f40 razor_imu_9dof/CMakeFiles/razor_imu_9dof_gencfg

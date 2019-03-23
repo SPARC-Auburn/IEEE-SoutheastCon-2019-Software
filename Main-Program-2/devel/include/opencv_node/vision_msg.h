@@ -15,6 +15,7 @@
 #include <ros/builtin_message_traits.h>
 #include <ros/message_operations.h>
 
+#include <opencv_node/object.h>
 
 namespace opencv_node
 {
@@ -24,47 +25,17 @@ struct vision_msg_
   typedef vision_msg_<ContainerAllocator> Type;
 
   vision_msg_()
-    : x_position(0)
-    , y_position(0)
-    , width(0)
-    , height(0)
-    , distance(0.0)
-    , color_index(0)
-    , object_type(0)  {
+    : objects()  {
     }
   vision_msg_(const ContainerAllocator& _alloc)
-    : x_position(0)
-    , y_position(0)
-    , width(0)
-    , height(0)
-    , distance(0.0)
-    , color_index(0)
-    , object_type(0)  {
+    : objects(_alloc)  {
   (void)_alloc;
     }
 
 
 
-   typedef uint32_t _x_position_type;
-  _x_position_type x_position;
-
-   typedef uint32_t _y_position_type;
-  _y_position_type y_position;
-
-   typedef uint32_t _width_type;
-  _width_type width;
-
-   typedef uint32_t _height_type;
-  _height_type height;
-
-   typedef float _distance_type;
-  _distance_type distance;
-
-   typedef uint8_t _color_index_type;
-  _color_index_type color_index;
-
-   typedef uint8_t _object_type_type;
-  _object_type_type object_type;
+   typedef std::vector< ::opencv_node::object_<ContainerAllocator> , typename ContainerAllocator::template rebind< ::opencv_node::object_<ContainerAllocator> >::other >  _objects_type;
+  _objects_type objects;
 
 
 
@@ -100,7 +71,7 @@ namespace message_traits
 
 
 
-// BOOLTRAITS {'IsFixedSize': True, 'IsMessage': True, 'HasHeader': False}
+// BOOLTRAITS {'IsFixedSize': False, 'IsMessage': True, 'HasHeader': False}
 // {'std_msgs': ['/opt/ros/kinetic/share/std_msgs/cmake/../msg'], 'opencv_node': ['/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg', '/home/ubuntu/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/msg']}
 
 // !!!!!!!!!!! ['__class__', '__delattr__', '__dict__', '__doc__', '__eq__', '__format__', '__getattribute__', '__hash__', '__init__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_parsed_fields', 'constants', 'fields', 'full_name', 'has_header', 'header_present', 'names', 'package', 'parsed_fields', 'short_name', 'text', 'types']
@@ -110,12 +81,12 @@ namespace message_traits
 
 template <class ContainerAllocator>
 struct IsFixedSize< ::opencv_node::vision_msg_<ContainerAllocator> >
-  : TrueType
+  : FalseType
   { };
 
 template <class ContainerAllocator>
 struct IsFixedSize< ::opencv_node::vision_msg_<ContainerAllocator> const>
-  : TrueType
+  : FalseType
   { };
 
 template <class ContainerAllocator>
@@ -144,12 +115,12 @@ struct MD5Sum< ::opencv_node::vision_msg_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "2ffacbbb937a845333e840b126fe6a12";
+    return "5abfddaa0c41b9448d210310355541e0";
   }
 
   static const char* value(const ::opencv_node::vision_msg_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0x2ffacbbb937a8453ULL;
-  static const uint64_t static_value2 = 0x33e840b126fe6a12ULL;
+  static const uint64_t static_value1 = 0x5abfddaa0c41b944ULL;
+  static const uint64_t static_value2 = 0x8d210310355541e0ULL;
 };
 
 template<class ContainerAllocator>
@@ -168,7 +139,10 @@ struct Definition< ::opencv_node::vision_msg_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "uint32 x_position\n\
+    return "object[] objects\n\
+================================================================================\n\
+MSG: opencv_node/object\n\
+uint32 x_position\n\
 uint32 y_position\n\
 uint32 width\n\
 uint32 height\n\
@@ -193,13 +167,7 @@ namespace serialization
   {
     template<typename Stream, typename T> inline static void allInOne(Stream& stream, T m)
     {
-      stream.next(m.x_position);
-      stream.next(m.y_position);
-      stream.next(m.width);
-      stream.next(m.height);
-      stream.next(m.distance);
-      stream.next(m.color_index);
-      stream.next(m.object_type);
+      stream.next(m.objects);
     }
 
     ROS_DECLARE_ALLINONE_SERIALIZER
@@ -218,20 +186,14 @@ struct Printer< ::opencv_node::vision_msg_<ContainerAllocator> >
 {
   template<typename Stream> static void stream(Stream& s, const std::string& indent, const ::opencv_node::vision_msg_<ContainerAllocator>& v)
   {
-    s << indent << "x_position: ";
-    Printer<uint32_t>::stream(s, indent + "  ", v.x_position);
-    s << indent << "y_position: ";
-    Printer<uint32_t>::stream(s, indent + "  ", v.y_position);
-    s << indent << "width: ";
-    Printer<uint32_t>::stream(s, indent + "  ", v.width);
-    s << indent << "height: ";
-    Printer<uint32_t>::stream(s, indent + "  ", v.height);
-    s << indent << "distance: ";
-    Printer<float>::stream(s, indent + "  ", v.distance);
-    s << indent << "color_index: ";
-    Printer<uint8_t>::stream(s, indent + "  ", v.color_index);
-    s << indent << "object_type: ";
-    Printer<uint8_t>::stream(s, indent + "  ", v.object_type);
+    s << indent << "objects[]" << std::endl;
+    for (size_t i = 0; i < v.objects.size(); ++i)
+    {
+      s << indent << "  objects[" << i << "]: ";
+      s << std::endl;
+      s << indent;
+      Printer< ::opencv_node::object_<ContainerAllocator> >::stream(s, indent + "    ", v.objects[i]);
+    }
   }
 };
 

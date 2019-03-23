@@ -166,21 +166,6 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
-opencv_node/CMakeFiles/opencv_node.dir/rule:
-	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f CMakeFiles/Makefile2 opencv_node/CMakeFiles/opencv_node.dir/rule
-.PHONY : opencv_node/CMakeFiles/opencv_node.dir/rule
-
-# Convenience name for target.
-opencv_node: opencv_node/CMakeFiles/opencv_node.dir/rule
-
-.PHONY : opencv_node
-
-# fast build rule for target.
-opencv_node/fast:
-	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/opencv_node.dir/build.make opencv_node/CMakeFiles/opencv_node.dir/build
-.PHONY : opencv_node/fast
-
-# Convenience name for target.
 opencv_node/CMakeFiles/opencv_node_genpy.dir/rule:
 	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f CMakeFiles/Makefile2 opencv_node/CMakeFiles/opencv_node_genpy.dir/rule
 .PHONY : opencv_node/CMakeFiles/opencv_node_genpy.dir/rule
@@ -209,6 +194,51 @@ opencv_node_generate_messages_py: opencv_node/CMakeFiles/opencv_node_generate_me
 opencv_node_generate_messages_py/fast:
 	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/opencv_node_generate_messages_py.dir/build.make opencv_node/CMakeFiles/opencv_node_generate_messages_py.dir/build
 .PHONY : opencv_node_generate_messages_py/fast
+
+# Convenience name for target.
+opencv_node/CMakeFiles/opencv_node_genlisp.dir/rule:
+	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f CMakeFiles/Makefile2 opencv_node/CMakeFiles/opencv_node_genlisp.dir/rule
+.PHONY : opencv_node/CMakeFiles/opencv_node_genlisp.dir/rule
+
+# Convenience name for target.
+opencv_node_genlisp: opencv_node/CMakeFiles/opencv_node_genlisp.dir/rule
+
+.PHONY : opencv_node_genlisp
+
+# fast build rule for target.
+opencv_node_genlisp/fast:
+	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/opencv_node_genlisp.dir/build.make opencv_node/CMakeFiles/opencv_node_genlisp.dir/build
+.PHONY : opencv_node_genlisp/fast
+
+# Convenience name for target.
+opencv_node/CMakeFiles/opencv_node.dir/rule:
+	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f CMakeFiles/Makefile2 opencv_node/CMakeFiles/opencv_node.dir/rule
+.PHONY : opencv_node/CMakeFiles/opencv_node.dir/rule
+
+# Convenience name for target.
+opencv_node: opencv_node/CMakeFiles/opencv_node.dir/rule
+
+.PHONY : opencv_node
+
+# fast build rule for target.
+opencv_node/fast:
+	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/opencv_node.dir/build.make opencv_node/CMakeFiles/opencv_node.dir/build
+.PHONY : opencv_node/fast
+
+# Convenience name for target.
+opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/rule:
+	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f CMakeFiles/Makefile2 opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/rule
+.PHONY : opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+opencv_node_generate_messages_lisp: opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/rule
+
+.PHONY : opencv_node_generate_messages_lisp
+
+# fast build rule for target.
+opencv_node_generate_messages_lisp/fast:
+	cd /home/ubuntu/ieee-2019-electrical-software/Main-Program-2/build && $(MAKE) -f opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/build.make opencv_node/CMakeFiles/opencv_node_generate_messages_lisp.dir/build
+.PHONY : opencv_node_generate_messages_lisp/fast
 
 # Convenience name for target.
 opencv_node/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule:
@@ -626,9 +656,11 @@ help:
 	@echo "... test"
 	@echo "... install"
 	@echo "... install/local"
-	@echo "... opencv_node"
 	@echo "... opencv_node_genpy"
 	@echo "... opencv_node_generate_messages_py"
+	@echo "... opencv_node_genlisp"
+	@echo "... opencv_node"
+	@echo "... opencv_node_generate_messages_lisp"
 	@echo "... rosgraph_msgs_generate_messages_lisp"
 	@echo "... rosgraph_msgs_generate_messages_cpp"
 	@echo "... install/strip"
