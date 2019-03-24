@@ -13,11 +13,11 @@ Color Indices = Red(0), Blue(1), Yellow(2), Green(3)
 #include <iostream>
 #include <string>
 #include <opencv2/opencv.hpp>
-#include <opencv2/core/core.hpp>
+#include <opencv2/core.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/videoio.hpp>
 #include <opencv2/imgproc.hpp>
-#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/highgui.hpp>
 #include <raspicam/raspicam_cv.h>
 #include <time.h>
 #include <ctime>
@@ -142,6 +142,8 @@ struct VisionHandle
 		for (int i = 0; i < 4; i++) {
 			findObjectsOfColor(i);
 		}
+		ROS_INFO("%s", "Finished finding objects");
+		displayImage("output");
 	}
 
 	// Populates vector array of object's properties; previously "GetObjectProperties"
@@ -202,7 +204,7 @@ struct VisionHandle
 					distance = (1/(double)boundRect.width) * DISTANCE_MULTIPLIER;
 					objectProperties.push_back(DebrisObject(boundRect, index, angle, distance, objectType));
 				}
-			}
+			}			
 		}
 	}
 	
@@ -211,7 +213,8 @@ struct VisionHandle
 	{
 		if (VISION_DEBUG_IMAGE)
 			{
-				//imwrite("Test.jpg",image);
+				ROS_INFO("%s", "Displaying/Saving Picture...");
+				imwrite("test.jpg",image);
 				imshow(label, image); // Show our image inside it.
 				waitKey(1);			// Wait for a keystroke in the window
 			}
@@ -222,40 +225,45 @@ struct VisionHandle
 	static constexpr double CameraHeight = .22225;
 	static constexpr double CameraAngle = 25.0;		//Degrees; angle the camera circuit board makes with the vertical. Only an approximate value. 
 
-  int main(int argc, char **argv)
-  {
-	ros::init(argc, argv, "vision_talker"); // initialize ROS
-	ros::NodeHandle n;
-	ros::Publisher pub = n.advertise<opencv_node::vision_msg>("vision_info", 1000); // start publishing chatter
-	ros::Rate loop_rate(10);
-	IEEE_VISION::VisionHandle vis; // initialize vision
-
-	while (ros::ok())
+	int processVision(int argc, char **argv)
 	{
-	  vis.takePicture();
-	  vis.findObjects();
+		ros::init(argc, argv, "vision_talker"); // initialize ROS
+		ros::NodeHandle n;
+		ros::Publisher pub = n.advertise<opencv_node::vision_msg>("vision_info", 1000); // start publishing chatter
+		ros::Rate loop_rate(10);
+		while (ros::ok())
+		{
+		  takePicture();
+		  findObjects();
 
-	  opencv_node::vision_msg msg;
-	  opencv_node::object data;
+		  opencv_node::vision_msg msg;
+		  opencv_node::object data;
 
-	  for(std::size_t i=0; i<objectProperties.size(); ++i){
-		data.x_position = objectProperties[i].center.x;
-		data.y_position = objectProperties[i].center.y;
-		data.width = objectProperties[i].width;
-		data.height = objectProperties[i].height;
-		msg.objects.push_back(data);
-	  } 
+		  for(std::size_t i=0; i<objectProperties.size(); ++i){
+			data.x_position = objectProperties[i].center.x;
+			data.y_position = objectProperties[i].center.y;
+			data.width = objectProperties[i].width;
+			data.height = objectProperties[i].height;
+			msg.objects.push_back(data);
+		  } 
 
-	  ROS_INFO("%s", "Sending object properties");
+		  ROS_INFO("%s", "Sending object properties2");
 
-	  pub.publish(msg); // Sends messages
+		  pub.publish(msg); // Sends messages
 
-	  ros::spinOnce();
+		  ros::spinOnce();
 
-	  loop_rate.sleep();
-	}
+		  loop_rate.sleep();
+		}
 
-	return 0;
+		return 0;	
   }
 };
+
+}
+int main(int argc, char **argv)
+{
+	IEEE_VISION::VisionHandle vis; // initialize vision
+	vis.processVision(argc,argv);
+	return 0;
 }

@@ -1,0 +1,8 @@
+prefix=/home/pi/ieee-2019-electrical-software/Main-Program-2/install
+
+Name: opencv_node
+Description: Description of opencv_node
+Version: 0.0.0
+Cflags: -I/home/pi/ieee-2019-electrical-software/Main-Program-2/install/include
+Libs: -L/home/pi/ieee-2019-electrical-software/Main-Program-2/install/lib -lopencv_node
+Requires: roscpp std_msgs message_runtime

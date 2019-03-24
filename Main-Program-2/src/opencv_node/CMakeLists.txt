@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(opencv_node)
-
-## Compile as C++11, supported in ROS Kinetic and newer
-add_compile_options(-std=c++11)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF )
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -40,20 +40,23 @@ catkin_package(
 ###########
 ## Build ##
 ###########
+set(raspicam_DIR "~/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/raspicam/build")
+find_package(raspicam REQUIRED)
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 find_package(OpenCV REQUIRED)
-
+message(${OpenCV_LIBRARIES})
 include_directories(
 # include
   ${catkin_INCLUDE_DIRS}
   ${OpenCV_INCLUDE_DIRS}
 )
 
+add_library(opencv_node src/vision_talker.cpp)
+target_link_libraries(opencv_node ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${raspicam_CV_LIBS})
+add_dependencies(opencv_node opencv_node_generate_messages_cpp)
 
 add_executable(vision_talker src/vision_talker.cpp)
-target_link_libraries(vision_talker ${catkin_LIBRARIES} ${OpenCV_LIBS})
+target_link_libraries(vision_talker ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${raspicam_CV_LIBS})
 add_dependencies(vision_talker opencv_node_generate_messages_cpp)
-
-add_library(opencv_node src/vision_talker.cpp )

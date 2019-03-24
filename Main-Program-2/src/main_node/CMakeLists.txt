@@ -57,4 +57,4 @@ add_executable(main src/main.cpp)
 target_link_libraries(main ${catkin_LIBRARIES})
 add_dependencies(main main_node_generate_messages_cpp)
 
-add_dependencies(vision_talker ${catkin_EXPORTED_TARGETS})
+add_dependencies(opencv_node ${catkin_EXPORTED_TARGETS})
