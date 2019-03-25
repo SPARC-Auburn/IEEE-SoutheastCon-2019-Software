@@ -29,15 +29,37 @@ catkin_make
 source ~/ieee-2019-electrical-software/Main-Program-2/devel/setup.bash
 ```
 
+### Build rosserial_arduino
+On Ubuntu:
+```
+sudo apt-get install ros-kinetic-rosserial-arduino
+sudo apt-get install ros-kinetic-rosserial
+```
+On Raspbian:
+```
+cd ~/ieee-2019-electrical-software/CommonMessages
+catkin_make
+source devel/setup.bash
+cd ../ArduinoROS
+catkin_make -j2
+```
+The branch of the Arduino serial library used is jade-devel. More info can be found [here](wiki.ros.org/rosserial_arduino/Tutorials/Arduino%20IDE%20Setup).
+
+### Setting up the Arduino IDE
+In the IDE, go to Sketch -> Include Library -> Manage Libraries. Search for "rosserial" and install the library.
+This does not require ROS to be installed on the computer with the IDE.
+
 ### Adding source to .bashrc
 * Open .bashrc
 ```
 cd ~
 nano .bashrc
 ```
-* Add the following line
+* Add the following lines
 ```
-source /opt/ros/kinetic/setup.bash
+source ~/ieee-2019-electrical-software/Main-Program-2/devel/setup.bash
+source ~/ieee-2019-electrical-software/CommonMessages/devel/setup.bash
+source ~/ieee-2019-electrical-software/ArduinoROS/devel/setup.bash
 ```
 
 ### Setup Raspicam
