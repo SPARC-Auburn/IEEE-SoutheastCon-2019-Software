@@ -37,12 +37,12 @@ nano .bashrc
 ```
 * Add the following line
 ```
-source ~/ieee-2019-electrical-software/Main-Program-2/devel/setup.bash
+source /opt/ros/kinetic/setup.bash
 ```
 
 ### Setup Raspicam
 ```
-cd ~/ieee-2019-electrical-software/Main-Program-2/raspicam
+cd ~/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/raspicam
 mkdir build
 cd build
 cmake ..

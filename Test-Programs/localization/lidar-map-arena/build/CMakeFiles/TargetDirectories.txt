@@ -1,7 +1,0 @@
-/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/build/CMakeFiles/ydlidar_driver_static.dir
-/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/build/CMakeFiles/rebuild_cache.dir
-/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/build/CMakeFiles/edit_cache.dir
-/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/build/CMakeFiles/ydlidar_driver.dir
-/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/build/samples/CMakeFiles/rebuild_cache.dir
-/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/build/samples/CMakeFiles/edit_cache.dir
-/home/pi/ieee-2019-electrical-software/localization/lidar-map-arena/build/samples/CMakeFiles/ydlidar_test.dir
