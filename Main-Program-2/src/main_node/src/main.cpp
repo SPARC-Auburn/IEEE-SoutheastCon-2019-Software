@@ -23,6 +23,10 @@ void visionCallback(const opencv_node::vision_msg::ConstPtr &msg)
   }  
 }
 
+void arduinoCallback(const std_msgs::String& msg) {
+	ROS_INFO_STREAM(msg << '\n');
+}
+
 /*void imuCallback(const sensor_msgs::Imu::ConstPtr &msg)
 {
   float gyro_x = msg->angular_velocity.x;
@@ -56,7 +60,25 @@ int main(int argc, char **argv)
   ros::Subscriber sub = n.subscribe("vision_info", 1000, visionCallback);
   //ros::Subscriber sub2 = n.subscribe("sensor_msgs/Imu", 1000, imuCallback);
 
-  ros::spin();
+	ros::Publisher arduinoSend = n.advertise<std_msgs::String>("arduinoTopic", 500);
+	ros::Subscriber arduinoReceive = n.subscribe("arduinoPub", 500, arduinoCallback);
+
+	ros::Rate loop_rate(1);	//1 Hz
+
+	int count = 0;
+	while(ros::ok()) {
+		std_msgs::String msg;
+		
+		msg.data = std::string("Hello ");
+		msg.data += std::to_string(count);
+		ROS_INFO_STREAM(msg.data);
+		
+		arduinoSend.publish(msg);
+		
+		ros::spinOnce();
+		loop_rate.sleep();
+		++count;
+	}
 
   return 0;
 }
