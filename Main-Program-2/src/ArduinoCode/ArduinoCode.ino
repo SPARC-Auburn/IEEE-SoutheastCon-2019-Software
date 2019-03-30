@@ -15,10 +15,11 @@ void receiveCallback(const std_msgs::String& message) {
   lcd.print(str_msg.data);
   
 }
-
+  
 ros::Subscriber<std_msgs::String> receiver("arduinoTopic", &receiveCallback);
 
 void setup() {
+  lcd.begin();
   nh.initNode();
   nh.advertise(sender);
   nh.subscribe(receiver);
