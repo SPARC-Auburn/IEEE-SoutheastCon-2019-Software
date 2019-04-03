@@ -9,7 +9,8 @@ find_package(catkin REQUIRED COMPONENTS nav_msgs roscpp tf)
 catkin_package()
 
 include_directories(${catkin_INCLUDE_DIRS})
-find_package (Eigen3 3.3 REQUIRED NO_MODULE)
+find_package (Eigen3 REQUIRED)
+include_directories(${EIGEN3_INCLUDE_DIR})
 find_library(wiringPi_LIB wiringPi)
 # Build the executable
 add_executable(odometry_publisher src/odometry_publisher.cpp)
@@ -19,7 +20,7 @@ if(nav_msgs_EXPORTED_TARGETS)
   add_dependencies(odometry_publisher ${nav_msgs_EXPORTED_TARGETS})
 endif()
 # Link against the catkin libraries
-target_link_libraries(odometry_publisher ${catkin_LIBRARIES} Eigen3::Eigen pthread ${wiringPi_LIB})
+target_link_libraries(odometry_publisher ${catkin_LIBRARIES} pthread ${wiringPi_LIB})
 
 # Install the executable
 install(TARGETS odometry_publisher

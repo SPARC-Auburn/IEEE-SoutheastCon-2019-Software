@@ -44,7 +44,7 @@
 #define pi 3.141592
 #define tau 2*pi
 struct Encoder{
-  static int outcome[] = {0,1,-1,0,-1,0,0,1,1,0,0,-1,0,-1,1,0};
+  const int outcome[16] = {0,1,-1,0,-1,0,0,1,1,0,0,-1,0,-1,1,0};
   int pin_a,pin_b;
   volatile long value;
   volatile char last,cur;
@@ -54,16 +54,16 @@ struct Encoder{
     pinMode (a, INPUT);
     pinMode (b, INPUT);
 
-    lastEncoded = 0;
+    last = 0;
     value = 0;
   }
-  update(){
+  void update(){
     cur = (digitalRead(pin_a) << 1) | digitalRead(pin_b);
     value += outcome[(last << 2) | cur];
     last = cur;
   }
-}
-void update(Encoder &coders[2]){
+};
+void update(Encoder coders[2]){
   while(1){
     coders[0].update();
     coders[1].update();
@@ -72,19 +72,19 @@ void update(Encoder &coders[2]){
 int main(int argc, char** argv){
   ros::init(argc, argv, "odometry_publisher");
   wiringPiSetup();
-  Encoder coders[2] = {Encoder(21,20),Encoder(19,26)}
-  std::thread IO (bar,coders);//put in a seperate thread to ensure its not delayed by the odometry integration
+  Encoder coders[2] = {Encoder(21,20),Encoder(19,26)};
+  std::thread IO (update,coders);//put in a seperate thread to ensure its not delayed by the odometry integration
 
   ros::NodeHandle n;
   ros::Publisher odom_pub = n.advertise<nav_msgs::Odometry>("odom", 50);
   tf::TransformBroadcaster odom_broadcaster;
-  odomIntegral odom(0.1778,0.038735);//base and radius in meters. TODO get accurate values here
+  odomIntegral odomI(0.1778,0.038735);//base and radius in meters. TODO get accurate values here
 
 
   ros::Time current_time, last_time;
   current_time = ros::Time::now();
   last_time = ros::Time::now();
-  long lastCountR = coders[0].value,lastCountL = coders[1].value,curValueR,curValueL;
+  long lastValueR = coders[0].value,lastValueL = coders[1].value,curValueR,curValueL;
   ros::Rate r(1.0);
   while(n.ok()){
     current_time = ros::Time::now();
@@ -95,12 +95,13 @@ int main(int argc, char** argv){
     curValueL = coders[1].value;
     double diffR = curValueR-lastValueR;
     double diffL = curValueL-lastValueL;
-    double wR = (tau*diffR)/(ticksPerRev*dt) //revolution speed of the right wheel in radians per second. This is computed as an instantneous measurement since the last time we updated
-    double wL = (tau*diffL)/(ticksPerRev*dt)
-    odom.proc(wL,wR,dt);  //this performs all the integration
-
+    double wR = (tau*diffR)/(ticksPerRev*dt); //revolution speed of the right wheel in radians per second. This is computed as an instantneous measurement since the last time we updated
+    double wL = (tau*diffL)/(ticksPerRev*dt);
+    odomI.proc(wL,wR,dt);  //this performs all the integration
+    lastValueR = curValueR;
+    lastValueL = curValueL;
     //since all odometry is 6DOF we'll need a quaternion created from yaw
-    geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(odom.theta);
+    geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(odomI.theta);
 
     //first, we'll publish the transform over tf
     geometry_msgs::TransformStamped odom_trans;
@@ -108,8 +109,8 @@ int main(int argc, char** argv){
     odom_trans.header.frame_id = "odom";
     odom_trans.child_frame_id = "base_link";
 
-    odom_trans.transform.translation.x = odom.x;
-    odom_trans.transform.translation.y = odom.y;
+    odom_trans.transform.translation.x = odomI.x;
+    odom_trans.transform.translation.y = odomI.y;
     odom_trans.transform.translation.z = 0.0;
     odom_trans.transform.rotation = odom_quat;
 
@@ -123,15 +124,15 @@ int main(int argc, char** argv){
     odom.child_frame_id = "base_link";
 
     //set the position
-    odom.pose.pose.position.x = odom.x;
-    odom.pose.pose.position.y = odom.y;
+    odom.pose.pose.position.x = odomI.x;
+    odom.pose.pose.position.y = odomI.y;
     odom.pose.pose.position.z = 0.0;
     odom.pose.pose.orientation = odom_quat;
 
     //set the velocity
-    odom.twist.twist.linear.x = odom.xdot;
-    odom.twist.twist.linear.y = odom.ydot;
-    odom.twist.twist.angular.z = odom.thetadot;
+    odom.twist.twist.linear.x = odomI.xdot;
+    odom.twist.twist.linear.y = odomI.ydot;
+    odom.twist.twist.angular.z = odomI.thetadot;
 
     //publish the message
     odom_pub.publish(odom);
