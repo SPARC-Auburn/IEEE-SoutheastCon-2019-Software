@@ -71,10 +71,9 @@ void update(Encoder coders[2]){
 }
 int main(int argc, char** argv){
   ros::init(argc, argv, "odometry_publisher");
-  wiringPiSetup();
+  wiringPiSetupGpio();
   Encoder coders[2] = {Encoder(21,20),Encoder(19,26)};
   std::thread IO (update,coders);//put in a seperate thread to ensure its not delayed by the odometry integration
-
   ros::NodeHandle n;
   ros::Publisher odom_pub = n.advertise<nav_msgs::Odometry>("odom", 50);
   tf::TransformBroadcaster odom_broadcaster;
@@ -85,7 +84,7 @@ int main(int argc, char** argv){
   current_time = ros::Time::now();
   last_time = ros::Time::now();
   long lastValueR = coders[0].value,lastValueL = coders[1].value,curValueR,curValueL;
-  ros::Rate r(1.0);
+  ros::Rate r(200);
   while(n.ok()){
     current_time = ros::Time::now();
 
@@ -138,6 +137,7 @@ int main(int argc, char** argv){
     odom_pub.publish(odom);
 
     last_time = current_time;
+    std::cout << "x:" << odomI.x << " y:" << odomI.y << " t:" << odomI.theta << std::endl;
     r.sleep();
   }
 }
