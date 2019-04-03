@@ -40,7 +40,7 @@
 #include <wiringPi.h>
 #include "deadreckon.h"
 #include <thread>
-#define ticksPerRev 1024.0 //ticks per rev is a double to the possibility of non whole number gear ratios due to how the encdoers are coupled
+#define ticksPerRev 2244.923077 //ticks per rev is a double to the possibility of non whole number gear ratios due to how the encdoers are coupled
 #define pi 3.141592
 #define tau 2*pi
 struct Encoder{
@@ -77,7 +77,7 @@ int main(int argc, char** argv){
   ros::NodeHandle n;
   ros::Publisher odom_pub = n.advertise<nav_msgs::Odometry>("odom", 50);
   tf::TransformBroadcaster odom_broadcaster;
-  odomIntegral odomI(0.1778,0.038735);//base and radius in meters. TODO get accurate values here
+  odomIntegral odomI(0.1730756,0.0379095);//base and radius in meters. TODO get accurate values here
 
 
   ros::Time current_time, last_time;
@@ -137,7 +137,7 @@ int main(int argc, char** argv){
     odom_pub.publish(odom);
 
     last_time = current_time;
-    std::cout << "x:" << odomI.x << " y:" << odomI.y << " t:" << odomI.theta << std::endl;
+//    std::cout << "x:" << odomI.x << " y:" << odomI.y << " t:" << odomI.theta << std::endl;
     r.sleep();
   }
 }
