@@ -10,8 +10,18 @@
 #include "opencv_node/vision_msg.h"
 #include "opencv_node/object.h"
 //#include "sensor_msgs/Imu.h"
+#include "Arduino-Serial/ArduinoSerial.h"
 
 using namespace std;
+
+serialPort arduino("/dev/ttyUSB0");  
+
+void testMovement()
+{        
+  arduino.turnRight(25);
+  usleep(1000*500);
+  arduino.stopMotors();
+}
 
 void visionCallback(const opencv_node::vision_msg::ConstPtr &msg)
 {
@@ -23,9 +33,11 @@ void visionCallback(const opencv_node::vision_msg::ConstPtr &msg)
   }  
 }
 
-void arduinoCallback(const std_msgs::String& msg) {
-	ROS_INFO_STREAM(msg << '\n');
-}
+
+
+// void arduinoCallback(const std_msgs::String& msg) {
+// 	ROS_INFO_STREAM(msg << '\n');
+// }
 
 /*void imuCallback(const sensor_msgs::Imu::ConstPtr &msg)
 {
@@ -60,20 +72,20 @@ int main(int argc, char **argv)
   ros::Subscriber sub = n.subscribe("vision_info", 1000, visionCallback);
   //ros::Subscriber sub2 = n.subscribe("sensor_msgs/Imu", 1000, imuCallback);
 
-	ros::Publisher arduinoSend = n.advertise<std_msgs::String>("arduinoTopic", 500);
-	ros::Subscriber arduinoReceive = n.subscribe("arduinoPub", 500, arduinoCallback);
+	// ros::Publisher arduinoSend = n.advertise<std_msgs::String>("arduinoTopic", 500);
+	// ros::Subscriber arduinoReceive = n.subscribe("arduinoPub", 500, arduinoCallback);
 
 	ros::Rate loop_rate(1);	//1 Hz
 
 	int count = 0;
 	while(ros::ok()) {
 		std_msgs::String msg;
-		
+		testMovement();
 		msg.data = std::string("Hello ");
 		msg.data += std::to_string(count);
 		ROS_INFO_STREAM(msg.data);
 		
-		arduinoSend.publish(msg);
+		// arduinoSend.publish(msg);
 		
 		ros::spinOnce();
 		loop_rate.sleep();
@@ -82,3 +94,4 @@ int main(int argc, char **argv)
 
   return 0;
 }
+
