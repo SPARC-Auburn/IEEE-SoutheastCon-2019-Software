@@ -26,7 +26,7 @@ signed char speed1;
 signed char speed2;
 signed char gatePos;
 signed char flagPos;
-signed char 
+signed char LCDtext;
 Cytron_SmartDriveDuo smartDriveDuo30(SERIAL_SIMPLFIED, IN1, MOTOR_CONTROLLER_BAUDRATE);
 Servo gateServo;
 Servo flagServo;
@@ -74,7 +74,7 @@ void loop()
     smartDriveDuo30.control(speed1,speed2);
     gateServo.write(gatePos);
     flagServo.write(flagPos);
-    lcd.print((string)LCDtext);
+    lcd.print(LCDtext);
   }
   else
     Serial.println(", Error");
