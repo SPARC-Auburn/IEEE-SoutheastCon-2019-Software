@@ -41,7 +41,7 @@ void setup()
   lcd.begin();
   lcd.backlight();  
   lcd.clear();
-  lcd.print("Starting Up");
+  lcd.print("Starting Up Pi.. Please wait..");
   gateServo.attach(10);
   flagServo.attach(11);
 }
