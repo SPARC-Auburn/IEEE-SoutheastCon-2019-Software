@@ -12,6 +12,7 @@ Speed Order = leftDriveSpeed,rightDriveSpeed,leftGateSpeed,rightGateSpeed,
 //#include <std_msgs/String.h>
 #include <Wire.h> 
 #include <LiquidCrystal_I2C.h>
+#include <Servo.h>
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 // Constants
@@ -23,7 +24,12 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 char streamIn[2] = {'0', '0'};
 signed char speed1;
 signed char speed2;
+signed char gatePos;
+signed char flagPos;
+signed char 
 Cytron_SmartDriveDuo smartDriveDuo30(SERIAL_SIMPLFIED, IN1, MOTOR_CONTROLLER_BAUDRATE);
+Servo gateServo;
+Servo flagServo;
 
 // Setup serial and pin states
 void setup()
@@ -36,6 +42,8 @@ void setup()
   lcd.backlight();  
   lcd.clear();
   lcd.print("Starting Up");
+  gateServo.attach(10);
+  flagServo.attach(11);
 }
 
 void loop()
@@ -44,17 +52,30 @@ void loop()
   while (Serial.available()<3);
   speed1  = Serial.read(); // left drive speed
   speed2  = Serial.read(); // Right drive speed
-  signed char calculatedChecksum = speed1 + speed2 + 1;
+  gatePos = Serial.read(); //Gate servo position
+  flagPos = Serial.read(); //Flag servo position
+  LCDtext = Serial.read(); //New LCDtext
+  signed char calculatedChecksum = speed1 + speed2 + gatePos + flagPos + LCDtext + 1;
   signed char checksumIn = Serial.read();
-  smartDriveDuo30.control(speed1,speed2);
   digitalWrite(13,HIGH);
   Serial.print(speed1);
   Serial.print(',');
   Serial.print(speed2);
   Serial.print(',');
+  Serial.print(gatePos);
+  Serial.print(',');
+  Serial.print(flagPos);
+  Serial.print(',');
+  Serial.print(LCDtext);
+  Serial.print(',');
   Serial.print(checksumIn);
-  if(calculatedChecksum == checksumIn)
+  if(calculatedChecksum == checksumIn){
     Serial.println(", Correct");
+    smartDriveDuo30.control(speed1,speed2);
+    gateServo.write(gatePos);
+    flagServo.write(flagPos);
+    lcd.print((string)LCDtext);
+  }
   else
     Serial.println(", Error");
   Serial.flush();

@@ -13,17 +13,14 @@ public:
 	
 	int available();
 	std::string read();
-	void updateMotors();
+	void updateArduino();
 	void turnLeft(int speed);
 	void turnRight(int speed);
 	void goForward(int speed);
 	void goBackward(int speed);
-	void raiseGate(int speed);
-	void lowerGate(int speed);
-	void holdGate();
-	void spinForward(int speed);
-	void spinBackward(int speed);
-	void stopSpinner();
+	void moveGate(int pos);
+	void moveFlag(int pos);
+	void updateLCD(string text);
 	void stopMotors();
 	~serialPort();
 

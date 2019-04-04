@@ -17,10 +17,46 @@ using namespace std;
 serialPort arduino("/dev/ttyUSB0");  
 
 void testMovement()
-{        
+{
+  arduino.updateLCD("Starting movement test..");
+  usleep(1000*500);
+  arduino.updateLCD("Forward..");
+  arduino.goForward(25);
+  usleep(1000*500);
+  arduino.updateLCD("Stop");
+  arduino.stopMotors(); 
+  usleep(1000*500);
+  arduino.updateLCD("Backward..");
+  arduino.goBackward(25);
+  usleep(1000*500);
+  arduino.updateLCD("Stop");
+  arduino.stopMotors(); 
+  usleep(1000*500);
+  arduino.updateLCD("Right..");     
   arduino.turnRight(25);
   usleep(1000*500);
+  arduino.updateLCD("Stop");
   arduino.stopMotors();
+  usleep(1000*500);
+  arduino.updateLCD("Left..");
+  arduino.turnLeft(25);
+  usleep(1000*500);
+  arduino.updateLCD("Stop");
+  arduino.stopMotors();
+  usleep(1000*500);
+  arduino.updateLCD("Moving Gate Up..");
+  arduino.moveGate(180);
+  usleep(1000*500);
+  arduino.updateLCD("Moving Gate Down..");
+  arduino.moveGate(0);
+  usleep(1000*500);
+  arduino.updateLCD("Moving Flag Up..");
+  arduino.moveFlag(0);
+  usleep(1000*500);
+  arduino.updateLCD("Moving Flag Down..");
+  arduino.moveFlag(180);
+  usleep(1000*500);
+  arduino.updateLCD("Movement Test Compeleted!");
 }
 
 void visionCallback(const opencv_node::vision_msg::ConstPtr &msg)

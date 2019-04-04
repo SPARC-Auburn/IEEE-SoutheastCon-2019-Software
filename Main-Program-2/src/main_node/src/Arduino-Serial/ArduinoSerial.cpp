@@ -26,9 +26,9 @@ using namespace std;
 // Variables
 int leftDriveSpeed = 0;
 int rightDriveSpeed = 0;
-int leftGateSpeed = 0;
-int rightGateSpeed = 0;
-int spinnerSpeed = 0;
+int gatePos = 0;
+int flagPos = 0;
+string LCDtext = "Connected!";
 
 serialPort::serialPort(const char* portName) {
   fileHandle = open(portName, O_RDWR | O_NOCTTY | O_NDELAY);
@@ -85,13 +85,16 @@ int serialPort::available() {
 }
 
 // Updates the motor speeds according to the state variables
-void serialPort::updateMotors() {
+void serialPort::updateArduino() {
   signed char char1 = (signed char)(leftDriveSpeed);
   signed char char2 = (signed char)(rightDriveSpeed);
-  signed char char3 = char1 + char2 + 1;
-	signed char x[3] = {char1,char2,char3};
+  signed char char3 = (signed char)(gatePos);
+  signed char char4 = (signed char)(flagPos);
+  signed char char5 = (signed char)(LCDstring);
+  signed char char6 = char1 + char2 + char3 + char4 + char5 + 1;
+	signed char x[6] = {char1,char2,char3,char4,char5,char6};
   if (DEBUG_TEXT){
-    cout << "Sending to Arduino: " << (int)char1 << "," << (int)char2 << "," << (int)char3 << endl;
+    cout << "Sending to Arduino: " << (int)char1 << "," << (int)char2 << "," << (int)char3 << "," << (int)char4 << "," << (int)char5  "," << (int)char6 << endl;
   }
   ::write(fileHandle, x, 3);
   if (DEBUG_TEXT){
@@ -104,7 +107,7 @@ void serialPort::turnLeft(int speed){
 		throw out_of_range("Motor speed must be between 0 and 127.");
   leftDriveSpeed = speed;
   rightDriveSpeed = -speed;
-  updateMotors();
+  updateArduino();
 }
 
 void serialPort::turnRight(int speed){
@@ -112,7 +115,7 @@ void serialPort::turnRight(int speed){
 		throw out_of_range("Motor speed must be between 0 and 127.");
   leftDriveSpeed = -speed;
   rightDriveSpeed = speed;
-  updateMotors();
+  updateArduino();
 }
 
 void serialPort::goForward(int speed){
@@ -120,7 +123,7 @@ void serialPort::goForward(int speed){
 		throw out_of_range("Motor speed must be between 0 and 127.");
   leftDriveSpeed = -speed;
   rightDriveSpeed = -speed;
-  updateMotors();
+  updateArduino();
 }
 
 void serialPort::goBackward(int speed){
@@ -128,57 +131,32 @@ void serialPort::goBackward(int speed){
 		throw out_of_range("Motor speed must be between 0 and 127.");
   leftDriveSpeed = speed;
   rightDriveSpeed = speed;
-  updateMotors();
-}
-
-void serialPort::raiseGate(int speed){
-  if(speed < 0 || speed > 127)
-		throw out_of_range("Motor speed must be between 0 and 127.");
-  rightGateSpeed = speed;
-  leftGateSpeed = speed;
-  updateMotors();
-}
-
-void serialPort::holdGate(){
-  rightGateSpeed = 0;
-  leftGateSpeed = 0;
-  updateMotors();
-}
-
-void serialPort::lowerGate(int speed){
-  if(speed < 0 || speed > 127)
-		throw out_of_range("Motor speed must be between 0 and 127.");
-  rightGateSpeed = -speed;
-  leftGateSpeed = -speed;
-  updateMotors();
-}
-
-void serialPort::spinForward(int speed){
-  if(speed < 0 || speed > 127)
-		throw out_of_range("Motor speed must be between 0 and 127.");
-  spinnerSpeed = speed;
-  updateMotors();
-}
-
-void serialPort::spinBackward(int speed){
-  if(speed < 0 || speed > 127)
-		throw out_of_range("Motor speed must be between 0 and 127.");
-  spinnerSpeed = -speed;
-  updateMotors();
-}
-
-void serialPort::stopSpinner(){
-  spinnerSpeed = 0;
-  updateMotors();
+  updateArduino();
 }
 
 void serialPort::stopMotors(){
   leftDriveSpeed = 0;
   rightDriveSpeed = 0;
-  leftGateSpeed = 0;
-  rightGateSpeed = 0;
-  spinnerSpeed = 0;
-  updateMotors();
+  updateArduino();
+}
+
+void serialPort::moveGate(int pos){
+  if(pos < 0 || pos > 180)
+		throw out_of_range("Servo position must be between 0 and 180.");
+  gatePos = pos;
+  updateArduino();
+}
+
+void serialPort::moveFlag(int pos){
+  if(pos < 0 || pos > 180)
+		throw out_of_range("Servo position must be between 0 and 180.");
+  flagPos = pos;
+  updateArduino();
+}
+
+void serialPort::updateLCD(string text){
+  LCDtext = text;
+  updateArduino();
 }
 
 serialPort::~serialPort() {
