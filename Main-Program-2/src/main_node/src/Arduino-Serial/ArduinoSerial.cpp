@@ -91,16 +91,22 @@ void serialPort::updateArduino() {
   signed char char2 = (signed char)(rightDriveSpeed);
   unsigned char char3 = (unsigned char)(gatePos);
   unsigned char char4 = (unsigned char)(flagPos);
-  string newText = LCDtext.resize(32);
-  char char5 = char1 + char2 + char3 + char4 + 1;
+  string newText = LCDtext;
+  newText.resize(32 , ' ');
+  unsigned char char5 = char1 + char2 + char3 + char4 + 1;
   signed char motorData[2] = {char1,char2};
   unsigned char servoData[3] = {char3, char4, char5};
   if (DEBUG_TEXT){
     cout << "Sending to Arduino: " << (int)char1 << "," << (int)char2 << "," << (int)char3  << "," << (int)char4 << "," << (int)char5 << "," << newText << endl;
+    cout << "Total bytes: " << (5+newText.length()) << endl;
   }
-  write(motorData[2], 2); //Send messages
-  write(servoData[3], 3); //Appended checksum
-  write(newText);
+  ::write(fileHandle, motorData, 2); //Send messages
+  ::write(fileHandle, servoData, 3); //Appended checksum
+  ::write(fileHandle, newText.c_str(), newText.length());
+  char qqqq[32];
+  memcpy(qqqq,newText.c_str(),32);
+  for(int i = 0; i<32; i++)cout << (int)qqqq[i] << " ";
+  cout << endl;
   string received = read();
   if (DEBUG_TEXT){
     cout << "Received from Arduino: " << received << endl;
