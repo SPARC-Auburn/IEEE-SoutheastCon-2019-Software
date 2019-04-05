@@ -13,7 +13,7 @@ public:
 	
 	int available();
 	std::string read();
-	void updateArduino();
+	std::string updateArduino();
 	void turnLeft(int speed);
 	void turnRight(int speed);
 	void goForward(int speed);

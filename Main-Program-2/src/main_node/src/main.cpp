@@ -116,7 +116,9 @@ int main(int argc, char **argv)
 	int count = 0;
 	while(ros::ok()) {
 		std_msgs::String msg;
-		testMovement();
+		if(arduino.updateArduino()=="1"){
+			testMovement();
+		}
 		msg.data = std::string("Hello ");
 		msg.data += std::to_string(count);
 		ROS_INFO_STREAM(msg.data);
