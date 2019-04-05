@@ -24,11 +24,13 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 char streamIn[2] = {'0', '0'};
 signed char speed1;
 signed char speed2;
-signed char gatePos;
-signed char flagPos;
+unsigned char gatePos;
+unsigned char flagPos;
 Cytron_SmartDriveDuo smartDriveDuo30(SERIAL_SIMPLFIED, IN1, MOTOR_CONTROLLER_BAUDRATE);
 Servo gateServo;
 Servo flagServo;
+const int goButton = 2;
+char goState = 0;
 
 // Setup serial and pin states
 void setup()
@@ -40,21 +42,28 @@ void setup()
   lcd.begin();
   lcd.backlight();  
   lcd.clear();
-  lcd.print("Looking for connection..");
+  lcd.print("Starting up..");
   gateServo.attach(10);
   flagServo.attach(11);
+  pinMode(goButton, INPUT)
 }
 
 void loop()
 {
-  digitalWrite(13,LOW);
-  while (Serial.available()<5);
+
+  while (Serial.available()<37){ //5 bytes for speeds and positions; 32 bytes for LCD message
+    digitalWrite(13,LOW);
+    buttonState = digitalRead(goButton);
+    if (buttonState == HIGH){
+      goState = 1;
+    }
+  } 
   speed1  = Serial.read(); // left drive speed
   speed2  = Serial.read(); // Right drive speed
   gatePos = Serial.read(); //Gate servo position
   flagPos = Serial.read(); //Flag servo position
   signed char checksumIn = Serial.read();
-  //LCDtext = Serial.read(); //New LCDtext
+  LCDtext = Serial.read(); //New LCDtext
   signed char calculatedChecksum = speed1 + speed2  + gatePos + flagPos + 1;
   digitalWrite(13,HIGH);
   Serial.print(speed1);
@@ -66,18 +75,26 @@ void loop()
   Serial.print(flagPos);
   Serial.print(',');
   Serial.print(checksumIn);
-  //Serial.print(',');
-  //Serial.print('LCDtext');
+  Serial.print(',');
+  Serial.print(LCDtext);
+  Serial.print(',');
+  Serial.print(goState);
   if(calculatedChecksum == checksumIn){
     Serial.println(", Correct");
     smartDriveDuo30.control(speed1,speed2);
     gateServo.write(gatePos);
     flagServo.write(flagPos);
-    //lcd.clear();
-    //lcd.print(LCDtext);
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print(LCDtext.substr(0,16)); //First line of LCD
+    lcd.setCursor(0,1);
+    lcd.print(LCDtext.substr(17,32)); //Second Line of LCD
   }
   else
     Serial.println(", Error");
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("Input Error");
   Serial.flush();
   delay(1);
 }

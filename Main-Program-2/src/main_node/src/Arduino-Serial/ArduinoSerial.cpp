@@ -89,19 +89,23 @@ int serialPort::available() {
 void serialPort::updateArduino() {
   signed char char1 = (signed char)(leftDriveSpeed);
   signed char char2 = (signed char)(rightDriveSpeed);
-  signed char char3 = (signed char)(gatePos);
-  signed char char4 = (signed char)(flagPos);
-  signed char char5 = char1 + char2 + char3 + char4 + 1;
-  signed char x[5] = {char1,char2,char3,char4,char5};
-  // string newText = LCDtext;
+  unsigned char char3 = (unsigned char)(gatePos);
+  unsigned char char4 = (unsigned char)(flagPos);
+  string newText = LCDtext.resize(32);
+  char char5 = char1 + char2 + char3 + char4 + 1;
+  signed char motorData[2] = {char1,char2};
+  unsigned char servoData[3] = {char3, char4, char5};
   if (DEBUG_TEXT){
-    cout << "Sending to Arduino: " << (int)char1 << "," << (int)char2 << "," << (int)char3  << "," << (int)char4 << "," << (int)char5 << endl; //newText << endl;
+    cout << "Sending to Arduino: " << (int)char1 << "," << (int)char2 << "," << (int)char3  << "," << (int)char4 << "," << (int)char5 << "," << newText << endl;
   }
-  ::write(fileHandle, x, 5);
-  //write(LCDtext);
+  write(motorData[2], 2); //Send messages
+  write(servoData[3], 3); //Appended checksum
+  write(newText);
+  string received = read();
   if (DEBUG_TEXT){
-    cout << "Received from Arduino: " << read() << endl;
-  } 
+    cout << "Received from Arduino: " << received << endl;
+  }
+  //TODO: Parse received string to get goButton state
 }
 
 void serialPort::turnLeft(int speed){
