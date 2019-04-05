@@ -15,9 +15,10 @@ Controls 2 drive motors and 3 steppers.  Speed ranges are from -127 to 127.
 #include <cstring>		//for strerror()
 #include <sstream>
 #include <iostream>
+#include <string>
 
 // Constants
-#define DEBUG_TEXT 0
+#define DEBUG_TEXT 1
 const char serialPort::typicalPortName[] = "/dev/ttyUSB0";
 
 // Namespaces
@@ -90,13 +91,14 @@ void serialPort::updateArduino() {
   signed char char2 = (signed char)(rightDriveSpeed);
   signed char char3 = (signed char)(gatePos);
   signed char char4 = (signed char)(flagPos);
-  signed char char5 = (signed char)(LCDstring);
-  signed char char6 = char1 + char2 + char3 + char4 + char5 + 1;
-	signed char x[6] = {char1,char2,char3,char4,char5,char6};
+  signed char char5 = char1 + char2 + char3 + char4 + 1;
+  signed char x[5] = {char1,char2,char3,char4,char5};
+  // string newText = LCDtext;
   if (DEBUG_TEXT){
-    cout << "Sending to Arduino: " << (int)char1 << "," << (int)char2 << "," << (int)char3 << "," << (int)char4 << "," << (int)char5  "," << (int)char6 << endl;
+    cout << "Sending to Arduino: " << (int)char1 << "," << (int)char2 << "," << (int)char3  << "," << (int)char4 << "," << (int)char5 << endl; //newText << endl;
   }
-  ::write(fileHandle, x, 3);
+  ::write(fileHandle, x, 5);
+  //write(LCDtext);
   if (DEBUG_TEXT){
     cout << "Received from Arduino: " << read() << endl;
   } 
@@ -155,7 +157,8 @@ void serialPort::moveFlag(int pos){
 }
 
 void serialPort::updateLCD(string text){
-  LCDtext = text;
+LCDtext = text;
+  cout << "New LCD text: " << text << endl;
   updateArduino();
 }
 
