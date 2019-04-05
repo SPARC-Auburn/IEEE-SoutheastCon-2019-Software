@@ -26,12 +26,12 @@ signed char speed1;
 signed char speed2;
 unsigned char gatePos;
 unsigned char flagPos;
-String LCDtext = "Starting up..";
+String LCDtext = "Waiting for     connection";
 Cytron_SmartDriveDuo smartDriveDuo30(SERIAL_SIMPLFIED, IN1, MOTOR_CONTROLLER_BAUDRATE);
 Servo gateServo;
 Servo flagServo;
 const int goButton = 2;
-char goState = 0;
+String goState = "0";
 
 // Setup serial and pin states
 void setup()
@@ -43,7 +43,10 @@ void setup()
   lcd.begin();
   lcd.backlight();  
   lcd.clear();
-  lcd.print(LCDtext);
+  lcd.setCursor(0,0);
+  lcd.print(LCDtext.substring(0,16)); //First line of LCD
+  lcd.setCursor(0,1);
+  lcd.print(LCDtext.substring(17,32)); //Second Line of LCD
   gateServo.attach(10);
   flagServo.attach(11);
   pinMode(goButton, INPUT);
@@ -53,10 +56,10 @@ void setup()
 
 void loop()
 {
- digitalWrite(13,LOW);
+  digitalWrite(13,LOW);
   int buttonState = digitalRead(goButton);
-  if (buttonState == HIGH){
-    goState = 1;
+  if (buttonState == LOW){
+    goState = "1";
   }
   while (Serial.available()<37); //5 bytes for speeds and positions; 32 bytes for LCD message
   speed1  = Serial.read(); // left drive speed
@@ -78,10 +81,12 @@ void loop()
   Serial.print(flagPos);
   Serial.print(',');
   Serial.print(checksumIn);
-  Serial.print(",RECV:");
-  Serial.print(receivedText);
+  Serial.print(',');
+  Serial.print(LCDtext);
+  Serial.print(',');
+  Serial.print(goState);
   if(calculatedChecksum == checksumIn){
-    Serial.print(", Correct, ");
+    Serial.println(", Correct, ");
     Serial.print(5+LCDtext.length());
     Serial.print(" bytes recieved");
     smartDriveDuo30.control(speed1,speed2);
@@ -94,7 +99,7 @@ void loop()
     lcd.print(LCDtext.substring(17,32)); //Second Line of LCD
   }
   else
-    Serial.print(", Error ");
+    Serial.println(", Error ");
     Serial.print(5+LCDtext.length());
     Serial.print(" bytes recieved");
   Serial.flush();
