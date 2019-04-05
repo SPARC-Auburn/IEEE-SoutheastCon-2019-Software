@@ -26,6 +26,7 @@ signed char speed1;
 signed char speed2;
 unsigned char gatePos;
 unsigned char flagPos;
+String LCDtext = "Starting up..";
 Cytron_SmartDriveDuo smartDriveDuo30(SERIAL_SIMPLFIED, IN1, MOTOR_CONTROLLER_BAUDRATE);
 Servo gateServo;
 Servo flagServo;
@@ -42,28 +43,30 @@ void setup()
   lcd.begin();
   lcd.backlight();  
   lcd.clear();
-  lcd.print("Starting up..");
+  lcd.print(LCDtext);
   gateServo.attach(10);
   flagServo.attach(11);
-  pinMode(goButton, INPUT)
+  pinMode(goButton, INPUT);
+  while(Serial.available())
+  Serial.read();
 }
 
 void loop()
 {
-
-  while (Serial.available()<37){ //5 bytes for speeds and positions; 32 bytes for LCD message
-    digitalWrite(13,LOW);
-    buttonState = digitalRead(goButton);
-    if (buttonState == HIGH){
-      goState = 1;
-    }
-  } 
+ digitalWrite(13,LOW);
+  int buttonState = digitalRead(goButton);
+  if (buttonState == HIGH){
+    goState = 1;
+  }
+  while (Serial.available()<37); //5 bytes for speeds and positions; 32 bytes for LCD message
   speed1  = Serial.read(); // left drive speed
   speed2  = Serial.read(); // Right drive speed
   gatePos = Serial.read(); //Gate servo position
   flagPos = Serial.read(); //Flag servo position
   signed char checksumIn = Serial.read();
-  LCDtext = Serial.read(); //New LCDtext
+  char receivedText[32];
+  Serial.readBytes(receivedText, 32); //Recieve 32 bytes of text
+  LCDtext = receivedText;
   signed char calculatedChecksum = speed1 + speed2  + gatePos + flagPos + 1;
   digitalWrite(13,HIGH);
   Serial.print(speed1);
@@ -75,26 +78,25 @@ void loop()
   Serial.print(flagPos);
   Serial.print(',');
   Serial.print(checksumIn);
-  Serial.print(',');
-  Serial.print(LCDtext);
-  Serial.print(',');
-  Serial.print(goState);
+  Serial.print(",RECV:");
+  Serial.print(receivedText);
   if(calculatedChecksum == checksumIn){
-    Serial.println(", Correct");
+    Serial.print(", Correct, ");
+    Serial.print(5+LCDtext.length());
+    Serial.print(" bytes recieved");
     smartDriveDuo30.control(speed1,speed2);
     gateServo.write(gatePos);
     flagServo.write(flagPos);
     lcd.clear();
     lcd.setCursor(0,0);
-    lcd.print(LCDtext.substr(0,16)); //First line of LCD
+    lcd.print(LCDtext.substring(0,16)); //First line of LCD
     lcd.setCursor(0,1);
-    lcd.print(LCDtext.substr(17,32)); //Second Line of LCD
+    lcd.print(LCDtext.substring(17,32)); //Second Line of LCD
   }
   else
-    Serial.println(", Error");
-    lcd.clear();
-    lcd.setCursor(0,0);
-    lcd.print("Input Error");
+    Serial.print(", Error ");
+    Serial.print(5+LCDtext.length());
+    Serial.print(" bytes recieved");
   Serial.flush();
   delay(1);
 }
