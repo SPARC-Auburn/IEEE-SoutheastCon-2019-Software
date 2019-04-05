@@ -26,7 +26,6 @@ signed char speed1;
 signed char speed2;
 signed char gatePos;
 signed char flagPos;
-signed char LCDtext;
 Cytron_SmartDriveDuo smartDriveDuo30(SERIAL_SIMPLFIED, IN1, MOTOR_CONTROLLER_BAUDRATE);
 Servo gateServo;
 Servo flagServo;
@@ -41,7 +40,7 @@ void setup()
   lcd.begin();
   lcd.backlight();  
   lcd.clear();
-  lcd.print("Starting Up Pi.. Please wait..");
+  lcd.print("Looking for connection..");
   gateServo.attach(10);
   flagServo.attach(11);
 }
@@ -49,14 +48,14 @@ void setup()
 void loop()
 {
   digitalWrite(13,LOW);
-  while (Serial.available()<3);
+  while (Serial.available()<5);
   speed1  = Serial.read(); // left drive speed
   speed2  = Serial.read(); // Right drive speed
   gatePos = Serial.read(); //Gate servo position
   flagPos = Serial.read(); //Flag servo position
-  LCDtext = Serial.read(); //New LCDtext
-  signed char calculatedChecksum = speed1 + speed2 + gatePos + flagPos + LCDtext + 1;
   signed char checksumIn = Serial.read();
+  //LCDtext = Serial.read(); //New LCDtext
+  signed char calculatedChecksum = speed1 + speed2  + gatePos + flagPos + 1;
   digitalWrite(13,HIGH);
   Serial.print(speed1);
   Serial.print(',');
@@ -66,15 +65,16 @@ void loop()
   Serial.print(',');
   Serial.print(flagPos);
   Serial.print(',');
-  Serial.print(LCDtext);
-  Serial.print(',');
   Serial.print(checksumIn);
+  //Serial.print(',');
+  //Serial.print('LCDtext');
   if(calculatedChecksum == checksumIn){
     Serial.println(", Correct");
     smartDriveDuo30.control(speed1,speed2);
     gateServo.write(gatePos);
     flagServo.write(flagPos);
-    lcd.print(LCDtext);
+    //lcd.clear();
+    //lcd.print(LCDtext);
   }
   else
     Serial.println(", Error");
