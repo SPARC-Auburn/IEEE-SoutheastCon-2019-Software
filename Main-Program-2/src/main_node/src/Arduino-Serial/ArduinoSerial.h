@@ -20,7 +20,7 @@ public:
 	void goBackward(int speed);
 	void moveGate(int pos);
 	void moveFlag(int pos);
-	void updateLCD(string text);
+	void updateLCD(std::string text);
 	void stopMotors();
 	~serialPort();
 
