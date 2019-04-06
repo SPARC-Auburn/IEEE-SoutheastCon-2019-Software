@@ -8,10 +8,60 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "opencv_node/vision_msg.h"
+#include <geometry_msgs/PoseWithCovarianceStamped.h>
 #include "opencv_node/object.h"
+
 //#include "sensor_msgs/Imu.h"
+#include "Arduino-Serial/ArduinoSerial.h"
 
 using namespace std;
+
+serialPort arduino("/dev/ttyUSB0");  
+
+ros::Publisher initPose;
+
+void testMovement()
+{
+  arduino.updateLCD("Starting movement test..");
+  usleep(1000*500);
+  arduino.updateLCD("Forward..");
+  arduino.goForward(25);
+  usleep(1000*500);
+  arduino.updateLCD("Stop");
+  arduino.stopMotors(); 
+  usleep(1000*500);
+  arduino.updateLCD("Backward..");
+  arduino.goBackward(25);
+  usleep(1000*500);
+  arduino.updateLCD("Stop");
+  arduino.stopMotors(); 
+  usleep(1000*500);
+  arduino.updateLCD("Right..");     
+  arduino.turnRight(25);
+  usleep(1000*500);
+  arduino.updateLCD("Stop");
+  arduino.stopMotors();
+  usleep(1000*500);
+  arduino.updateLCD("Left..");
+  arduino.turnLeft(25);
+  usleep(1000*500);
+  arduino.updateLCD("Stop");
+  arduino.stopMotors();
+  usleep(1000*500);
+  arduino.updateLCD("Moving Gate Up..");
+  arduino.moveGate(180);
+  usleep(1000*500);
+  arduino.updateLCD("Moving Gate Down..");
+  arduino.moveGate(0);
+  usleep(1000*500);
+  arduino.updateLCD("Moving Flag Up..");
+  arduino.moveFlag(0);
+  usleep(1000*500);
+  arduino.updateLCD("Moving Flag Down..");
+  arduino.moveFlag(180);
+  usleep(1000*500);
+  arduino.updateLCD("Movement Test Compeleted!");
+}
 
 void visionCallback(const opencv_node::vision_msg::ConstPtr &msg)
 {
@@ -23,9 +73,11 @@ void visionCallback(const opencv_node::vision_msg::ConstPtr &msg)
   }  
 }
 
-void arduinoCallback(const std_msgs::String& msg) {
-	ROS_INFO_STREAM(msg << '\n');
-}
+
+
+// void arduinoCallback(const std_msgs::String& msg) {
+// 	ROS_INFO_STREAM(msg << '\n');
+// }
 
 /*void imuCallback(const sensor_msgs::Imu::ConstPtr &msg)
 {
@@ -42,6 +94,13 @@ void arduinoCallback(const std_msgs::String& msg) {
 
 int main(int argc, char **argv)
 {
+
+  ros::init(argc, argv, "main");
+  ros::NodeHandle n;
+
+  ros::Subscriber sub = n.subscribe("vision_info", 1000, visionCallback);
+  initPose = n.advertise<geometry_msgs::PoseWithCovarianceStamped>("initialpose",1,true);
+
   cout << "\033[1;34m-------------------------------------------------------------------\033[0m" << endl;
   cout << "\033[1;34m   .:: ::    .:::::::          .:         .:::::::          .::    \033[0m" << endl;
   cout << "\033[1;34m .::    .::  .::    .::       .: ::       .::    .::     .::   .:: \033[0m" << endl;
@@ -53,28 +112,35 @@ int main(int argc, char **argv)
   cout << "\033[1;34m-------------------------------------------------------------------\033[0m" << endl;
   cout << "\033[1;34m|        Student Projects and Research Committee IEEE 2019        |\033[0m" << endl;
   cout << "\033[1;34m ------------------------------------------------------------------\033[0m" << endl;
-
-  ros::init(argc, argv, "main");
-  ros::NodeHandle n;
-
-  ros::Subscriber sub = n.subscribe("vision_info", 1000, visionCallback);
+  sleep(1);
   //ros::Subscriber sub2 = n.subscribe("sensor_msgs/Imu", 1000, imuCallback);
 
-	ros::Publisher arduinoSend = n.advertise<std_msgs::String>("arduinoTopic", 500);
-	ros::Subscriber arduinoReceive = n.subscribe("arduinoPub", 500, arduinoCallback);
-
+	// ros::Publisher arduinoSend = n.advertise<std_msgs::String>("arduinoTopic", 500);
+	// ros::Subscriber arduinoReceive = n.subscribe("arduinoPub", 500, arduinoCallback);
 	ros::Rate loop_rate(1);	//1 Hz
 
+
+	geometry_msgs::PoseWithCovarianceStamped ip;
+	ip.header.frame_id = "map";
+	ros::Time current_time = ros::Time::now();
+	ip.header.stamp = current_time;
+	ip.pose.pose.position.x = 0.1143;
+	ip.pose.pose.position.y = 0.1143;
+	ip.pose.pose.orientation.z = 0;
+	ip.pose.covariance[0] = 1e-3;
+	ip.pose.covariance[7] = 1e-3;
+	ip.pose.covariance[35] = 1e-3;
+	initPose.publish(ip);
+	ros::spinOnce();
+	while(arduino.updateArduino()!="1"){sleep(1);}
+	testMovement();
 	int count = 0;
 	while(ros::ok()) {
 		std_msgs::String msg;
-		
 		msg.data = std::string("Hello ");
 		msg.data += std::to_string(count);
 		ROS_INFO_STREAM(msg.data);
-		
-		arduinoSend.publish(msg);
-		
+		// arduinoSend.publish(msg);
 		ros::spinOnce();
 		loop_rate.sleep();
 		++count;
@@ -82,3 +148,4 @@ int main(int argc, char **argv)
 
   return 0;
 }
+

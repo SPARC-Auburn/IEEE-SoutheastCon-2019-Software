@@ -53,7 +53,8 @@ include_directories(
 ## Testing ##
 #############
 
-add_executable(main src/main.cpp)
+add_executable(main src/main.cpp src/Arduino-Serial/ArduinoSerial.cpp)
+
 target_link_libraries(main ${catkin_LIBRARIES})
 add_dependencies(main main_node_generate_messages_cpp)
 
