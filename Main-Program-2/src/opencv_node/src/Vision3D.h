@@ -9,7 +9,7 @@ public:
 	static constexpr double CornerHeight = .3;		//meters; constexpr instead of const because it allows in-class initialization
 	static constexpr double AvgDebrisHeight = .05715;		//If we gain the ability to differentiate between cubes and spheres, this should be replaced with two values
 	static constexpr double CameraHeight = .22225;
-	static constexpr double CameraAngle = 30.0;		//Degrees; angle the camera circuit board makes with the vertical.
+	static constexpr double CameraAngle = 30.0 / 180.0 * 3.14159265;		//Degrees; angle the camera circuit board makes with the vertical.
 
 	//Found using OpenCV's calibrate.py. Units are in meters.
 	static const cv::Matx33d cameraMatrix;
