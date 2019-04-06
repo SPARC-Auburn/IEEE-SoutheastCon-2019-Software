@@ -45,7 +45,8 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/ioctl.h>
-#define ticksPerRev 2244.923077 //ticks per rev is a double to the possibility of non whole number gear ratios due to how the encdoers are coupled
+#include <utility>
+#define ticksPerRev 210.461538 //ticks per rev is a double to the possibility of non whole number gear ratios due to how the encdoers are coupled
 #define pi 3.141592
 #define tau 2*pi
 
@@ -86,20 +87,27 @@ int available(int fd) {
   ioctl(fd, FIONREAD, &bytes);
   return(bytes);
 }
-int get(int fd) {
-  while(available(fd)<4);
-  int ret;
-  lseek(fd,-4,SEEK_END);
-  read(fd,(char*)&ret,4 );    //The const cast is less than ideal
-  return ret;
+std::pair<int,int> get(int fd) {
+  while(available(fd) < 50);
+  char c[50];
+  lseek(fd,-50,SEEK_END);
+  read(fd,(char*)&c,50);    //The const cast is less than ideal
+  std::string pain(c,50);
+  int last = pain.find_last_of(">");
+  int first= pain.find_last_of("<",last);
+  pain = pain.substr(first+1,last);
+  int a = std::stoi(pain);
+  pain = pain.substr(pain.find(",")+1);
+  int b = -std::stoi(pain);
+  //std::cout << a << "," << b << std::endl; 
+  //std::cout << last << " " << pain.find_last_of("\n",last) << std::endl;
+  return std::pair<int,int>(a,b);
 }
 int main(int argc, char** argv){
-  int s1 = getSer("/dev/ttyACM0");
-  int s2 = getSer("/dev/ttyS0");
-  while(1){
-	std::cout << get(s1) << " " << get(s2) << std::endl;
-  }}
-/*
+  int s1 = getSer("/dev/serial0");
+ // int s2 = getSer("/dev/ttyS0");
+
+
   ros::init(argc, argv, "odometry_publisher");
 
   ros::NodeHandle n;
@@ -111,16 +119,21 @@ int main(int argc, char** argv){
   ros::Time current_time, last_time;
   current_time = ros::Time::now();
   last_time = ros::Time::now();
-  long lastValueR = coders[0].value,lastValueL = coders[1].value,curValueR,curValueL;
+  
+  std::pair<int,int> vals = get(s1);
+
+  long lastValueL = vals.first,lastValueR = vals.second,curValueR,curValueL;
   ros::Rate r(100);
   while(n.ok()){
     current_time = ros::Time::now();
 
     //compute odometry in a typical way given the velocities of the robot
     double dt = (current_time - last_time).toSec();
-    curValueR = coders[0].value;
-    curValueL = coders[1].value;
-//    std::cout << curValueR << " " << curValueL << std::endl;
+    vals = get(s1);
+
+    curValueL = vals.first;
+    curValueR = vals.second;
+    //std::cout << curValueR << " " << curValueL << std::endl;
     double diffR = curValueR-lastValueR;
     double diffL = curValueL-lastValueL;
     double wR = (tau*diffR)/(ticksPerRev*dt); //revolution speed of the right wheel in radians per second. This is computed as an instantneous measurement since the last time we updated
@@ -129,30 +142,30 @@ int main(int argc, char** argv){
     lastValueR = curValueR;
     lastValueL = curValueL;
     //since all odometry is 6DOF we'll need a quaternion created from yaw
-    geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(odomI.theta);
+    geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(-odomI.theta);
 
     //first, we'll publish the transform over tf
-    /*geometry_msgs::TransformStamped odom_trans;
+    geometry_msgs::TransformStamped odom_trans;
     odom_trans.header.stamp = current_time;
     odom_trans.header.frame_id = "fuck/odom";
     odom_trans.child_frame_id = "base_footprint";
 
-    odom_trans.transform.translation.x = odomI.x;
+    odom_trans.transform.translation.x = -odomI.x;
     odom_trans.transform.translation.y = odomI.y;
     odom_trans.transform.translation.z = 0.0;
     odom_trans.transform.rotation = odom_quat;
 
     //send the transform
     odom_broadcaster.sendTransform(odom_trans);
-	*/
+	
     //next, we'll publish the odometry message over ROS*/
-    /*nav_msgs::Odometry odom;
+    nav_msgs::Odometry odom;
     odom.header.stamp = current_time;
     odom.header.frame_id = "odom";
     odom.child_frame_id = "base_footprint";
 
     //set the position
-    odom.pose.pose.position.x = odomI.x;
+    odom.pose.pose.position.x = -odomI.x;
     odom.pose.pose.position.y = odomI.y;
     odom.pose.pose.position.z = 0.0;
     odom.pose.pose.orientation = odom_quat;
@@ -161,9 +174,9 @@ int main(int argc, char** argv){
     odom.pose.covariance[35] = 1e-3; 
 
     //set the velocity
-    odom.twist.twist.linear.x = odomI.xdot;
+    odom.twist.twist.linear.x = -odomI.xdot;
     odom.twist.twist.linear.y = odomI.ydot;
-    odom.twist.twist.angular.z = odomI.thetadot;
+    odom.twist.twist.angular.z = -odomI.thetadot;
     odom.twist.covariance[0] = 1e-3;
     odom.twist.covariance[7] = 1e-3;
     odom.twist.covariance[35] = 1e-3;
@@ -175,4 +188,4 @@ int main(int argc, char** argv){
 //    std::cout << "x:" << odomI.x << " y:" << odomI.y << " t:" << odomI.theta << std::endl;
     r.sleep();
   }
-}*/
+}
