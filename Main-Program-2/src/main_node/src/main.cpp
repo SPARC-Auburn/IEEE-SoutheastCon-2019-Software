@@ -60,7 +60,7 @@ void testMovement()
   arduino.updateLCD("Moving Flag Down..");
   arduino.moveFlag(180);
   usleep(1000*500);
-  arduino.updateLCD("Movement Test Compeleted!");
+  arduino.updateLCD("Movement Test   Compeleted!");
 }
 
 void visionCallback(const opencv_node::vision_msg::ConstPtr &msg)
@@ -132,14 +132,37 @@ int main(int argc, char **argv)
 	ip.pose.covariance[35] = 1e-3;
 	initPose.publish(ip);
 	ros::spinOnce();
-	while(arduino.updateArduino()!="1"){sleep(1);}
-	testMovement();
+	//while(arduino.updateArduino()!="1"){sleep(1);}
+	//testMovement();
 	int count = 0;
 	while(ros::ok()) {
 		std_msgs::String msg;
 		msg.data = std::string("Hello ");
 		msg.data += std::to_string(count);
 		ROS_INFO_STREAM(msg.data);
+		switch(arduino.getMode()){
+			case 0: arduino.updateLCD("Red");\
+				break;
+			case 1: arduino.updateLCD("Green");
+				break;
+			case 2: arduino.updateLCD("Blue");
+				break;
+			case 3: arduino.updateLCD("Yellow");
+				break;
+			default: break;
+		}
+		if(arduino.getButtonState()==1){
+			switch(arduino.getMode()){
+				case 0: testMovement();
+					break;
+				case 1: testMovement();
+					break;
+				case 2: testMovement();
+					break;
+				case 3: testMovement();
+					break;
+			}
+		}
 		// arduinoSend.publish(msg);
 		ros::spinOnce();
 		loop_rate.sleep();

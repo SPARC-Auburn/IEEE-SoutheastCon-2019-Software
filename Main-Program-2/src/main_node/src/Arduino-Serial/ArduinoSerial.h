@@ -21,6 +21,8 @@ public:
 	void moveGate(int pos);
 	void moveFlag(int pos);
 	void updateLCD(std::string text);
+	int getMode();
+	int getButtonState();
 	void stopMotors();
 	~serialPort();
 

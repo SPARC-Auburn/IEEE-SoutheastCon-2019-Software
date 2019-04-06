@@ -31,6 +31,9 @@ int gatePos = 0;
 int flagPos = 0;
 string LCDtext = "Connected!";
 string buttonState = "0";
+int clearButtonState = 0;
+string mode = "-1";
+
 
 serialPort::serialPort(const char* portName) {
   fileHandle = open(portName, O_RDWR | O_NOCTTY | O_NDELAY);
@@ -65,18 +68,18 @@ serialPort::serialPort(const char* portName) {
 }
 
 void serialPort::write(string text) {
-  ::write(fileHandle, text.c_str(), text.length());
+  ssize_t bytes_written = ::write(fileHandle, text.c_str(), text.length());
 }
 
 void serialPort::write(char data[], int length) {
-  ::write(fileHandle, data, length);
+  ssize_t bytes_written =  ::write(fileHandle, data, length);
 }
 
 string serialPort::read() {
   string input;
   int bytes = available();
   input.resize(bytes);
-  ::read(fileHandle, const_cast<char*>(input.data()) , bytes);    //The const cast is less than ideal
+  ssize_t bytes_written = ::read(fileHandle, const_cast<char*>(input.data()) , bytes);    //The const cast is less than ideal
   return(input);
 }
 
@@ -92,18 +95,24 @@ string serialPort::updateArduino() {
   signed char char2 = (signed char)(rightDriveSpeed);
   unsigned char char3 = (unsigned char)(gatePos);
   unsigned char char4 = (unsigned char)(flagPos);
+  unsigned char char6 = (unsigned char)(clearButtonState);
   string newText = LCDtext;
   newText.resize(32 , ' ');
-  unsigned char char5 = char1 + char2 + char3 + char4 + 1;
+  unsigned char char5 = char1 + char2 + char3 + char4 + char6 + 1;
+  char startChar[1] = {'<'};
   signed char motorData[2] = {char1,char2};
-  unsigned char servoData[3] = {char3, char4, char5};
+  unsigned char servoData[4] = {char3, char4, char6, char5};
+  char endChar[1] = {'>'};
   if (DEBUG_TEXT){
-    cout << "Sending to Arduino: " << (int)char1 << "," << (int)char2 << "," << (int)char3  << "," << (int)char4 << "," << (int)char5 << "," << newText << endl;
-    //cout << "Total bytes: " << (5+newText.length()) << endl;
+    cout << "Sending to Arduino: " << startChar[0] << (int)char1 << "," << (int)char2 << "," << (int)char3  << "," << (int)char4 << "," << (int)char6 << ",";
+    cout << (int)char5 << ","  << newText << "," << endChar[0] <<  endl;
+   // cout << "Total bytes: " << (6+newText.length()) << endl;
   }
-  ::write(fileHandle, motorData, 2); //Send messages
-  ::write(fileHandle, servoData, 3); //Appended checksum
-  ::write(fileHandle, newText.c_str(), newText.length());
+  ssize_t bytes_written = ::write(fileHandle, startChar, 1); 
+  bytes_written = ::write(fileHandle, motorData, 2); //Send messages
+  bytes_written = ::write(fileHandle, servoData, 4); //Appended checksum
+  bytes_written = ::write(fileHandle, newText.c_str(), newText.length());
+  bytes_written = ::write(fileHandle, endChar, 1);
  // if (DEBUG_TEXT){ //Output text characters
  // 	char qqqq[32];
  // 	memcpy(qqqq,newText.c_str(),32);
@@ -119,15 +128,22 @@ string serialPort::updateArduino() {
 	cout << "Recieved from Arduino: ";
   }
   while (end != string::npos){
-	if (DEBUG_TEXT){
-		cout << received.substr(start, end - start) << ",";
-	}
 	value++;
-	if(value==7){
+	if(value==8){
 		buttonState = received.substr(start, end - start);
 		if (DEBUG_TEXT){
-			cout << "Go?: " << buttonState << ",";
+			cout << "ButtonState: " << buttonState << ",";
 		}
+	}
+	else if(value==9){
+		mode = received.substr(start, end - start);
+		if (DEBUG_TEXT){
+			cout << "Mode: " << mode;
+		}
+		break;
+	}
+	else if (DEBUG_TEXT){
+		 cout << received.substr(start, end - start) << ",";
 	}
 	start = end + delim.length();
 	end = received.find(delim, start);
@@ -189,13 +205,33 @@ void serialPort::moveFlag(int pos){
 }
 
 void serialPort::updateLCD(string text){
-LCDtext = text;
+  LCDtext = text;
   cout << "New LCD text: " << text << endl;
   updateArduino();
 }
 
+int serialPort::getMode(){
+	updateArduino();
+	return stoi(mode);
+}
+
+int serialPort::getButtonState(){
+	int currentState = 0;
+	updateArduino();
+	currentState = stoi(buttonState);
+	if (buttonState == "1"){
+		clearButtonState = 1;
+		buttonState = "0";
+	}
+	else{
+		clearButtonState = 0;
+	}
+	return currentState;
+}
+
+
 serialPort::~serialPort() {
   cout << "Disconnecting from Arduino..." << endl;
-  updateLCD("Disconnected... Reset Arduino..");
+  updateLCD("Disconnected..");
   close(fileHandle);
 }
