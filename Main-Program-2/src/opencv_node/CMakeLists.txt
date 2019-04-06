@@ -57,6 +57,6 @@ add_library(opencv_node src/vision_talker.cpp)
 target_link_libraries(opencv_node ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${raspicam_CV_LIBS})
 add_dependencies(opencv_node opencv_node_generate_messages_cpp)
 
-add_executable(vision_talker src/vision_talker.cpp)
+add_executable(vision_talker src/vision_talker.cpp src/Vision3D.cpp)
 target_link_libraries(vision_talker ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${raspicam_CV_LIBS})
 add_dependencies(vision_talker opencv_node_generate_messages_cpp)

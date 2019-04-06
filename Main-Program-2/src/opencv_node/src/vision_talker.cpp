@@ -27,6 +27,7 @@ Color Indices = Red(0), Blue(1), Yellow(2), Green(3)
 #include "std_msgs/String.h"
 #include <sstream>
 #include <opencv_node/vision_msg.h>
+#include "Vision3D.h"
 
 // Constants
 #define PI 3.14159265
@@ -35,6 +36,7 @@ Color Indices = Red(0), Blue(1), Yellow(2), Green(3)
 #define VISION_DEBUG_IMAGE 1
 #define VISION_DEBUG_COLOR_IMAGE -1 // -1 to disable (0 red,1 blue,2 yellow,3 green)
 #define VISION_DEBUG_TEXT 0
+#define VISION_DEBUG_3D 1
 #define DEBRIS_MIN_W2H 0.75
 #define DEBRIS_MAX_W2H 1.5
 #define CORNER_MIN_W2H .1
@@ -57,6 +59,7 @@ struct DebrisObject
 	int colorIndex;
 	int angle;
 	double distance;
+	Point2d position;
 	
 	enum class ObjectType {
 		Debris,
@@ -69,6 +72,7 @@ struct DebrisObject
 	{
 		center.x = boundingRect.x + boundingRect.width / 2;
 		center.y = boundingRect.y + boundingRect.height / 2;
+		position = Vision3D::getPosIfHeight(center, getHalfHeight());
 		width = boundingRect.width;
 		height = boundingRect.height;
 		colorIndex = new_colorIndex;
@@ -81,6 +85,17 @@ struct DebrisObject
 		cout << "X=" << center.x << " Y=" << center.y << " Width=" << width << " Height=" << height << " colorIndex=" << colorIndex 
 		<< " angle=" << angle << " distance=" << distance << "\n";
 	}
+	double getHalfHeight() const {
+		if(type == ObjectType::Debris)
+			return Vision3D::AvgDebrisHeight / 2;
+		else if(type == ObjectType::Corner)
+			return Vision3D::CornerHeight / 2;
+		else if(type == ObjectType::CenterFace)
+			return 0.0;		//unimplemented
+		else
+			return 0.0;
+	}
+    
 };
 
 vector<DebrisObject> objectProperties;
@@ -203,6 +218,11 @@ struct VisionHandle
 					angle = atan((double)(boundRect.x - image.cols / 2) / (double)(image.rows - boundRect.y)) * 180 / PI; // Find angle to center of object from centerline
 					distance = (1/(double)boundRect.width) * DISTANCE_MULTIPLIER;
 					objectProperties.push_back(DebrisObject(boundRect, index, angle, distance, objectType));
+					if(VISION_DEBUG_3D) {
+						stringstream text;
+						text << objectProperties.back().position.x << ", " << objectProperties.back().position.y;
+						putText(image, text.str().c_str(), objectProperties.back().center, FONT_HERSHEY_COMPLEX_SMALL, .8, Scalar(255, 255, 255));
+					}
 				}
 			}			
 		}
@@ -219,11 +239,7 @@ struct VisionHandle
 				waitKey(1);			// Wait for a keystroke in the window
 			}
 	}
-	
-	static constexpr double CornerHeight = .3;		//meters; constexpr instead of const because it allows in-class initialization
-	static constexpr double AvgDebrisHeight = .05715;		//If we gain the ability to differentiate between cubes and spheres, this should be replaced with two values
-	static constexpr double CameraHeight = .22225;
-	static constexpr double CameraAngle = 25.0;		//Degrees; angle the camera circuit board makes with the vertical. Only an approximate value. 
+	 
 
 	int processVision(int argc, char **argv)
 	{
