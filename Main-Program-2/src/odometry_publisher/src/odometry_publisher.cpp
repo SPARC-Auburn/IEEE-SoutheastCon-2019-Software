@@ -48,18 +48,19 @@ struct Encoder{
   int pin_a,pin_b;
   volatile long value;
   volatile char last,cur;
-  Encoder(int a, int b){
+  int sign;
+  Encoder(int a, int b, int sig){
     pin_a = a;
     pin_b = b;
     pinMode (a, INPUT);
     pinMode (b, INPUT);
-
+    sign = sig;
     last = 0;
     value = 0;
   }
   void update(){
     cur = (digitalRead(pin_a) << 1) | digitalRead(pin_b);
-    value += outcome[(last << 2) | cur];
+    value += sign*outcome[(last << 2) | cur];
     last = cur;
   }
 };
@@ -67,15 +68,16 @@ void update(Encoder coders[2]){
   while(1){
     coders[0].update();
     coders[1].update();
+    //std::cout << coders[0].value << " " << coders[1].value << std::endl;
   }
 }
 int main(int argc, char** argv){
   ros::init(argc, argv, "odometry_publisher");
   wiringPiSetupGpio();
-  Encoder coders[2] = {Encoder(21,20),Encoder(19,26)};
+  Encoder coders[2] = {Encoder(21,20,1),Encoder(19,26,-1)};
   std::thread IO (update,coders);//put in a seperate thread to ensure its not delayed by the odometry integration
   ros::NodeHandle n;
-  ros::Publisher odom_pub = n.advertise<nav_msgs::Odometry>("odom", 50);
+  ros::Publisher odom_pub = n.advertise<nav_msgs::Odometry>("fuck/odom", 50);
   tf::TransformBroadcaster odom_broadcaster;
   odomIntegral odomI(0.1730756,0.0379095);//base and radius in meters. TODO get accurate values here
 
@@ -84,7 +86,7 @@ int main(int argc, char** argv){
   current_time = ros::Time::now();
   last_time = ros::Time::now();
   long lastValueR = coders[0].value,lastValueL = coders[1].value,curValueR,curValueL;
-  ros::Rate r(200);
+  ros::Rate r(100);
   while(n.ok()){
     current_time = ros::Time::now();
 
@@ -92,6 +94,7 @@ int main(int argc, char** argv){
     double dt = (current_time - last_time).toSec();
     curValueR = coders[0].value;
     curValueL = coders[1].value;
+//    std::cout << curValueR << " " << curValueL << std::endl;
     double diffR = curValueR-lastValueR;
     double diffL = curValueL-lastValueL;
     double wR = (tau*diffR)/(ticksPerRev*dt); //revolution speed of the right wheel in radians per second. This is computed as an instantneous measurement since the last time we updated
@@ -103,10 +106,10 @@ int main(int argc, char** argv){
     geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(odomI.theta);
 
     //first, we'll publish the transform over tf
-    geometry_msgs::TransformStamped odom_trans;
+    /*geometry_msgs::TransformStamped odom_trans;
     odom_trans.header.stamp = current_time;
-    odom_trans.header.frame_id = "odom";
-    odom_trans.child_frame_id = "base_link";
+    odom_trans.header.frame_id = "fuck/odom";
+    odom_trans.child_frame_id = "base_footprint";
 
     odom_trans.transform.translation.x = odomI.x;
     odom_trans.transform.translation.y = odomI.y;
@@ -115,23 +118,29 @@ int main(int argc, char** argv){
 
     //send the transform
     odom_broadcaster.sendTransform(odom_trans);
-
+	*/
     //next, we'll publish the odometry message over ROS
     nav_msgs::Odometry odom;
     odom.header.stamp = current_time;
     odom.header.frame_id = "odom";
-    odom.child_frame_id = "base_link";
+    odom.child_frame_id = "base_footprint";
 
     //set the position
     odom.pose.pose.position.x = odomI.x;
     odom.pose.pose.position.y = odomI.y;
     odom.pose.pose.position.z = 0.0;
     odom.pose.pose.orientation = odom_quat;
+    odom.pose.covariance[0] = 1e-3;
+    odom.pose.covariance[7] = 1e-3;
+    odom.pose.covariance[35] = 1e-3; 
 
     //set the velocity
     odom.twist.twist.linear.x = odomI.xdot;
     odom.twist.twist.linear.y = odomI.ydot;
     odom.twist.twist.angular.z = odomI.thetadot;
+    odom.twist.covariance[0] = 1e-3;
+    odom.twist.covariance[7] = 1e-3;
+    odom.twist.covariance[35] = 1e-3;
 
     //publish the message
     odom_pub.publish(odom);

@@ -1,6 +1,6 @@
 import RPi.GPIO as GPIO
-A_Pin = 21
-B_Pin = 20
+A_Pin = 19
+B_Pin = 26
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(A_Pin, GPIO.IN)
