@@ -37,45 +37,71 @@
 #include <ros/ros.h>
 #include <tf/transform_broadcaster.h>
 #include <nav_msgs/Odometry.h>
-#include <wiringPi.h>
 #include "deadreckon.h"
-#include <thread>
+#include <string>
+#include <termios.h>
+
+#include <stdexcept>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/ioctl.h>
 #define ticksPerRev 2244.923077 //ticks per rev is a double to the possibility of non whole number gear ratios due to how the encdoers are coupled
 #define pi 3.141592
 #define tau 2*pi
-struct Encoder{
-  const int outcome[16] = {0,1,-1,0,-1,0,0,1,1,0,0,-1,0,-1,1,0};
-  int pin_a,pin_b;
-  volatile long value;
-  volatile char last,cur;
-  int sign;
-  Encoder(int a, int b, int sig){
-    pin_a = a;
-    pin_b = b;
-    pinMode (a, INPUT);
-    pinMode (b, INPUT);
-    sign = sig;
-    last = 0;
-    value = 0;
+
+int getSer(std::string name){
+  int fileHandle = open(name.c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
+  if(fileHandle == -1) {
+    throw std::runtime_error(std::string("Error opening port: ") + strerror(errno));
   }
-  void update(){
-    cur = (digitalRead(pin_a) << 1) | digitalRead(pin_b);
-    value += sign*outcome[(last << 2) | cur];
-    last = cur;
+  if(!isatty(fileHandle)) {
+    close(fileHandle);
+    throw std::runtime_error("Port is not a serial device.");
   }
-};
-void update(Encoder coders[2]){
-  while(1){
-    coders[0].update();
-    coders[1].update();
-    //std::cout << coders[0].value << " " << coders[1].value << std::endl;
+  termios config;
+  cfmakeraw(&config);     //Sets various parameters for non-canonical mode; disables parity
+
+  cfsetospeed (&config, B9600);    //Baud rate
+  cfsetispeed (&config, B9600);
+
+  config.c_cflag     &=  ~CSTOPB;    //One stop bit
+
+  config.c_cflag     |=  CREAD | CLOCAL;
+  config.c_cflag     &=  ~CRTSCTS;           // no flow control
+
+  config.c_cc[VMIN]   =  0;
+  config.c_cc[VTIME]  =  0;
+
+  if(tcsetattr(fileHandle, TCSANOW, &config) != 0) {
+    close(fileHandle);
+    throw std::runtime_error("Setting attributes failed.");
   }
+  usleep(1000*1000*1); // wait 1 sec for arduino to reset
+  tcflush(fileHandle, TCIFLUSH);    //clear input buffer
+  usleep(1000*1000*1); // wait 1 sec for arduino to reset  
+  return fileHandle;
+}
+int available(int fd) {
+  int bytes;
+  ioctl(fd, FIONREAD, &bytes);
+  return(bytes);
+}
+int get(int fd) {
+  while(available(fd)<4);
+  int ret;
+  lseek(fd,-4,SEEK_END);
+  read(fd,(char*)&ret,4 );    //The const cast is less than ideal
+  return ret;
 }
 int main(int argc, char** argv){
+  int s1 = getSer("/dev/ttyACM0");
+  int s2 = getSer("/dev/ttyS0");
+  while(1){
+	std::cout << get(s1) << " " << get(s2) << std::endl;
+  }}
+/*
   ros::init(argc, argv, "odometry_publisher");
-  wiringPiSetupGpio();
-  Encoder coders[2] = {Encoder(21,20,1),Encoder(19,26,-1)};
-  std::thread IO (update,coders);//put in a seperate thread to ensure its not delayed by the odometry integration
+
   ros::NodeHandle n;
   ros::Publisher odom_pub = n.advertise<nav_msgs::Odometry>("fuck/odom", 50);
   tf::TransformBroadcaster odom_broadcaster;
@@ -119,8 +145,8 @@ int main(int argc, char** argv){
     //send the transform
     odom_broadcaster.sendTransform(odom_trans);
 	*/
-    //next, we'll publish the odometry message over ROS
-    nav_msgs::Odometry odom;
+    //next, we'll publish the odometry message over ROS*/
+    /*nav_msgs::Odometry odom;
     odom.header.stamp = current_time;
     odom.header.frame_id = "odom";
     odom.child_frame_id = "base_footprint";
@@ -149,4 +175,4 @@ int main(int argc, char** argv){
 //    std::cout << "x:" << odomI.x << " y:" << odomI.y << " t:" << odomI.theta << std::endl;
     r.sleep();
   }
-}
+}*/
