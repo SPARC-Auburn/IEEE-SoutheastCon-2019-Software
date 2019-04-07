@@ -1,5 +1,6 @@
 #include "ros/ros.h"
 #include "std_msgs/String.h"
+#include "std_msgs/Float32.h"
 #include <thread>
 #include <unistd.h>
 #include <iostream>
@@ -16,10 +17,10 @@
 
 using namespace std;
 
-serialPort arduino("/dev/ttyUSB0");  
+serialPort arduino("/dev/serial/by-id/usb-1a86_USB2.0-Serial-if00-port0");  
 
 ros::Publisher initPose;
-
+int rightSpeed=0,leftSpeed=0;
 void testMovement()
 {
   arduino.updateLCD("Starting movement test..");
@@ -62,6 +63,13 @@ void testMovement()
   usleep(1000*500);
   arduino.updateLCD("Movement Test   Compeleted!");
 }
+void rin(const std_msgs::Float32ConstPtr &msg){
+	rightSpeed = (int)msg->data;
+}
+
+void lin(const std_msgs::Float32ConstPtr &msg){
+	leftSpeed = (int)msg->data;
+}
 
 void visionCallback(const opencv_node::vision_msg::ConstPtr &msg)
 {
@@ -97,8 +105,11 @@ int main(int argc, char **argv)
 
   ros::init(argc, argv, "main");
   ros::NodeHandle n;
-
   ros::Subscriber sub = n.subscribe("vision_info", 1000, visionCallback);
+
+  ros::Subscriber lsub = n.subscribe<std_msgs::Float32>("rwheel_cmd", 1,lin);
+  ros::Subscriber rsub = n.subscribe<std_msgs::Float32>("lwheel_cmd", 1,rin);
+
   initPose = n.advertise<geometry_msgs::PoseWithCovarianceStamped>("initialpose",1,true);
 
   cout << "\033[1;34m-------------------------------------------------------------------\033[0m" << endl;
@@ -117,7 +128,7 @@ int main(int argc, char **argv)
 
 	// ros::Publisher arduinoSend = n.advertise<std_msgs::String>("arduinoTopic", 500);
 	// ros::Subscriber arduinoReceive = n.subscribe("arduinoPub", 500, arduinoCallback);
-	ros::Rate loop_rate(1);	//1 Hz
+	ros::Rate loop_rate(60);	//1 Hz
 
 
 	geometry_msgs::PoseWithCovarianceStamped ip;
@@ -131,12 +142,12 @@ int main(int argc, char **argv)
 	ip.pose.covariance[7] = 1e-3;
 	ip.pose.covariance[35] = 1e-3;
 	initPose.publish(ip);
-	ros::spinOnce();
+	//ros::spinOnce();
 	//while(arduino.updateArduino()!="1"){sleep(1);}
 	//testMovement();
 	int count = 0;
 	while(ros::ok()) {
-		std_msgs::String msg;
+		/*std_msgs::String msg;
 		msg.data = std::string("Hello ");
 		msg.data += std::to_string(count);
 		ROS_INFO_STREAM(msg.data);
@@ -151,8 +162,9 @@ int main(int argc, char **argv)
 				break;
 			default: break;
 		}
-		if(arduino.getButtonState()==1){
-			switch(arduino.getMode()){
+		//if(arduino.getButtonState()==1){
+		if(1){
+   		switch(arduino.getMode()){
 				case 0: testMovement();
 					break;
 				case 1: testMovement();
@@ -162,9 +174,10 @@ int main(int argc, char **argv)
 				case 3: testMovement();
 					break;
 			}
-		}
+		}*/
 		// arduinoSend.publish(msg);
 		ros::spinOnce();
+		arduino.drive(leftSpeed,rightSpeed);
 		loop_rate.sleep();
 		++count;
 	}

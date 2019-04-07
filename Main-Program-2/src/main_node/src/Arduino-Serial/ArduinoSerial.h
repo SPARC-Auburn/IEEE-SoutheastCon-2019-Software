@@ -21,6 +21,7 @@ public:
 	void moveGate(int pos);
 	void moveFlag(int pos);
 	void updateLCD(std::string text);
+	void drive(int left,int right);
 	int getMode();
 	int getButtonState();
 	void stopMotors();

@@ -1,3 +1,4 @@
+
 /*------------------------------------------------------------------------------
 Filename:     ArduinoSerial.cpp
 Project:      IEEE SoutheastCon Hardware Competition 2019
@@ -19,7 +20,7 @@ Controls 2 drive motors and 3 steppers.  Speed ranges are from -127 to 127.
 
 // Constants
 #define DEBUG_TEXT 1
-const char serialPort::typicalPortName[] = "/dev/ttyUSB0";
+const char serialPort::typicalPortName[] = "/dev/ttyUSB1";
 
 // Namespaces
 using namespace std;
@@ -178,12 +179,16 @@ void serialPort::goForward(int speed){
 
 void serialPort::goBackward(int speed){
   if(speed < 0 || speed > 127)
-		throw out_of_range("Motor speed must be between 0 and 127.");
+  		throw out_of_range("Motor speed must be between 0 and 127.");
   leftDriveSpeed = speed;
   rightDriveSpeed = speed;
   updateArduino();
 }
-
+void serialPort::drive(int left, int right){
+  leftDriveSpeed = left;
+  rightDriveSpeed = right;
+  updateArduino();
+}
 void serialPort::stopMotors(){
   leftDriveSpeed = 0;
   rightDriveSpeed = 0;
