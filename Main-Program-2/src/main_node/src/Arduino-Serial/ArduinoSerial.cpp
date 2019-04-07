@@ -19,7 +19,7 @@ Controls 2 drive motors and 3 steppers.  Speed ranges are from -127 to 127.
 #include <string>
 
 // Constants
-#define DEBUG_TEXT 1
+#define DEBUG_TEXT 0
 const char serialPort::typicalPortName[] = "/dev/ttyUSB1";
 
 // Namespaces
@@ -48,8 +48,8 @@ serialPort::serialPort(const char* portName) {
 
   cfmakeraw(&config);     //Sets various parameters for non-canonical mode; disables parity
 
-  cfsetospeed (&config, B38400);    //Baud rate
-  cfsetispeed (&config, B38400);
+  cfsetospeed (&config, B9600);    //Baud rate
+  cfsetispeed (&config, B9600);
 
   config.c_cflag     &=  ~CSTOPB;    //One stop bit
 
