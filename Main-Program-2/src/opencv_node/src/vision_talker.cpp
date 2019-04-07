@@ -19,9 +19,8 @@ Color Indices = Red(0), Blue(1), Yellow(2), Green(3)
 #include <opencv2/imgproc.hpp>
 #include <opencv2/highgui.hpp>
 #include <raspicam/raspicam_cv.h>
-#include <time.h>
 #include <ctime>
-#include <math.h>
+#include <ctime>
 
 #include "ros/ros.h"
 #include "std_msgs/String.h"
@@ -30,19 +29,19 @@ Color Indices = Red(0), Blue(1), Yellow(2), Green(3)
 #include "Vision3D.h"
 
 // Constants
-#define PI 3.14159265
-#define MIN_AREA 200
-#define MAX_AREA 30000
-#define VISION_DEBUG_IMAGE 1
-#define VISION_DEBUG_COLOR_IMAGE -1 // -1 to disable (0 red,1 blue,2 yellow,3 green)
-#define VISION_DEBUG_TEXT 0
-#define VISION_DEBUG_3D 1
-#define DEBRIS_MIN_W2H 0.75
-#define DEBRIS_MAX_W2H 1.5
-#define CORNER_MIN_W2H .1
-#define CORNER_MAX_W2H .333
-#define DEBRIS_MIN_PERCENT_FILLED 0.65
-#define DISTANCE_MULTIPLIER 26.95
+const double PI = 3.14159265;
+const int MIN_AREA = 200;
+const int MAX_AREA = 30000;
+const bool VISION_DEBUG_IMAGE = true;
+const int VISION_DEBUG_COLOR_IMAGE = -1; // -1 to disable (0 red,1 blue, 2 yellow, 3 green)
+const bool VISION_DEBUG_TEXT = false;
+const bool VISION_DEBUG_3D = true;
+const double DEBRIS_MIN_W2H = 0.75;
+const double DEBRIS_MAX_W2H = 1.5;
+const double CORNER_MIN_W2H  = .1;
+const double CORNER_MAX_W2H = .333;
+const double DEBRIS_MIN_PERCENT_FILLED = 0.65;
+const double DISTANCE_MULTIPLIER = 26.95;
 
 // Common Namespaces
 using namespace cv;
@@ -116,7 +115,6 @@ struct VisionHandle
 	Mat kernel = getStructuringElement(MORPH_CROSS, Size(3, 3));
 	Size resolution;
 	clock_t begin;
-	vector<Rect> boundRect;
 	
 
   public:
@@ -157,7 +155,8 @@ struct VisionHandle
 		for (int i = 0; i < 4; i++) {
 			findObjectsOfColor(i);
 		}
-		ROS_INFO("%s", "Finished finding objects");
+		if(VISION_DEBUG_TEXT)
+			ROS_INFO("%s", "Finished finding objects");
 		displayImage("output");
 	}
 
