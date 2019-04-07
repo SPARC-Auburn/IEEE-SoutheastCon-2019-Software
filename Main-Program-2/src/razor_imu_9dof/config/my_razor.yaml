@@ -4,12 +4,12 @@ port: /dev/ttyACM0
 
 ##### Calibration ####
 ### accelerometer
-accel_x_min: -250.0
-accel_x_max: 250.0
-accel_y_min: -250.0
-accel_y_max: 250.0
-accel_z_min: -250.0
-accel_z_max: 250.0
+accel_x_min: -261.96
+accel_x_max: 255.86
+accel_y_min: -253.9
+accel_y_max: 265.62
+accel_z_min: -274.9
+accel_z_max: 276.73
 
 ### magnetometer
 # standard calibration
@@ -26,9 +26,9 @@ magn_ellipsoid_center: [0, 0, 0]
 magn_ellipsoid_transform: [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
 
 # AHRS to robot calibration
-imu_yaw_calibration: 0.0
+#imu_yaw_calibration: 0.0
 
 ### gyroscope
-gyro_average_offset_x: 0.0
-gyro_average_offset_y: 0.0
-gyro_average_offset_z: 0.0
+gyro_average_offset_x: -0.03
+gyro_average_offset_y: 0.01
+gyro_average_offset_z: 0.02

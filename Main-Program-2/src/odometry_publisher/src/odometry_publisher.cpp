@@ -150,13 +150,13 @@ int main(int argc, char** argv){
     odom_trans.header.frame_id = "fuck/odom";
     odom_trans.child_frame_id = "base_footprint";
 
-    odom_trans.transform.translation.x = -odomI.x;
+    odom_trans.transform.translation.x = odomI.x;
     odom_trans.transform.translation.y = odomI.y;
     odom_trans.transform.translation.z = 0.0;
     odom_trans.transform.rotation = odom_quat;
 
     //send the transform
-    odom_broadcaster.sendTransform(odom_trans);
+    //odom_broadcaster.sendTransform(odom_trans);
 	
     //next, we'll publish the odometry message over ROS*/
     nav_msgs::Odometry odom;
@@ -165,7 +165,7 @@ int main(int argc, char** argv){
     odom.child_frame_id = "base_footprint";
 
     //set the position
-    odom.pose.pose.position.x = -odomI.x;
+    odom.pose.pose.position.x = odomI.x;
     odom.pose.pose.position.y = odomI.y;
     odom.pose.pose.position.z = 0.0;
     odom.pose.pose.orientation = odom_quat;
@@ -174,7 +174,7 @@ int main(int argc, char** argv){
     odom.pose.covariance[35] = 1e-3; 
 
     //set the velocity
-    odom.twist.twist.linear.x = -odomI.xdot;
+    odom.twist.twist.linear.x = odomI.xdot;
     odom.twist.twist.linear.y = odomI.ydot;
     odom.twist.twist.angular.z = -odomI.thetadot;
     odom.twist.covariance[0] = 1e-3;
