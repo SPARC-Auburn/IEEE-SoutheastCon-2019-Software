@@ -48,8 +48,8 @@ serialPort::serialPort(const char* portName) {
 
   cfmakeraw(&config);     //Sets various parameters for non-canonical mode; disables parity
 
-  cfsetospeed (&config, B9600);    //Baud rate
-  cfsetispeed (&config, B9600);
+  cfsetospeed (&config, B38400);    //Baud rate
+  cfsetispeed (&config, B38400);
 
   config.c_cflag     &=  ~CSTOPB;    //One stop bit
 
