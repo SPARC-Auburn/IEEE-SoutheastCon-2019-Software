@@ -37,45 +37,79 @@
 #include <ros/ros.h>
 #include <tf/transform_broadcaster.h>
 #include <nav_msgs/Odometry.h>
-#include <wiringPi.h>
 #include "deadreckon.h"
-#include <thread>
-#define ticksPerRev 2244.923077 //ticks per rev is a double to the possibility of non whole number gear ratios due to how the encdoers are coupled
+#include <string>
+#include <termios.h>
+
+#include <stdexcept>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/ioctl.h>
+#include <utility>
+#define ticksPerRev 210.461538 //ticks per rev is a double to the possibility of non whole number gear ratios due to how the encdoers are coupled
 #define pi 3.141592
 #define tau 2*pi
-struct Encoder{
-  const int outcome[16] = {0,1,-1,0,-1,0,0,1,1,0,0,-1,0,-1,1,0};
-  int pin_a,pin_b;
-  volatile long value;
-  volatile char last,cur;
-  int sign;
-  Encoder(int a, int b, int sig){
-    pin_a = a;
-    pin_b = b;
-    pinMode (a, INPUT);
-    pinMode (b, INPUT);
-    sign = sig;
-    last = 0;
-    value = 0;
+
+int getSer(std::string name){
+  int fileHandle = open(name.c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
+  if(fileHandle == -1) {
+    throw std::runtime_error(std::string("Error opening port: ") + strerror(errno));
   }
-  void update(){
-    cur = (digitalRead(pin_a) << 1) | digitalRead(pin_b);
-    value += sign*outcome[(last << 2) | cur];
-    last = cur;
+  if(!isatty(fileHandle)) {
+    close(fileHandle);
+    throw std::runtime_error("Port is not a serial device.");
   }
-};
-void update(Encoder coders[2]){
-  while(1){
-    coders[0].update();
-    coders[1].update();
-    //std::cout << coders[0].value << " " << coders[1].value << std::endl;
+  termios config;
+  cfmakeraw(&config);     //Sets various parameters for non-canonical mode; disables parity
+
+  cfsetospeed (&config, B9600);    //Baud rate
+  cfsetispeed (&config, B9600);
+
+  config.c_cflag     &=  ~CSTOPB;    //One stop bit
+
+  config.c_cflag     |=  CREAD | CLOCAL;
+  config.c_cflag     &=  ~CRTSCTS;           // no flow control
+
+  config.c_cc[VMIN]   =  0;
+  config.c_cc[VTIME]  =  0;
+
+  if(tcsetattr(fileHandle, TCSANOW, &config) != 0) {
+    close(fileHandle);
+    throw std::runtime_error("Setting attributes failed.");
   }
+  usleep(1000*1000*1); // wait 1 sec for arduino to reset
+  tcflush(fileHandle, TCIFLUSH);    //clear input buffer
+  usleep(1000*1000*1); // wait 1 sec for arduino to reset  
+  return fileHandle;
+}
+int available(int fd) {
+  int bytes;
+  ioctl(fd, FIONREAD, &bytes);
+  return(bytes);
+}
+std::pair<int,int> get(int fd) {
+  while(available(fd) < 50);
+  char c[50];
+  lseek(fd,-50,SEEK_END);
+  read(fd,(char*)&c,50);    //The const cast is less than ideal
+  std::string pain(c,50);
+  int last = pain.find_last_of(">");
+  int first= pain.find_last_of("<",last);
+  pain = pain.substr(first+1,last);
+  int a = std::stoi(pain);
+  pain = pain.substr(pain.find(",")+1);
+  int b = -std::stoi(pain);
+  //std::cout << a << "," << b << std::endl; 
+  //std::cout << last << " " << pain.find_last_of("\n",last) << std::endl;
+  return std::pair<int,int>(a,b);
 }
 int main(int argc, char** argv){
+  int s1 = getSer("/dev/serial0");
+ // int s2 = getSer("/dev/ttyS0");
+
+
   ros::init(argc, argv, "odometry_publisher");
-  wiringPiSetupGpio();
-  Encoder coders[2] = {Encoder(21,20,1),Encoder(19,26,-1)};
-  std::thread IO (update,coders);//put in a seperate thread to ensure its not delayed by the odometry integration
+
   ros::NodeHandle n;
   ros::Publisher odom_pub = n.advertise<nav_msgs::Odometry>("fuck/odom", 50);
   tf::TransformBroadcaster odom_broadcaster;
@@ -85,16 +119,21 @@ int main(int argc, char** argv){
   ros::Time current_time, last_time;
   current_time = ros::Time::now();
   last_time = ros::Time::now();
-  long lastValueR = coders[0].value,lastValueL = coders[1].value,curValueR,curValueL;
+  
+  std::pair<int,int> vals = get(s1);
+
+  long lastValueL = vals.first,lastValueR = vals.second,curValueR,curValueL;
   ros::Rate r(100);
   while(n.ok()){
     current_time = ros::Time::now();
 
     //compute odometry in a typical way given the velocities of the robot
     double dt = (current_time - last_time).toSec();
-    curValueR = coders[0].value;
-    curValueL = coders[1].value;
-//    std::cout << curValueR << " " << curValueL << std::endl;
+    vals = get(s1);
+
+    curValueL = vals.first;
+    curValueR = vals.second;
+    //std::cout << curValueR << " " << curValueL << std::endl;
     double diffR = curValueR-lastValueR;
     double diffL = curValueL-lastValueL;
     double wR = (tau*diffR)/(ticksPerRev*dt); //revolution speed of the right wheel in radians per second. This is computed as an instantneous measurement since the last time we updated
@@ -103,10 +142,10 @@ int main(int argc, char** argv){
     lastValueR = curValueR;
     lastValueL = curValueL;
     //since all odometry is 6DOF we'll need a quaternion created from yaw
-    geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(odomI.theta);
+    geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(-odomI.theta);
 
     //first, we'll publish the transform over tf
-    /*geometry_msgs::TransformStamped odom_trans;
+    geometry_msgs::TransformStamped odom_trans;
     odom_trans.header.stamp = current_time;
     odom_trans.header.frame_id = "fuck/odom";
     odom_trans.child_frame_id = "base_footprint";
@@ -117,9 +156,9 @@ int main(int argc, char** argv){
     odom_trans.transform.rotation = odom_quat;
 
     //send the transform
-    odom_broadcaster.sendTransform(odom_trans);
-	*/
-    //next, we'll publish the odometry message over ROS
+    //odom_broadcaster.sendTransform(odom_trans);
+	
+    //next, we'll publish the odometry message over ROS*/
     nav_msgs::Odometry odom;
     odom.header.stamp = current_time;
     odom.header.frame_id = "odom";
@@ -137,7 +176,7 @@ int main(int argc, char** argv){
     //set the velocity
     odom.twist.twist.linear.x = odomI.xdot;
     odom.twist.twist.linear.y = odomI.ydot;
-    odom.twist.twist.angular.z = odomI.thetadot;
+    odom.twist.twist.angular.z = -odomI.thetadot;
     odom.twist.covariance[0] = 1e-3;
     odom.twist.covariance[7] = 1e-3;
     odom.twist.covariance[35] = 1e-3;
