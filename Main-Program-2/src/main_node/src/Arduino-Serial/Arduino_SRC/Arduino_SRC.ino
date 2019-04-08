@@ -20,14 +20,14 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 #define BUTTON 2
 #define POTPIN A7
 #define MOTOR_CONTROLLER_BAUDRATE  9600
-#define RASPBERRY_PI_BAUDRATE  38400
+#define RASPBERRY_PI_BAUDRATE  9600
 
 // Variables
 signed char speed1;
 signed char speed2;
 unsigned char gatePos;
 unsigned char flagPos;
-String currentLCDtext = "Waiting for      connection";
+String LCDtext = "Waiting for      connection";
 Cytron_SmartDriveDuo smartDriveDuo30(SERIAL_SIMPLFIED, IN1, MOTOR_CONTROLLER_BAUDRATE);
 Servo gateServo;
 Servo flagServo;
@@ -79,7 +79,6 @@ void recvWithStartEndMarkers() {
 //Output Data
 void takeNewData() {
     if (newData == true) {
-        String allChars = receivedChars;
         speed1 = receivedChars[0];
         speed2 = receivedChars[1];
         gatePos = receivedChars[2];
@@ -89,46 +88,38 @@ void takeNewData() {
         for(int i = 0; i < 32; i++){
           receivedLCDText[i] = receivedChars[i+6];  
         }
-        String newLCDtext = receivedLCDText;
-        int i =0;
-        while(i<20){
-          Serial.print('\0');
-          i++;
-        }
+        LCDtext = receivedLCDText;
         Serial.print(speed1);
-//        Serial.print(',');
-//        Serial.print(speed2);
-//        Serial.print(',');
-//        Serial.print(gatePos);
-//        Serial.print(',');
-//        Serial.print(flagPos);
-//        Serial.print(',');
-//        Serial.print(clearButtonState);
-//        Serial.print(',');
-//        Serial.print(checksumIn);
-//        Serial.print(',');
-//        Serial.print(newLCDtext);
-//        Serial.print(',');
-//        Serial.print(buttonState);
-//        Serial.print(',');
-//        Serial.print(mode);
+        Serial.print(',');
+        Serial.print(speed2);
+        Serial.print(',');
+        Serial.print(gatePos);
+        Serial.print(',');
+        Serial.print(flagPos);
+        Serial.print(',');
+        Serial.print(clearButtonState);
+        Serial.print(',');
+        Serial.print(checksumIn);
+        Serial.print(',');
+        Serial.print(LCDtext);
+        Serial.print(',');
+        Serial.print(buttonState);
+        Serial.print(',');
+        Serial.print(mode);
         signed char calculatedChecksum = speed1 + speed2  + gatePos + flagPos + clearButtonState + 1;
         if(calculatedChecksum == checksumIn){
-          //Serial.println(", Correct>");
+          Serial.println(", Correct");
           smartDriveDuo30.control(speed1,speed2);
           gateServo.write(gatePos);
           flagServo.write(flagPos);
-          if(newLCDtext != currentLCDtext){
-            currentLCDtext = newLCDtext;
-            lcd.clear();
-            lcd.setCursor(0,0);
-            lcd.print(currentLCDtext.substring(0,15)); //First line of LCD
-            lcd.setCursor(0,1);
-            lcd.print(currentLCDtext.substring(16,32)); //Second Line of LCD
-          }
+          lcd.clear();
+          lcd.setCursor(0,0);
+          lcd.print(LCDtext.substring(0,15)); //First line of LCD
+          lcd.setCursor(0,1);
+          lcd.print(LCDtext.substring(16,32)); //Second Line of LCD
         }
         else{
-          //Serial.println(", Error>");
+          Serial.print(", Error");
         }
         newData = false;
     }
@@ -146,15 +137,14 @@ void setup()
   lcd.backlight();  
   lcd.clear();
   lcd.setCursor(0,0);
-  lcd.print(currentLCDtext.substring(0,16)); //First line of LCD
+  lcd.print(LCDtext.substring(0,16)); //First line of LCD
   lcd.setCursor(0,1);
-  lcd.print(currentLCDtext.substring(17,32)); //Second Line of LCD
+  lcd.print(LCDtext.substring(17,32)); //Second Line of LCD
   gateServo.attach(10);
   flagServo.attach(11);
   pinMode(BUTTON, INPUT);
   while(Serial.available())
   Serial.read();
-  
 }
 
 void loop()
