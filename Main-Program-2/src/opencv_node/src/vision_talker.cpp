@@ -20,7 +20,6 @@ Color Indices = Red(0), Blue(1), Yellow(2), Green(3)
 #include <opencv2/highgui.hpp>
 #include <raspicam/raspicam_cv.h>
 #include <ctime>
-#include <ctime>
 
 #include "ros/ros.h"
 #include "std_msgs/String.h"
@@ -67,17 +66,13 @@ struct DebrisObject
 		Unknown
 	} type;
 
-	DebrisObject(Rect boundingRect, int new_colorIndex, int new_angle, double new_distance, ObjectType typeIn)
+	DebrisObject(Rect boundingRect, int new_colorIndex, int new_angle, double new_distance, ObjectType typeIn, Point2d positionIn) : colorIndex{new_colorIndex}, angle{new_angle}, type{typeIn}, position{positionIn}
 	{
 		center.x = boundingRect.x + boundingRect.width / 2;
 		center.y = boundingRect.y + boundingRect.height / 2;
-		position = Vision3D::getPosIfHeight(center, getHalfHeight());
 		width = boundingRect.width;
 		height = boundingRect.height;
-		colorIndex = new_colorIndex;
-		angle = new_angle;
 		distance = new_distance;
-		type = typeIn;
 	}
 	void printProperties()
 	{
@@ -160,6 +155,19 @@ struct VisionHandle
 		displayImage("output");
 	}
 
+	void debugInvalidObj(Mat imageIn, Rect bounds) {
+		if(VISION_DEBUG_IMAGE) {
+			rectangle(image, bounds.tl(), bounds.br(), Scalar(100, 100, 100), 4);
+		}
+	}
+	
+	void drawRotatedRect(Mat imageIn, RotatedRect rRect, Scalar color) {
+		Point2f vertices[4];
+		rRect.points(vertices);
+		for (int i = 0; i < 4; i++)
+			line(imageIn, vertices[i], vertices[(i+1)%4], color, 1);
+	}
+
 	// Populates vector array of object's properties; previously "GetObjectProperties"
 	void findObjectsOfColor(int index)
 	{
@@ -190,33 +198,79 @@ struct VisionHandle
 				float r;
 				Point2f cent;
 				w2h = (double)boundRect.width / boundRect.height;					 // Find width to height ratio, 1.0 is square
-				percentFilled = area / (double) boundRect.area(); // amount of rectangle consumed by contour
+				RotatedRect rotatedBounds = minAreaRect(contours[i]);
+				percentFilled = area / rotatedBounds.size.area();	// amount of rectangle consumed by contour
 				// Determine shape
 				DebrisObject::ObjectType objectType = DebrisObject::ObjectType::Unknown;
+				Point2d position(0, 0);
+				
+				//vector<vector<Point>> smoothedContour(1);
+				//approxPolyDP(contours[i], smoothedContour[0], .02 * arcLength(contours[i], true), true);
+				
 				if (percentFilled < DEBRIS_MIN_PERCENT_FILLED) {
 					if (VISION_DEBUG_IMAGE)
 						rectangle(image, boundRect.tl(), boundRect.br(), Scalar(200, 200, 200), 4, 8, 0);
 					continue;
 				}
-				else if (w2h < DEBRIS_MAX_W2H && w2h > DEBRIS_MIN_W2H) {
+				else if (w2h < DEBRIS_MAX_W2H && w2h > DEBRIS_MIN_W2H && boundRect.y != 0) {		//Checking the boundRect prevents detection of a corner that is mostly cut off to where it is square
 					objectType = DebrisObject::ObjectType::Debris;
+					position = Vision3D::getPosIfHeight((boundRect.br() + boundRect.tl()) / 2, Vision3D::AvgDebrisHeight);		//It is assumed that the center of the boundRect goes through the centroid of the object
 					if (VISION_DEBUG_IMAGE)
 						rectangle(image, boundRect.tl(), boundRect.br(), colors[index], 4, 8, 0);
 				}
-				else if(w2h < CORNER_MAX_W2H && w2h > CORNER_MIN_W2H) {
-					objectType = DebrisObject::ObjectType::Corner;
-					if (VISION_DEBUG_IMAGE)
-						rectangle(image, boundRect.tl(), boundRect.br(), colors[index], 4, 8, 0);
-				}
-				else { // wrong size ratio
-					if (VISION_DEBUG_IMAGE)
-						rectangle(image, boundRect.tl(), boundRect.br(), Scalar(100, 100, 100), 4, 8, 0);
+				else {
+					RotatedRect rotated = minAreaRect(contours[i]);
+					double betterw2h = rotated.size.width / rotated.size.height;
+					if(w2h > 1) {
+						if(betterw2h <= 1)
+							betterw2h = 1 / betterw2h;
+					}
+					else {
+						if(betterw2h > 1)
+							betterw2h = 1 / betterw2h;
+					}
+					//putText(image, format("%f", betterw2h), boundRect.br(), FONT_HERSHEY_COMPLEX_SMALL, .8, Scalar(20, 20, 20));
+					
+					if(betterw2h < CORNER_MAX_W2H && betterw2h > CORNER_MIN_W2H) {
+						double squareEdge = boundRect.height * .3;
+						if(boundRect.x  - squareEdge >= 0.0 && boundRect.x + boundRect.width + squareEdge < image.size().width) {		//ensure that the tested areas are inside the image
+							double offset = boundRect.height * .2;
+							Mat mask(image.size(), CV_8UC1, Scalar::all(0));
+							Rect ROI(boundRect.x - squareEdge, boundRect.y + boundRect.height - squareEdge - offset, squareEdge, squareEdge);
+							rectangle(image, ROI.tl(), ROI.br(), Scalar(0, 0, 0), 1);
+							mask(ROI).setTo(Scalar::all(255));
+							ROI.x = boundRect.x + boundRect.width;
+							rectangle(image, ROI.tl(), ROI.br(), Scalar(0, 0, 0), 1);
+							mask(ROI).setTo(Scalar::all(255));
+							Scalar meanColor = mean(hsv, mask);				//The purpose of this is to see if the area on both sides of a potential corner is white.
+							//ROS_INFO("Average: %f, %f, %f", meanColor.val[0], meanColor.val[1], meanColor.val[2]);
+							
+							if(meanColor.val[1] <= 22.0 && meanColor.val[2] >= 145) {
+								objectType = DebrisObject::ObjectType::Corner;
+								Point2f points[4];
+								rotated.points(points);
+								sort(std::begin(points), std::end(points), [] (const Point2f& point1, const Point2f& point2) { return point1.y < point2.y; });
+								position = Vision3D::getPosIfHeight((points[0] + points[1]) / 2.0, 0.0);		//Approximate location of the center of the corner's bottom square. OpenCV rounds when converting from Point2f to Point2i
+								if (VISION_DEBUG_IMAGE)
+									drawRotatedRect(image, rotated, Scalar(0, 0, 0));
+							}
+							else {
+								debugInvalidObj(image, boundRect);
+							}
+						}
+						else {
+							debugInvalidObj(image, boundRect);
+						}
+					}
+					else { // wrong size ratio
+						debugInvalidObj(image, boundRect);
+					}
 				}
 				
 				if(objectType != DebrisObject::ObjectType::Unknown) {
 					angle = atan((double)(boundRect.x - image.cols / 2) / (double)(image.rows - boundRect.y)) * 180 / PI; // Find angle to center of object from centerline
 					distance = (1/(double)boundRect.width) * DISTANCE_MULTIPLIER;
-					objectProperties.push_back(DebrisObject(boundRect, index, angle, distance, objectType));
+					objectProperties.push_back(DebrisObject(boundRect, index, angle, distance, objectType, position));
 					if(VISION_DEBUG_3D) {
 						stringstream text;
 						text << objectProperties.back().position.x << ", " << objectProperties.back().position.y;
