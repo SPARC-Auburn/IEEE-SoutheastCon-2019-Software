@@ -135,8 +135,8 @@ def main():
     
     x_min = rospy.get_param("~x_min", -1)
     x_max = rospy.get_param("~x_max", 1)
-    r_min = rospy.get_param("~r_min", -1.0)
-    r_max = rospy.get_param("~r_max", 1.0)
+    r_min = rospy.get_param("~r_min", -3.0)
+    r_max = rospy.get_param("~r_max", 3.0)
     
     app = QtGui.QApplication(sys.argv)
     ex = MainWindow()

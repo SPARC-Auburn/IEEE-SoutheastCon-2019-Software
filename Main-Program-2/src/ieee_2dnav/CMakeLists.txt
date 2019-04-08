@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(2dnav)
+project(ieee_2dnav)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -11,7 +11,6 @@ find_package(catkin REQUIRED COMPONENTS
   move_base
   odometry_publisher
   razor_imu_9dof
-  ydlidar-master
 )
 
 ## System dependencies are found with CMake's conventions
