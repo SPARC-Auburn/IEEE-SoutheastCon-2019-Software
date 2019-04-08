@@ -1,0 +1,10 @@
+<launch>
+
+   <node pkg="razor_imu_9dof" type="sensor_node_type" name="razor" output="screen">
+    <param name="sensor_param" value="param_value" />
+ </node>
+ <node pkg="odom_publisher" type="odom_node_type" name="odom_node" output="screen">
+    <param name="odom_param" value="param_value" />
+ </node>
+
+</launch> 
