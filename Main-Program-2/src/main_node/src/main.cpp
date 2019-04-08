@@ -17,9 +17,10 @@
 
 using namespace std;
 
-serialPort arduino("/dev/serial/by-id/usb-1a86_USB2.0-Serial-if00-port0");  
+serialPort arduino("/dev/serial/by-id/usb-1a86_USB2.0-Serial-if00-port0");
 
 ros::Publisher initPose;
+//arduino.setupConnection();
 int rightSpeed=0,leftSpeed=0;
 void testMovement()
 {
@@ -128,7 +129,7 @@ int main(int argc, char **argv)
 
 	// ros::Publisher arduinoSend = n.advertise<std_msgs::String>("arduinoTopic", 500);
 	// ros::Subscriber arduinoReceive = n.subscribe("arduinoPub", 500, arduinoCallback);
-	ros::Rate loop_rate(20);	//1 Hz
+	ros::Rate loop_rate(40);	//1 Hz
 
 
 	geometry_msgs::PoseWithCovarianceStamped ip;

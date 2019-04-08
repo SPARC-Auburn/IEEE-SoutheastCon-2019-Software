@@ -12,6 +12,7 @@ public:
 	void write(char data[size]) { write(data, size); }
 	
 	int available();
+	void setupConnection();
 	std::string read();
 	std::string updateArduino();
 	void turnLeft(int speed);

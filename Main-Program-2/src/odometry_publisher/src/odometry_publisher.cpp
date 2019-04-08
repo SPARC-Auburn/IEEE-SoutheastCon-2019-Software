@@ -37,63 +37,45 @@
 #include <ros/ros.h>
 #include <tf/transform_broadcaster.h>
 #include <nav_msgs/Odometry.h>
-#include <wiringPi.h>
+#include "std_msgs/Int32.h"
 #include "deadreckon.h"
-#include <thread>
-#define ticksPerRev 2244.923077 //ticks per rev is a double to the possibility of non whole number gear ratios due to how the encdoers are coupled
+#define ticksPerRev 210.461538 //ticks per rev is a double to the possibility of non whole number gear ratios due to how the encdoers are coupled
 #define pi 3.141592
 #define tau 2*pi
-struct Encoder{
-  const int outcome[16] = {0,1,-1,0,-1,0,0,1,1,0,0,-1,0,-1,1,0};
-  int pin_a,pin_b;
-  volatile long value;
-  volatile char last,cur;
-  int sign;
-  Encoder(int a, int b, int sig){
-    pin_a = a;
-    pin_b = b;
-    pinMode (a, INPUT);
-    pinMode (b, INPUT);
-    sign = sig;
-    last = 0;
-    value = 0;
-  }
-  void update(){
-    cur = (digitalRead(pin_a) << 1) | digitalRead(pin_b);
-    value += sign*outcome[(last << 2) | cur];
-    last = cur;
-  }
-};
-void update(Encoder coders[2]){
-  while(1){
-    coders[0].update();
-    coders[1].update();
-    //std::cout << coders[0].value << " " << coders[1].value << std::endl;
-  }
+#define bad -2147483648
+int rightCount=bad,leftCount=bad;
+void rin(const std_msgs::Int32ConstPtr &msg){
+        rightCount = msg->data;
 }
+
+void lin(const std_msgs::Int32ConstPtr &msg){
+        leftCount = msg->data;
+}
+
 int main(int argc, char** argv){
   ros::init(argc, argv, "odometry_publisher");
-  wiringPiSetupGpio();
-  Encoder coders[2] = {Encoder(21,20,1),Encoder(19,26,-1)};
-  std::thread IO (update,coders);//put in a seperate thread to ensure its not delayed by the odometry integration
   ros::NodeHandle n;
-  ros::Publisher odom_pub = n.advertise<nav_msgs::Odometry>("fuck/odom", 50);
+  ros::Publisher odom_pub = n.advertise<nav_msgs::Odometry>("fuck/odom", 1);
+  ros::Subscriber lsub = n.subscribe<std_msgs::Int32>("lwheel",1,lin);
+  ros::Subscriber rsub = n.subscribe<std_msgs::Int32>("rwheel",1,rin);
   tf::TransformBroadcaster odom_broadcaster;
   odomIntegral odomI(0.1730756,0.0379095);//base and radius in meters. TODO get accurate values here
 
 
   ros::Time current_time, last_time;
-  current_time = ros::Time::now();
+  while(rightCount == bad || leftCount == bad){
+	ros::spinOnce();
+  }
+  int lastValueR=rightCount,lastValueL=leftCount,curValueR,curValueL;
+  ros::Rate r(60);
   last_time = ros::Time::now();
-  long lastValueR = coders[0].value,lastValueL = coders[1].value,curValueR,curValueL;
-  ros::Rate r(100);
   while(n.ok()){
+    ros::spinOnce();
     current_time = ros::Time::now();
-
     //compute odometry in a typical way given the velocities of the robot
     double dt = (current_time - last_time).toSec();
-    curValueR = coders[0].value;
-    curValueL = coders[1].value;
+    curValueR = rightCount;
+    curValueL = leftCount;
 //    std::cout << curValueR << " " << curValueL << std::endl;
     double diffR = curValueR-lastValueR;
     double diffL = curValueL-lastValueL;

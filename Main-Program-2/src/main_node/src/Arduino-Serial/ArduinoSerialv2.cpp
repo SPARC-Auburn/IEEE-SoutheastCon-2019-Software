@@ -4,11 +4,11 @@
 #include <termios.h>
 #include <unistd.h>
 #include "ArduinoSerialv2.h"
-
+#include <iostream>
 // Constants
 #define DEBUG_TEXT 1
 const char serialPort::typicalPortName[] = "/dev/ttyUSB0";
-
+using namespace std;
 // Variables
 int leftDriveSpeed = 0;
 int rightDriveSpeed = 0;
@@ -21,27 +21,32 @@ string mode = "-1";
 
 //SerialVariables
 int fd;
+int speed;
 
-serialPort::serialPort(const char* portName, int speed){
-  fd = open (portname, O_RDWR | O_NOCTTY | O_SYNC);
+serialPort::serialPort(const char* portName, int inputSpeed){
+  speed = inputSpeed;
+  fd = open (portName, O_RDWR | O_NOCTTY | O_SYNC);
   if (fd < 0)
   {
-          error_message ("error %d opening %s: %s", errno, portname, strerror (errno));
+         // error_message ("error %d opening %s: %s", errno, portName, strerror (errno));
           return;
   }
 
-  set_interface_attribs (fd, speed, 0);  // set speed to 115,200 bps, 8n1 (no parity)
-  set_blocking (fd, 0);                // set no blocking
+}
+
+void serialPort::setupConnection(){
+  set_interface_attribs (fd, 0);  // set speed to 115,200 bps, 8n1 (no parity)
+  set_blocking (fd, 60);                // set no blocking
 
 }
 
-int serialPort::set_interface_attribs (int fd, int speed, int parity){
+int serialPort::set_interface_attribs (int fd, int parity){
   
         struct termios tty;
         memset (&tty, 0, sizeof tty);
         if (tcgetattr (fd, &tty) != 0)
         {
-                error_message ("error %d from tcgetattr", errno);
+               // error_message ("error %d from tcgetattr", errno);
                 return -1;
         }
 
@@ -69,55 +74,74 @@ int serialPort::set_interface_attribs (int fd, int speed, int parity){
 
         if (tcsetattr (fd, TCSANOW, &tty) != 0)
         {
-                error_message ("error %d from tcsetattr", errno);
+                //error_message ("error %d from tcsetattr", errno);
                 return -1;
         }
         return 0;
 }
 
-void serialPort::set_blocking (int fd, int should_block)
+void serialPort::set_blocking(int fd, int should_block)
 {
         struct termios tty;
         memset (&tty, 0, sizeof tty);
         if (tcgetattr (fd, &tty) != 0)
         {
-                error_message ("error %d from tggetattr", errno);
+                //error_message ("error %d from tggetattr", errno);
                 return;
         }
 
         tty.c_cc[VMIN]  = should_block ? 1 : 0;
         tty.c_cc[VTIME] = 5;            // 0.5 seconds read timeout
 
-        if (tcsetattr (fd, TCSANOW, &tty) != 0)
-                error_message ("error %d setting term attributes", errno);
+        if (tcsetattr (fd, TCSANOW, &tty) != 0){
+	}
+                //error_message ("error %d setting term attributes", errno);
 }
 
 void serialPort::updateArduino(){
         //Write our message first
         char startChar[1] = {'<'};
         char endChar[1] = {'>'};
-        signed char leftMotor = (signed char)(leftMotorSpeed);
-        signed char rightMotor = (signed char)(rightMotorSpeed);
+        signed char leftMotor = (signed char)(leftDriveSpeed);
+        signed char rightMotor = (signed char)(rightDriveSpeed);
         unsigned char gate = (unsigned char)(gatePos);
         unsigned char flag = (unsigned char)(flagPos);
         unsigned char clearState = (unsigned char)(clearButtonState);
         string newText = LCDtext;
         newText.resize(32 , ' ');
         unsigned char checkSum = leftMotor + rightMotor + gate + flag + clearState + 1; 
-        char data[7] = {startChar, leftMotor, rightMotor, gate, flag, clearState, checkSum}
-        write (fd, data, 7);           // send 7 data characters
+        signed char sdata[2] = {leftMotor, rightMotor};
+	unsigned char usdata[4] = {gate, flag, clearState, checkSum};
+	if (DEBUG_TEXT){
+		cout << "Sending to Arduino: " << startChar[0] << (int)leftMotor << "," << (int)rightMotor << "," << (int)gate << ","
+		     << (int)flag << "," << (int)clearState << "," << (int)clearState << ","  << newText  << endChar[0] << endl;
+		cout << "Total bytes: " << (6+newText.length()) << endl;
+	}
+	write (fd, startChar, 1);
+        write (fd, sdata, 2);           // send 7 data characters
+	write (fd, usdata, 4);
         write (fd, newText.c_str(), newText.length());
         write (fd, endChar, 1);
         usleep ((38 + 25) * 100);             // sleep enough to transmit the 7 plus
+
         //Listen for a response
-        char buf [50];
-        string n = read (fd, buf, sizeof buf);  // read up to 100 characters if ready to read
-        string delim = ","; //Pick out 6th value to find buttonState
-        auto start = 0U;
+        char buf [60];
+	read (fd, buf, sizeof buf);  // read up to 100 characters if ready to read
+	cout << "read" << endl;
+        string received(buf,sizeof buf);
+	string delim = ","; //Pick out 6th value to find buttonState
+        auto start = '<';
         auto end = received.find(delim);
-        int value = 0;
+        std::cout << "end: " << end << std::endl;
+	int value = 0;
+	if (received.find(start) != string::npos){
         if (DEBUG_TEXT){
                 cout << "Recieved from Arduino: ";
+		char qqq[50];
+		memcpy(qqq,received.c_str(),60);
+		for(int i = 0; i <60; i++) cout << (int)qqq[i] << " ";
+		cout << endl;
+		
         }
         while (end != string::npos){
                 value++;
@@ -143,6 +167,18 @@ void serialPort::updateArduino(){
         if (DEBUG_TEXT){
                 cout << endl;
         }
+	}
+	else{
+		if (DEBUG_TEXT){
+			cout << "Nothing intelligible received from Arduino yet" << endl;
+			cout << "Recieved from Arduino: ";
+               		char qqq[50];
+                	memcpy(qqq,received.c_str(),60);
+                	for(int i = 0; i <60; i++) cout << (int)qqq[i] << " ";
+                	cout << endl;
+		}
+
+	}
 }
 
 void serialPort::turnLeft(int speed){
