@@ -11,7 +11,7 @@ public:
 	static constexpr double CameraHeight = .22225;
 	static constexpr double CameraAngle = 30.0 / 180.0 * 3.14159265;		//Degrees; angle the camera circuit board makes with the vertical.
 
-	//Found using OpenCV's calibrate.py. Units are in meters.
+	//Found using OpenCV's calibrate.py. Units are in meters. Assumes a resolution of 640 x 480.
 	static const cv::Matx33d cameraMatrix;
 
 	static cv::Point2d getPosIfHeight(cv::Point imagePos, double height);

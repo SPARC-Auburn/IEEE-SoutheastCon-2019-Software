@@ -15,16 +15,9 @@ Point2d Vision3D::getPosIfHeight(Point imagePos, double height) {
 				     0, cos(CameraAngle), sin(CameraAngle),
 				     0, -sin(CameraAngle), cos(CameraAngle)};		 //Rotate clockwise about the x if the positive x axis is facing you
 	Point3d dir = rotationMat * (cameraMatrix.inv() * Point3d(imagePos.x, imagePos.y, 1));
-	if(dir.y <= 0.0) {
-		
-	}
 	double t = (-height + CameraHeight) / dir.y;
 	Point2d output;
 	output.x = t * dir.x;
 	output.y = t * dir.z;
-	Point3d testResult = cameraMatrix.inv() * Point3d(imagePos.x, imagePos.y, 1);
-	ROS_INFO("Before rotation: %f, %f, %f", testResult.x, testResult.y, testResult.z);
-	ROS_INFO("Dir: %f, %f, %f", dir.x, dir.y, dir.z);
-	ROS_INFO("Output: %f, %f", output.x, output.y);
 	return output;
 }
