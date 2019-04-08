@@ -149,7 +149,8 @@ string serialPort::updateArduino() {
 	start = end + delim.length();
 	end = received.find(delim, start);
   }
-  cout << endl;
+  if(DEBUG_TEXT)
+    cout << endl;
   return buttonState;
 }
 
