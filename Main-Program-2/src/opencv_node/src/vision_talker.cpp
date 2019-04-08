@@ -39,12 +39,19 @@ const double DEBRIS_MIN_W2H = 0.75;
 const double DEBRIS_MAX_W2H = 1.5;
 const double CORNER_MIN_W2H  = .1;
 const double CORNER_MAX_W2H = .333;
-const double DEBRIS_MIN_PERCENT_FILLED = 0.65;
+const double DEBRIS_MIN_PERCENT_FILLED = 0.70;
 const double DISTANCE_MULTIPLIER = 26.95;
 
 // Common Namespaces
 using namespace cv;
 using namespace std;
+
+enum Colors {
+	Red,
+	Blue,
+	Yellow,
+	Green
+};
 
 // Debris Object Namespace
 namespace IEEE_VISION
@@ -97,14 +104,16 @@ vector<DebrisObject> objectProperties;
 struct VisionHandle
 {
 	raspicam::RaspiCam_Cv Camera;
-	Mat image, hsv, threshed;
+	Mat image, hsv, threshed, threshedSecondary;
 
   private:
 	vector<vector<Point>> contours;
 	vector<Vec4i> hierarchy;
 	Mat temp;
-	Scalar lowerThreshes[4] = {Scalar(0, 100, 20), Scalar(95, 100, 20), Scalar(15, 100, 20), Scalar(45, 100, 20)};
-	Scalar upperThreshes[4] = {Scalar(15, 255, 255), Scalar(110, 256, 256), Scalar(35, 256, 256), Scalar(60, 256, 256)};
+	Scalar lowerThreshes[4] = {Scalar(0, 98, 105), Scalar(89, 56, 100), Scalar(23, 80, 100), Scalar(37, 44, 100)};
+	Scalar upperThreshes[4] = {Scalar(9, 255, 255), Scalar(117, 255, 255), Scalar(35, 255, 255), Scalar(77, 255, 255)};
+	Scalar redSecondaryLower{170, 42, 52};
+	Scalar redSecondaryUpper{180, 255, 255};
 	Scalar colors[4] = {Scalar(0, 0, 255), Scalar(255, 0, 0), Scalar(0, 255, 255), Scalar(0, 255, 0)};
 	String labels[4] = {"Red", "Blue", "Yellow", "Green"};
 	Mat kernel = getStructuringElement(MORPH_CROSS, Size(3, 3));
@@ -178,6 +187,10 @@ struct VisionHandle
 		hierarchy.clear();
 		clock_t begin = clock();
 		inRange(hsv, lowerThreshes[index], upperThreshes[index], threshed);
+		if(index == Red) {
+			inRange(hsv, redSecondaryLower, redSecondaryUpper, threshedSecondary);
+			threshed |= threshedSecondary;
+		}
 		dilate(threshed, threshed, kernel);
 		findContours(threshed, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE, Point(0, 0));
 		if (VISION_DEBUG_TEXT)
@@ -214,9 +227,10 @@ struct VisionHandle
 				}
 				else if (w2h < DEBRIS_MAX_W2H && w2h > DEBRIS_MIN_W2H && boundRect.y != 0) {		//Checking the boundRect prevents detection of a corner that is mostly cut off to where it is square
 					objectType = DebrisObject::ObjectType::Debris;
-					position = Vision3D::getPosIfHeight((boundRect.br() + boundRect.tl()) / 2, Vision3D::AvgDebrisHeight);		//It is assumed that the center of the boundRect goes through the centroid of the object
+					position = Vision3D::getPosIfHeight((boundRect.br() + boundRect.tl()) / 2, Vision3D::AvgDebrisHeight / 2);		//It is assumed that the center of the boundRect goes through the centroid of the object
 					if (VISION_DEBUG_IMAGE)
 						rectangle(image, boundRect.tl(), boundRect.br(), colors[index], 4, 8, 0);
+						//drawContours(image, contours, i, Scalar(0, 0, 0));
 				}
 				else {
 					RotatedRect rotated = minAreaRect(contours[i]);
