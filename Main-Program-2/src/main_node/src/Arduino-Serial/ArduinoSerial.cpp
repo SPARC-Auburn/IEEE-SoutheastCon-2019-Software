@@ -106,7 +106,7 @@ string serialPort::updateArduino() {
   char endChar[1] = {'>'};
   if (DEBUG_TEXT){
     cout << "Sending to Arduino: " << startChar[0] << (int)char1 << "," << (int)char2 << "," << (int)char3  << "," << (int)char4 << "," << (int)char6 << ",";
-    //cout << (int)char5 << ","  << newText << "," << endChar[0] <<  endl;
+    cout << (int)char5 << ","  << newText << "," << endChar[0] <<  endl;
    // cout << "Total bytes: " << (6+newText.length()) << endl;
   }
   ssize_t bytes_written = ::write(fileHandle, startChar, 1); 
@@ -150,7 +150,7 @@ string serialPort::updateArduino() {
 	end = received.find(delim, start);
   }
   if(DEBUG_TEXT)
-    //cout << endl;
+    cout << endl;
   return buttonState;
 }
 
