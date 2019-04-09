@@ -85,31 +85,31 @@ void visionCallback(const opencv_node::vision_msg::ConstPtr &msg)
   }  
 }
 
-void testROSGoal(){
+void moveFwdOneMeter(){
 	//MOVE BASE CODE//
 
-        //MoveBaseClient ac("move_base", true); //Tell the client we want to spin a thread by default
-        // while(!ac.waitForServer(ros::Duration(5.0))){
-          //      ROS_INFO("Waiting for the move_base action server to come up");
-       // }
+        MoveBaseClient ac("move_base", true); //Tell the client we want to spin a thread by default
+         while(!ac.waitForServer(ros::Duration(5.0))){
+                ROS_INFO("Waiting for the move_base action server to come up");
+        }
 
-        //move_base_msgs::MoveBaseGoal moveFwd;
+        move_base_msgs::MoveBaseGoal moveFwd;
 	
-	//moveFwd.target_pose.header.frame_id = "base_footprint";
-        //moveFwd.target_pose.header.stamp = ros::Time::now();
+	moveFwd.target_pose.header.frame_id = "base_footprint";
+        moveFwd.target_pose.header.stamp = ros::Time::now();
 
-        //moveFwd.target_pose.pose.orientation.x = 1.0; //move 1 meter forward
-        //moveFwd.target_pose.pose.orientation.w = 1.0;
+        moveFwd.target_pose.pose.orientation.x = 1.0; //move 1 meter forward
+        moveFwd.target_pose.pose.orientation.w = 1.0;
 
         ROS_INFO("Sending goal");
-	//ac.sendGoal(moveFwd);
+	ac.sendGoal(moveFwd);
 
-	//ac.waitForResult();
+	ac.waitForResult();
 
-	//if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
-		//ROS_INFO("WOOP WOOP YOU DID IT");
-	//else
-		//ROS_INFO("You screwed up boi");
+	if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
+		ROS_INFO("WOOP WOOP YOU DID IT");
+	else
+		ROS_INFO("You screwed up boi");
         /////////////////
 
 }
@@ -178,6 +178,10 @@ int main(int argc, char **argv)
 	//ros::spinOnce();
 	//while(arduino.updateArduino()!="1"){sleep(1);}
 	//testMovement();
+
+
+	//moveFwdOneMeter;
+
 	int count = 0;
 	while(ros::ok()) {
 		/*std_msgs::String msg;
