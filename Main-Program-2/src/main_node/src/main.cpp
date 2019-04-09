@@ -185,7 +185,7 @@ int main(int argc, char **argv)
   ros::Subscriber lsub = n.subscribe<std_msgs::Float32>("rmotor_cmd", 1,lin);
   ros::Subscriber rsub = n.subscribe<std_msgs::Float32>("lmotor_cmd", 1,rin);
 
-  initPose = n.advertise<geometry_msgs::PoseWithCovarianceStamped>("initialpose",1,true);
+  //initPose = n.advertise<geometry_msgs::PoseWithCovarianceStamped>("initialpose",1,true);
 
   cout << "\033[1;34m-------------------------------------------------------------------\033[0m" << endl;
   cout << "\033[1;34m   .:: ::    .:::::::          .:         .:::::::          .::    \033[0m" << endl;
@@ -205,7 +205,7 @@ int main(int argc, char **argv)
 	// ros::Subscriber arduinoReceive = n.subscribe("arduinoPub", 500, arduinoCallback);
 	ros::Rate loop_rate(40);	//1 Hz
 
-
+  /*
 	geometry_msgs::PoseWithCovarianceStamped ip;
 	ip.header.frame_id = "map";
 	ros::Time current_time = ros::Time::now();
@@ -217,6 +217,7 @@ int main(int argc, char **argv)
 	ip.pose.covariance[7] = 1e-3;
 	ip.pose.covariance[35] = 1e-3;
 	initPose.publish(ip);
+  */
 	int count = 0;
 	while(ros::ok()) {
 		//TEST #0 - Move. Period.
@@ -250,8 +251,8 @@ int main(int argc, char **argv)
 					
 		
 		std_msgs::String msg;
-		msg.data = std::string("Hello ");
-		msg.data += std::to_string(count);
+		//msg.data = std::string("Hello ");
+		//msg.data += std::to_string(count);
 		ROS_INFO_STREAM(msg.data);
 		switch(arduino.getMode()){
 			case 0: arduino.updateLCD("Red");\
