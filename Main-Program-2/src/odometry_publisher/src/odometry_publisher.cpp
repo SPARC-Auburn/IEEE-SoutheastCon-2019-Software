@@ -58,7 +58,7 @@ int main(int argc, char** argv){
   ros::Publisher odom_pub = n.advertise<nav_msgs::Odometry>("fuck/odom", 1);
   ros::Subscriber lsub = n.subscribe<std_msgs::Int32>("lwheel",1,lin);
   ros::Subscriber rsub = n.subscribe<std_msgs::Int32>("rwheel",1,rin);
-  tf::TransformBroadcaster odom_broadcaster;
+//  tf::TransformBroadcaster odom_broadcaster;
   odomIntegral odomI(0.1730756,0.0379095);//base and radius in meters. TODO get accurate values here
 
 

@@ -62,7 +62,7 @@ class PidVelocity():
         self.out_min = rospy.get_param('~out_min',-255)
         self.out_max = rospy.get_param('~out_max',255)
         self.rate = rospy.get_param('~rate',30)
-        self.rolling_pts = rospy.get_param('~rolling_pts',2)
+        self.max_change = rospy.get_param('~max_change',0.666666)
         self.timeout_ticks = rospy.get_param('~timeout_ticks',4)
         self.ticks_per_meter = rospy.get_param('ticks_meter', 20)
         self.vel_threshold = rospy.get_param('~vel_threshold', 0.001)
@@ -70,7 +70,6 @@ class PidVelocity():
         self.encoder_max = rospy.get_param('encoder_max', 32768)
         self.encoder_low_wrap = rospy.get_param('wheel_low_wrap', (self.encoder_max - self.encoder_min) * 0.3 + self.encoder_min )
         self.encoder_high_wrap = rospy.get_param('wheel_high_wrap', (self.encoder_max - self.encoder_min) * 0.7 + self.encoder_min )
-        self.prev_vel = [0.0] * self.rolling_pts
         self.wheel_latest = 0.0
         self.prev_pid_time = rospy.Time.now()
         rospy.logdebug("%s got Kp:%0.3f Ki:%0.3f Kd:%0.3f tpm:%0.3f" % (self.nodename, self.Kp, self.Ki, self.Kd, self.ticks_per_meter))
@@ -98,7 +97,6 @@ class PidVelocity():
     def spinOnce(self):
     #####################################################
         self.previous_error = 0.0
-        self.prev_vel = [0.0] * self.rolling_pts
         self.integral = 0.0
         self.error = 0.0
         self.derivative = 0.0 
@@ -134,7 +132,7 @@ class PidVelocity():
     #####################################################
         self.vel = self.vel * 0.8 + 0.2 * val
     def updateDerv(self,val):
-        self.derivative = val * 0.6 + self.derivative * 0.4
+        self.derivative = val * 0.8 + self.derivative * 0.2
     #####################################################
     def doPid(self):
     #####################################################
@@ -148,11 +146,11 @@ class PidVelocity():
         self.updateDerv((self.error - self.previous_error) / pid_dt)
         self.previous_error = self.error
     
-        self.motor += (self.Kp * self.error) + (self.Ki * self.integral) + (self.Kd * self.derivative)
+        self.motor += max(min((self.Kp * self.error) + (self.Ki * self.integral) + (self.Kd * self.derivative),self.max_change),-self.max_change)
         self.motor = min(max(self.motor,self.out_min),self.out_max)
       
-        if (self.target == 0):
-            self.motor = 0
+        #if (self.target == 0):
+        #    self.motor = 0
     
         rospy.loginfo("vel:%0.2f tar:%0.2f err:%0.2f int:%0.2f der:%0.2f ## motor:%d " % 
                       (self.vel, self.target, self.error, self.integral, self.derivative, self.motor))
