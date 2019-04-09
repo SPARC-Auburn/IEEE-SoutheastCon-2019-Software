@@ -321,11 +321,13 @@ struct VisionHandle
 		  opencv_node::object data;
 
 		  for(std::size_t i=0; i<objectProperties.size(); ++i){
-			data.x_position = objectProperties[i].position.x;
-			data.y_position = objectProperties[i].position.y;
-			data.color_index = objectProperties[i].colorIndex;
-			data.object_type = (int)objectProperties[i].type;
-			msg.objects.push_back(data);
+			if (objectProperties[i].type == DebrisObject::ObjectType::Debris ){
+				data.x_position = objectProperties[i].position.x;
+				data.y_position = objectProperties[i].position.y;
+				data.color_index = objectProperties[i].colorIndex;
+				data.object_type = (int)objectProperties[i].type;
+				msg.objects.push_back(data);
+			}
 		  } 
 
 		  ROS_INFO("%s", "Sending object properties2");

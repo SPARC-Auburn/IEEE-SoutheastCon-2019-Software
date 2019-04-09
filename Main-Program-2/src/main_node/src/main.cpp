@@ -75,14 +75,33 @@ void lin(const std_msgs::Float32ConstPtr &msg){
 	leftSpeed = (int)msg->data;
 }
 
+double objDistance(const opencv_node::object& obj) {
+	return sqrt(pow(obj.x_position, 2) + pow(obj.y_position, 2));
+}
+
 void visionCallback(const opencv_node::vision_msg::ConstPtr &msg)
 {
-  ROS_INFO("Main>>>Number of Objects: %d", msg->objects.size());
-  for (int i = 0; i < msg->objects.size(); ++i)
-  {
-    const opencv_node::object &prop = msg->objects[i];
-    ROS_INFO_STREAM("Position: " << prop.x_position << "," << prop.y_position << " Color:" << prop.color_index << " Object Type:" << prop.object_type);
-  }  
+	ROS_INFO("Main>>>Number of Objects: %d", msg->objects.size());
+	int desiredColor = 0;
+	double minDistance = 0.0;
+	int currentMin = -1;
+	for (int i = 0; i < msg->objects.size(); ++i)
+	{
+		const opencv_node::object &prop = msg->objects[i];
+		ROS_INFO_STREAM("Position: " << prop.x_position << "," << prop.y_position << " Color:" << prop.color_index << " Object Type:" << prop.object_type);
+		if(prop.color_index == desiredColor && (currentMin == -1 || objDistance(prop) < minDistance)) {
+			currentMin = i;
+			minDistance = objDistance(prop);
+		}
+	}
+	//auto closest = min_element(msg->objects.begin(),msg->objects.end(),[](const opencv_node::object &first,const opencv_node::object &second){
+		//return objDistance(first) < objDistance(second);
+	//});
+	if(currentMin != -1) {
+		ROS_INFO_STREAM("Selected Object >>> Position: " << msg->objects[currentMin].x_position << "," << msg->objects[currentMin].y_position << " Color:" << msg->objects[currentMin].color_index << " Object Type:" << msg->objects[currentMin].object_type);
+	}
+	
+	  
 }
 
 void moveFwdOneMeter(){
