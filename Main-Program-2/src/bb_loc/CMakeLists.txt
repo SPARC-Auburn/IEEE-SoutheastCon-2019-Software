@@ -1,59 +1,41 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(bb_al)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF )
 
-## Compile as C++11, supported in ROS Kinetic and newer
-add_compile_options(-std=c++11)
+find_package(catkin REQUIRED COMPONENTS geometry_msgs sensor_msgs roscpp tf)
 
-## Find catkin macros and libraries
-## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
-## is used, also find other catkin packages
-find_package(catkin REQUIRED COMPONENTS
-  roscpp
-  geometry_msgs
-  sensor_msgs
-)
+catkin_package()
+find_package(Boost REQUIRED)
 
-## System dependencies are found with CMake's conventions
-# find_package(Boost REQUIRED COMPONENTS system)
+IF(Boost_FOUND)
+  INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
+  LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
+ENDIF(Boost_FOUND)
+find_package(OpenCV REQUIRED)
 
-################################################
-## Declare ROS messages, services and actions ##
-################################################
+include_directories(${catkin_INCLUDE_DIRS})
+# Build the executable
+add_executable(bb_al src/main.cpp)
+# Add a build order dependency on nav_msgs
+# This ensures that nav_msgs' msg headers are built before your executable
+if(sensor_msgs_EXPORTED_TARGETS)
+  add_dependencies(bb_al ${sensor_msgs_EXPORTED_TARGETS})
+endif()
+if(geometry_msgs_EXPORTED_TARGETS)
+  add_dependencies(bb_al ${geometry_msgs_EXPORTED_TARGETS})
+endif()
 
-################################################
-## Declare ROS dynamic reconfigure parameters ##
-################################################
+# Link against the catkin libraries
+target_link_libraries(bb_al ${catkin_LIBRARIES} ${Boost_LIBRARIES} ${OpenCV_LIBS})
 
-###################################
-## catkin specific configuration ##
-###################################
-catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES main_node
-  CATKIN_DEPENDS roscpp geometry_msgs sensor_msgs 
-#  DEPENDS system_lib
-)
+# Install the executable
+install(TARGETS bb_al
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
-###########
-## Build ##
-###########
 
-## Specify additional locations of header files
-## Your package locations should be listed before other locations
-include_directories(
-# include
-  ${catkin_INCLUDE_DIRS}
-)
 
-#############
-## Install ##
-#############
-
-#############
-## Testing ##
-#############
-
-add_executable(bb_al src/main.cpp )
-
-target_link_libraries(bb_al ${catkin_LIBRARIES})
 
