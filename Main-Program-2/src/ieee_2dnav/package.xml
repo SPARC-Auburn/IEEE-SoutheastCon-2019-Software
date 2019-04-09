@@ -52,15 +52,12 @@
   <build_depend>move_base</build_depend>
   <build_depend>odometry_publisher</build_depend>
   <build_depend>razor_imu_9dof</build_depend>
-  <build_depend>ydlidar-master</build_depend>
   <build_export_depend>move_base</build_export_depend>
   <build_export_depend>odometry_publisher</build_export_depend>
   <build_export_depend>razor_imu_9dof</build_export_depend>
-  <build_export_depend>ydlidar-master</build_export_depend>
   <exec_depend>move_base</exec_depend>
   <exec_depend>odometry_publisher</exec_depend>
   <exec_depend>razor_imu_9dof</exec_depend>
-  <exec_depend>ydlidar-master</exec_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->
