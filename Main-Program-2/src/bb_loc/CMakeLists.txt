@@ -53,7 +53,7 @@ include_directories(
 ## Testing ##
 #############
 
-add_executable(main src/main.cpp )
+add_executable(bb_al src/main.cpp )
 
-target_link_libraries(main ${catkin_LIBRARIES})
+target_link_libraries(bb_al ${catkin_LIBRARIES})
 

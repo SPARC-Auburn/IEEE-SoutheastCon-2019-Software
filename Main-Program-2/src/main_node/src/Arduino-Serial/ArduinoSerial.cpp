@@ -159,7 +159,6 @@ void serialPort::turnLeft(int speed){
 		throw out_of_range("Motor speed must be between 0 and 127.");
   leftDriveSpeed = speed;
   rightDriveSpeed = -speed;
-  updateArduino();
 }
 
 void serialPort::turnRight(int speed){
@@ -167,7 +166,6 @@ void serialPort::turnRight(int speed){
 		throw out_of_range("Motor speed must be between 0 and 127.");
   leftDriveSpeed = -speed;
   rightDriveSpeed = speed;
-  updateArduino();
 }
 
 void serialPort::goForward(int speed){
@@ -175,7 +173,6 @@ void serialPort::goForward(int speed){
 		throw out_of_range("Motor speed must be between 0 and 127.");
   leftDriveSpeed = -speed;
   rightDriveSpeed = -speed;
-  updateArduino();
 }
 
 void serialPort::goBackward(int speed){
@@ -183,47 +180,41 @@ void serialPort::goBackward(int speed){
   		throw out_of_range("Motor speed must be between 0 and 127.");
   leftDriveSpeed = speed;
   rightDriveSpeed = speed;
-  updateArduino();
 }
 void serialPort::drive(int left, int right){
   leftDriveSpeed = left;
   rightDriveSpeed = right;
-  updateArduino();
 }
 void serialPort::stopMotors(){
   leftDriveSpeed = 0;
   rightDriveSpeed = 0;
-  updateArduino();
 }
 
 void serialPort::moveGate(int pos){
   if(pos < 0 || pos > 180)
 		throw out_of_range("Servo position must be between 0 and 180.");
   gatePos = pos;
-  updateArduino();
 }
 
 void serialPort::moveFlag(int pos){
   if(pos < 0 || pos > 180)
 		throw out_of_range("Servo position must be between 0 and 180.");
   flagPos = pos;
-  updateArduino();
 }
 
 void serialPort::updateLCD(string text){
   LCDtext = text;
-  cout << "New LCD text: " << text << endl;
-  updateArduino();
+  if(DEBUG_TEXT){
+ 	 cout << "New LCD text: " << text << endl;
+  }
 }
 
 int serialPort::getMode(){
-	updateArduino();
 	return stoi(mode);
 }
 
 int serialPort::getButtonState(){
 	int currentState = 0;
-	updateArduino();
 	currentState = stoi(buttonState);
 	if (buttonState == "1"){
 		clearButtonState = 1;
@@ -239,5 +230,6 @@ int serialPort::getButtonState(){
 serialPort::~serialPort() {
   cout << "Disconnecting from Arduino..." << endl;
   updateLCD("Disconnected..");
+  updateArduino();
   close(fileHandle);
 }

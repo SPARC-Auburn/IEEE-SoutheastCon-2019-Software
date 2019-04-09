@@ -10,8 +10,8 @@
 #include <sensor_msgs/LaserScan.h>
 
 using namespace std;
-void laserCallback(const sensor_msgs::LaserScan &msg){
-	cout << "Angle min:" << msg->angle_min << endl;
+void laserCallback(const sensor_msgs::LaserScanConstPtr &msg){
+  cout << "Angle min:" << msg->angle_min << endl;
   cout << "Angle max:" << msg->angle_max << endl;
   cout << "Angle inc:" << msg->angle_increment << endl;
   cout << "Time inc: " << msg->time_increment << endl;

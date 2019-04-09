@@ -98,13 +98,13 @@ void moveFwdOneMeter(){
 	moveFwd.target_pose.header.frame_id = "base_footprint";
         moveFwd.target_pose.header.stamp = ros::Time::now();
 
-        moveFwd.target_pose.pose.orientation.x = 1.0; //move 1 meter forward
+        moveFwd.target_pose.pose.position.x = 1.0; //move 1 meter forward
         moveFwd.target_pose.pose.orientation.w = 1.0;
 
         ROS_INFO("Sending goal");
 	ac.sendGoal(moveFwd);
 
-	ac.waitForResult();
+	//ac.waitForResult();
 
 	if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
 		ROS_INFO("WOOP WOOP YOU DID IT");
@@ -219,6 +219,7 @@ int main(int argc, char **argv)
 	initPose.publish(ip);
 	*/
 	int count = 0;
+	bool done = 0;
 	while(ros::ok()) {
 		//TEST #0 - Move. Period.
 	        //testMovement();
@@ -253,9 +254,10 @@ int main(int argc, char **argv)
 		std_msgs::String msg;
 		msg.data = std::string("Hello ");
 		msg.data += std::to_string(count);
-		//ROS_INFO_STREAM(msg.data);
 		switch(arduino.getMode()){
-			case 0: arduino.updateLCD("Red");\
+			case 0: arduino.updateLCD("Red");
+				//moveFwdOneMeter();
+				ROS_INFO_STREAM(msg.data);
 				break;
 			case 1: arduino.updateLCD("Green");
 				break;
@@ -267,6 +269,7 @@ int main(int argc, char **argv)
 		}
 		ros::spinOnce();
 		arduino.drive(rightSpeed,leftSpeed);
+		arduino.updateArduino();
 		loop_rate.sleep();
 		++count;
 	}

@@ -3,9 +3,9 @@ raytrace_range: 3.0
 footprint: [[0.1134, 0.1134], [0.1134, -0.1134], [-0.1134,-0.1134], [-0.1134, 0.1134]]
 #robot_radius: ir_of_robot
 inflation_radius: 0.2
-
+transform_tolerance: 1
 
 observation_sources: laser_scan_sensor
 
-laser_scan_sensor: {sensor_frame: scan_frame, data_type: LaserScan, topic: /scan, marking: true, clearing: true}
+laser_scan_sensor: {sensor_frame: base_footprint, data_type: LaserScan, topic: /scan, marking: true, clearing: true}
 
