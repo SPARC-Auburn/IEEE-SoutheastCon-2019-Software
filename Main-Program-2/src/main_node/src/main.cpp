@@ -81,7 +81,7 @@ void visionCallback(const opencv_node::vision_msg::ConstPtr &msg)
   for (int i = 0; i < msg->objects.size(); ++i)
   {
     const opencv_node::object &prop = msg->objects[i];
-    ROS_INFO_STREAM("Position: " << prop.x_position << "," << prop.y_position);
+    ROS_INFO_STREAM("Position: " << prop.x_position << "," << prop.y_position << " Color:" << prop.color_index << " Object Type:" << prop.object_type);
   }  
 }
 

@@ -137,7 +137,7 @@ struct VisionHandle
 		Camera.release();
 	}
 
-	// Takes a picture, flips it, saves it in image, and converts it to HSV
+	// Takes a picture, saves it in image, and converts it to HSV
 	void takePicture()
 	{
 		if (VISION_DEBUG_TEXT){
@@ -146,8 +146,6 @@ struct VisionHandle
 		}
 		Camera.grab();
 		Camera.retrieve(image);
-		//Camera.retrieve(temp);
-		//flip(temp, image, -1); // flip the image 180 degrees
 		cvtColor(image, hsv, COLOR_BGR2HSV);
 		resolution = image.size();
 	}
@@ -323,10 +321,10 @@ struct VisionHandle
 		  opencv_node::object data;
 
 		  for(std::size_t i=0; i<objectProperties.size(); ++i){
-			data.x_position = objectProperties[i].center.x;
-			data.y_position = objectProperties[i].center.y;
-			data.width = objectProperties[i].width;
-			data.height = objectProperties[i].height;
+			data.x_position = objectProperties[i].position.x;
+			data.y_position = objectProperties[i].position.y;
+			data.color_index = objectProperties[i].colorIndex;
+			data.object_type = (int)objectProperties[i].type;
 			msg.objects.push_back(data);
 		  } 
 

@@ -24,7 +24,7 @@ Point2d Vision3D::getPosIfHeight(Point imagePos, double height) {
 	Point3d dir = rotationMat * (cameraMatrix.inv() * Point3d(undistorted[0].x, undistorted[0].y, 1));
 	double t = (-height + CameraHeight) / dir.y;
 	Point2d output;
-	output.x = t * dir.x;
-	output.y = t * dir.z;
+	output.x = t * dir.z + 0.1143;
+	output.y = - t * dir.x;
 	return output;
 }
