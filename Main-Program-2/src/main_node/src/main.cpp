@@ -11,6 +11,8 @@
 #include "opencv_node/vision_msg.h"
 #include <geometry_msgs/PoseWithCovarianceStamped.h>
 #include "opencv_node/object.h"
+#include <move_base_msgs/MoveBaseAction.h>
+#include <actionlib/client/simple_action_client.h>
 
 //#include "sensor_msgs/Imu.h"
 #include "Arduino-Serial/ArduinoSerial.h"
@@ -20,6 +22,7 @@ using namespace std;
 serialPort arduino("/dev/serial/by-id/usb-1a86_USB2.0-Serial-if00-port0");
 
 ros::Publisher initPose;
+typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
 //arduino.setupConnection();
 int rightSpeed=0,leftSpeed=0;
 void testMovement()
@@ -82,7 +85,34 @@ void visionCallback(const opencv_node::vision_msg::ConstPtr &msg)
   }  
 }
 
+void testROSGoal(){
+	//MOVE BASE CODE//
 
+        //MoveBaseClient ac("move_base", true); //Tell the client we want to spin a thread by default
+        // while(!ac.waitForServer(ros::Duration(5.0))){
+          //      ROS_INFO("Waiting for the move_base action server to come up");
+       // }
+
+        //move_base_msgs::MoveBaseGoal moveFwd;
+	
+	//moveFwd.target_pose.header.frame_id = "base_footprint";
+        //moveFwd.target_pose.header.stamp = ros::Time::now();
+
+        //moveFwd.target_pose.pose.orientation.x = 1.0; //move 1 meter forward
+        //moveFwd.target_pose.pose.orientation.w = 1.0;
+
+        ROS_INFO("Sending goal");
+	//ac.sendGoal(moveFwd);
+
+	//ac.waitForResult();
+
+	//if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
+		//ROS_INFO("WOOP WOOP YOU DID IT");
+	//else
+		//ROS_INFO("You screwed up boi");
+        /////////////////
+
+}
 
 // void arduinoCallback(const std_msgs::String& msg) {
 // 	ROS_INFO_STREAM(msg << '\n');
@@ -100,6 +130,7 @@ void visionCallback(const opencv_node::vision_msg::ConstPtr &msg)
   //ROS_INFO("Main>>>Angular Velocity: x(%f),y(%f),z(%f)", gyro_x,gyro_y,gyro_z);
   ROS_INFO("Main>>>Orientation: x(%f),y(%f),z(%f)", orientation_x, orientation_y, orientation_z);
 }*/
+
 
 int main(int argc, char **argv)
 {
@@ -143,6 +174,7 @@ int main(int argc, char **argv)
 	ip.pose.covariance[7] = 1e-3;
 	ip.pose.covariance[35] = 1e-3;
 	initPose.publish(ip);
+	/////////////////
 	//ros::spinOnce();
 	//while(arduino.updateArduino()!="1"){sleep(1);}
 	//testMovement();
