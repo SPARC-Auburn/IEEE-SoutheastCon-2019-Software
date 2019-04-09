@@ -1,5 +1,5 @@
 import rospy
-from geometry_msgs import PoseWithCovarianceStamped
+from geometry_msgs.msg import Pose, PoseWithCovarianceStamped
 import struct
 def talker():
     while not rospy.is_shutdown(): 
