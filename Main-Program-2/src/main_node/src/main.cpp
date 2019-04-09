@@ -21,7 +21,7 @@ using namespace std;
 
 serialPort arduino("/dev/serial/by-id/usb-1a86_USB2.0-Serial-if00-port0");
 
-ros::Publisher initPose;
+//ros::Publisher initPose;
 typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
 //arduino.setupConnection();
 int rightSpeed=0,leftSpeed=0;
@@ -75,33 +75,14 @@ void lin(const std_msgs::Float32ConstPtr &msg){
 	leftSpeed = (int)msg->data;
 }
 
-double objDistance(const opencv_node::object& obj) {
-	return sqrt(pow(obj.x_position, 2) + pow(obj.y_position, 2));
-}
-
 void visionCallback(const opencv_node::vision_msg::ConstPtr &msg)
 {
-	ROS_INFO("Main>>>Number of Objects: %d", msg->objects.size());
-	int desiredColor = 0;
-	double minDistance = 0.0;
-	int currentMin = -1;
-	for (int i = 0; i < msg->objects.size(); ++i)
-	{
-		const opencv_node::object &prop = msg->objects[i];
-		ROS_INFO_STREAM("Position: " << prop.x_position << "," << prop.y_position << " Color:" << prop.color_index << " Object Type:" << prop.object_type);
-		if(prop.color_index == desiredColor && (currentMin == -1 || objDistance(prop) < minDistance)) {
-			currentMin = i;
-			minDistance = objDistance(prop);
-		}
-	}
-	//auto closest = min_element(msg->objects.begin(),msg->objects.end(),[](const opencv_node::object &first,const opencv_node::object &second){
-		//return objDistance(first) < objDistance(second);
-	//});
-	if(currentMin != -1) {
-		ROS_INFO_STREAM("Selected Object >>> Position: " << msg->objects[currentMin].x_position << "," << msg->objects[currentMin].y_position << " Color:" << msg->objects[currentMin].color_index << " Object Type:" << msg->objects[currentMin].object_type);
-	}
-	
-	  
+  ROS_INFO("Main>>>Number of Objects: %d", msg->objects.size());
+  for (int i = 0; i < msg->objects.size(); ++i)
+  {
+    const opencv_node::object &prop = msg->objects[i];
+    ROS_INFO_STREAM("Position: " << prop.x_position << "," << prop.y_position << " Color:" << prop.color_index << " Object Type:" << prop.object_type);
+  }  
 }
 
 void moveFwdOneMeter(){
@@ -204,7 +185,7 @@ int main(int argc, char **argv)
   ros::Subscriber lsub = n.subscribe<std_msgs::Float32>("rmotor_cmd", 1,lin);
   ros::Subscriber rsub = n.subscribe<std_msgs::Float32>("lmotor_cmd", 1,rin);
 
-  initPose = n.advertise<geometry_msgs::PoseWithCovarianceStamped>("initialpose",1,true);
+ // initPose = n.advertise<geometry_msgs::PoseWithCovarianceStamped>("initialpose",1,true);
 
   cout << "\033[1;34m-------------------------------------------------------------------\033[0m" << endl;
   cout << "\033[1;34m   .:: ::    .:::::::          .:         .:::::::          .::    \033[0m" << endl;
@@ -225,10 +206,10 @@ int main(int argc, char **argv)
 	ros::Rate loop_rate(40);	//1 Hz
 
 
-	geometry_msgs::PoseWithCovarianceStamped ip;
-	ip.header.frame_id = "map";
+	//geometry_msgs::PoseWithCovarianceStamped ip;
+	//ip.header.frame_id = "map";
 	ros::Time current_time = ros::Time::now();
-	ip.header.stamp = current_time;
+	/*ip.header.stamp = current_time;
 	ip.pose.pose.position.x = 0.1143;
 	ip.pose.pose.position.y = 0.1143;
 	ip.pose.pose.orientation.z = 0;
@@ -236,6 +217,7 @@ int main(int argc, char **argv)
 	ip.pose.covariance[7] = 1e-3;
 	ip.pose.covariance[35] = 1e-3;
 	initPose.publish(ip);
+	*/
 	int count = 0;
 	while(ros::ok()) {
 		//TEST #0 - Move. Period.
