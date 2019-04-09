@@ -114,6 +114,49 @@ void moveFwdOneMeter(){
 
 }
 
+//Note: frame is typicall "map" or "base_footprint"
+bool moveToGoal(double xGoal, double yGoal, string frame){
+
+   //define a client for to send goal requests to the move_base server through a SimpleActionClient
+   actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> ac("move_base", true);
+
+   //wait for the action server to come up
+   while(!ac.waitForServer(ros::Duration(5.0))){
+      ROS_INFO("Waiting for the move_base action server to come up");
+   }
+
+   move_base_msgs::MoveBaseGoal goal;
+
+   //set up the frame parameters
+   goal.target_pose.header.frame_id = "map";
+   goal.target_pose.header.stamp = ros::Time::now();
+
+   /* moving towards the goal*/
+
+   goal.target_pose.pose.position.x =  xGoal;
+   goal.target_pose.pose.position.y =  yGoal;
+   goal.target_pose.pose.position.z =  0.0;
+   goal.target_pose.pose.orientation.x = 0.0;
+   goal.target_pose.pose.orientation.y = 0.0;
+   goal.target_pose.pose.orientation.z = 0.0;
+   goal.target_pose.pose.orientation.w = 1.0;
+
+   ROS_INFO("Sending goal location ...");
+   ac.sendGoal(goal);
+
+   ac.waitForResult();
+
+   if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED){
+      ROS_INFO("You have reached the destination");
+      return true;
+   }
+   else{
+      ROS_INFO("The robot failed to reach the destination");
+      return false;
+   }
+
+}
+
 // void arduinoCallback(const std_msgs::String& msg) {
 // 	ROS_INFO_STREAM(msg << '\n');
 // }
@@ -174,17 +217,39 @@ int main(int argc, char **argv)
 	ip.pose.covariance[7] = 1e-3;
 	ip.pose.covariance[35] = 1e-3;
 	initPose.publish(ip);
-	/////////////////
-	//ros::spinOnce();
-	//while(arduino.updateArduino()!="1"){sleep(1);}
-	//testMovement();
-
-
-	//moveFwdOneMeter;
-
 	int count = 0;
 	while(ros::ok()) {
-		/*std_msgs::String msg;
+		//TEST #0 - Move. Period.
+	        //testMovement();
+
+       		//TEST #1 - Move forward a meter
+       		//moveFwdOneMeter;
+
+		//TEST #2 - Go in a circle
+		//bool goalReached = false;
+		//double x1 = 2.25;
+		//double y1 = 2.25;
+		//double x2 = 2.25;
+		//double y2 = 2.25;
+		//double x3 = 2.25;
+		//double y3 = 2.25;
+		//double x4 = 2.25;
+		//double x5 = 2.25;
+		//if(goalReached == moveToGoal(x1,y1)){
+		//	goalReached = false;
+		//	if(goalReached == moveToGoal(x2,y2)){
+		//		goalReached = false;
+		//		if(goalReached == moveToGoal(x3,y3)){
+		//			goalReached = false;
+		//			if(goalReached == moveToGoal(x4,y4)){
+		//				goalReached = false;
+		//			}
+		//		}
+		//	}
+	//	}
+					
+		
+		std_msgs::String msg;
 		msg.data = std::string("Hello ");
 		msg.data += std::to_string(count);
 		ROS_INFO_STREAM(msg.data);
@@ -199,20 +264,6 @@ int main(int argc, char **argv)
 				break;
 			default: break;
 		}
-		//if(arduino.getButtonState()==1){
-		if(1){
-   		switch(arduino.getMode()){
-				case 0: testMovement();
-					break;
-				case 1: testMovement();
-					break;
-				case 2: testMovement();
-					break;
-				case 3: testMovement();
-					break;
-			}
-		}*/
-		// arduinoSend.publish(msg);
 		ros::spinOnce();
 		arduino.drive(rightSpeed,leftSpeed);
 		loop_rate.sleep();
