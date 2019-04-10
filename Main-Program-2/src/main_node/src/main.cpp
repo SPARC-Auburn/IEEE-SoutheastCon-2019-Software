@@ -16,7 +16,7 @@
 
 //#include "sensor_msgs/Imu.h"
 #include "Arduino-Serial/ArduinoSerial.h"
-
+//Color Indices = red(0), yellow(1), blue(2), green(3)
 using namespace std;
 
 serialPort arduino("/dev/serial/by-id/usb-1a86_USB2.0-Serial-if00-port0");
@@ -25,6 +25,9 @@ serialPort arduino("/dev/serial/by-id/usb-1a86_USB2.0-Serial-if00-port0");
 typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
 //arduino.setupConnection();
 int rightSpeed=0,leftSpeed=0;
+double closestBlockx = 0;
+double closetBlocky = 0;//add this to x for field placement
+
 void testMovement()
 {
   arduino.updateLCD("Starting movement test..");
@@ -75,14 +78,35 @@ void lin(const std_msgs::Float32ConstPtr &msg){
 	leftSpeed = (int)msg->data;
 }
 
+double objDistance(const opencv_node::object& obj) {
+	return sqrt(pow(obj.x_position, 2) + pow(obj.y_position, 2));
+}
+
 void visionCallback(const opencv_node::vision_msg::ConstPtr &msg)
 {
-  ROS_INFO("Main>>>Number of Objects: %d", msg->objects.size());
-  for (int i = 0; i < msg->objects.size(); ++i)
-  {
-    const opencv_node::object &prop = msg->objects[i];
-    ROS_INFO_STREAM("Position: " << prop.x_position << "," << prop.y_position << " Color:" << prop.color_index << " Object Type:" << prop.object_type);
-  }  
+	ROS_INFO("Main>>>Number of Objects: %d", msg->objects.size());
+	int desiredColor = 0;
+	double minDistance = 0.0;
+	int currentMin = -1;
+	for (int i = 0; i < msg->objects.size(); ++i)
+	{
+		const opencv_node::object &prop = msg->objects[i];
+		ROS_INFO_STREAM("Position: " << prop.x_position << "," << prop.y_position << " Color:" << prop.color_index << " Object Type:" << prop.object_type);
+		if(prop.color_index == desiredColor && (currentMin == -1 || objDistance(prop) < minDistance)) {
+			currentMin = i;
+			minDistance = objDistance(prop);
+		}
+	}
+	//auto closest = min_element(msg->objects.begin(),msg->objects.end(),[](const opencv_node::object &first,const opencv_node::object &second){
+		//return objDistance(first) < objDistance(second);
+	//});
+	if(currentMin != -1) {
+    closestBlockx = msg->objects[currentMin].x_position;
+    closestBlocky = msg->objects[currentMin].y_position;
+		ROS_INFO_STREAM("Selected Object >>> Position: " << msg->objects[currentMin].x_position << "," << msg->objects[currentMin].y_position << " Color:" << msg->objects[currentMin].color_index << " Object Type:" << msg->objects[currentMin].object_type);
+	}
+	
+	  
 }
 
 void moveFwdOneMeter(){
@@ -220,7 +244,53 @@ int main(int argc, char **argv)
 	*/
 	int count = 0;
 	bool done = 0;
+  
 	while(ros::ok()) {
+    //this tests the octet and debris goal setting
+    /*
+    arduino.moveGate(0);//close gate
+    int startingPos = arduino.getMode(); //query the set starting corner
+    double goalListx[8] = {0, 0.45, 0.32, 0.45, 0, -0.45,-0.32, -0.45};//map frame position
+    double goalListy[8] = {-0.32, -0.45, 0, 0.45, 0.32, 0.45, 0, -0.45};//map frame position
+    double myGoalx[8] = {0,0,0,0,0,0,0,0};
+    double myGoaly[8] = {0,0,0,0,0,0,0,0};
+    int goalOffset = 0;
+    switch(startingPos){
+      case(0):
+        ip.pose.pose.position.x = -122; //redStart
+	      ip.pose.pose.position.y = -122;
+        goalOffset = 0;
+        
+        break;
+      case(1):
+        ip.pose.pose.position.x = -122;//yellowStart
+	      ip.pose.pose.position.y = 122;
+        goalOffset = 2;
+        break;
+      case(2):
+        ip.pose.pose.position.x = 122;//blueStart
+	      ip.pose.pose.position.y = 122;
+        goalOffset = 4;
+        break;
+      case(3):
+        ip.pose.pose.position.x = 122;//greenStart
+	      ip.pose.pose.position.y = -122;
+        goalOffset = 6;
+      break;
+    }
+    for(int i = 0; i < 8; i++){
+      myGoalx[i] = goalListx[(i+goalOffset)%8];
+      myGoaly[i] = goalListy[(i+goalOffset)%8];
+    }
+ */
+
+
+
+
+
+
+
+
 		//TEST #0 - Move. Period.
 	        //testMovement();
 
@@ -259,11 +329,11 @@ int main(int argc, char **argv)
 				//moveFwdOneMeter();
 				ROS_INFO_STREAM(msg.data);
 				break;
-			case 1: arduino.updateLCD("Green");
+			case 1: arduino.updateLCD("Yellow");
 				break;
 			case 2: arduino.updateLCD("Blue");
 				break;
-			case 3: arduino.updateLCD("Yellow");
+			case 3: arduino.updateLCD("Green");
 				break;
 			default: break;
 		}
