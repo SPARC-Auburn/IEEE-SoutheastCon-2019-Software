@@ -25,8 +25,11 @@ serialPort arduino("/dev/serial/by-id/usb-1a86_USB2.0-Serial-if00-port0");
 typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
 //arduino.setupConnection();
 int rightSpeed=0,leftSpeed=0;
-double closestBlockx = 0;
-double closetBlocky = 0;//add this to x for field placement
+double closestBlockX = 0.0;//add this to y for map placement
+double closestBlockY = 0.0;//add this to x for map placement
+int numberBlocks = 0;
+double desiredColor = 0.0;
+
 
 void testMovement()
 {
@@ -85,6 +88,7 @@ double objDistance(const opencv_node::object& obj) {
 void visionCallback(const opencv_node::vision_msg::ConstPtr &msg)
 {
 	ROS_INFO("Main>>>Number of Objects: %d", msg->objects.size());
+  numberBlocks = msg->objects.size();
 	int desiredColor = 0;
 	double minDistance = 0.0;
 	int currentMin = -1;
@@ -101,8 +105,9 @@ void visionCallback(const opencv_node::vision_msg::ConstPtr &msg)
 		//return objDistance(first) < objDistance(second);
 	//});
 	if(currentMin != -1) {
-    closestBlockx = msg->objects[currentMin].x_position;
-    closestBlocky = msg->objects[currentMin].y_position;
+    closestBlockX = msg->objects[currentMin].x_position;
+    closestBlockY = msg->objects[currentMin].y_position;
+    desiredColor = msg->objects[currentMin].color_index;//not used yet
 		ROS_INFO_STREAM("Selected Object >>> Position: " << msg->objects[currentMin].x_position << "," << msg->objects[currentMin].y_position << " Color:" << msg->objects[currentMin].color_index << " Object Type:" << msg->objects[currentMin].object_type);
 	}
 	
@@ -248,44 +253,84 @@ int main(int argc, char **argv)
 	while(ros::ok()) {
     //this tests the octet and debris goal setting
     /*
+    arduino.moveFlag(180);//lower flag
     arduino.moveGate(0);//close gate
-    int startingPos = arduino.getMode(); //query the set starting corner
-    double goalListx[8] = {0, 0.45, 0.32, 0.45, 0, -0.45,-0.32, -0.45};//map frame position
-    double goalListy[8] = {-0.32, -0.45, 0, 0.45, 0.32, 0.45, 0, -0.45};//map frame position
-    double myGoalx[8] = {0,0,0,0,0,0,0,0};
-    double myGoaly[8] = {0,0,0,0,0,0,0,0};
-    int goalOffset = 0;
-    switch(startingPos){
-      case(0):
-        ip.pose.pose.position.x = -122; //redStart
-	      ip.pose.pose.position.y = -122;
-        goalOffset = 0;
-        
+    if(arduino.getButtonState){
+      int startingPos = arduino.getMode(); //query the set starting corner
+      double goalListx[8] = {0, 0.45, 0.32, 0.45, 0, -0.45,-0.32, -0.45};//map frame position
+      double goalListy[8] = {-0.32, -0.45, 0, 0.45, 0.32, 0.45, 0, -0.45};//map frame position
+      double myGoalX[8] = {0,0,0,0,0,0,0,0};
+      double myGoalY[8] = {0,0,0,0,0,0,0,0};
+      double initialPose[2] = {0.0,0.0};
+      int startMatch = 0;
+      int goalOffset = 0;
+      int octetNum = 0;
+      int loopNum = 0;
+      switch(startingPos){
+        case(0):
+          ip.pose.pose.position.x = -122; //redStart
+          ip.pose.pose.position.y = -122;
+          initialPose[0] = -122;
+          initialPose[1] = -122;
+          goalOffset = 0;
+          
+          break;
+        case(1):
+          ip.pose.pose.position.x = -122;//yellowStart
+          ip.pose.pose.position.y = 122;
+          initialPose[0] = -122;
+          initialPose[1] = 122;
+          goalOffset = 2;
+          break;
+        case(2):
+          ip.pose.pose.position.x = 122;//blueStart
+          ip.pose.pose.position.y = 122;
+          initialPose[0] =  122;
+          initialPose[1] =  122;
+          goalOffset = 4;
+          break;
+        case(3):
+          ip.pose.pose.position.x = 122;//greenStart
+          ip.pose.pose.position.y = -122;
+          initialPose[0] = 122;
+          initialPose[1] = -122;
+          goalOffset = 6;
         break;
-      case(1):
-        ip.pose.pose.position.x = -122;//yellowStart
-	      ip.pose.pose.position.y = 122;
-        goalOffset = 2;
-        break;
-      case(2):
-        ip.pose.pose.position.x = 122;//blueStart
-	      ip.pose.pose.position.y = 122;
-        goalOffset = 4;
-        break;
-      case(3):
-        ip.pose.pose.position.x = 122;//greenStart
-	      ip.pose.pose.position.y = -122;
-        goalOffset = 6;
-      break;
+      }
+      
+      for(int i = 0; i < 8; i++){
+        myGoalX[i] = goalListx[(i+goalOffset)%8];
+        myGoalY[i] = goalListy[(i+goalOffset)%8];
+      }
+      startMatch = 1;//never execute this switch case more than once
+    } 
+    if(startMatch){
+      if(loopNUm == 0 && octet == 0){//first start location setting
+        while(!(moveToGoal(myGoalX[octetNum],myGoalY[octetNum])));//go to initial octet
+        octetNum++;
+      }
+      //check to see if any blocks in view, if so go to them.
+      if(numberBlocks != 0){
+        double dummyRobotX = 0.0;
+        double dummyRobotY = 0.0;
+        arduino.moveGate(180);
+        while(!(moveToGoal(dummyRobotX+closestBlockY+0.11,dummyRobotY+closestBlockX)));//location reference to map, .11 is roughly half the width of the robot 
+        //to compensate for camera offset,,this waits until the robot has met its goal
+        //also this moves to collect all blocks 
+      }
+      else if(numBlocks == 0 && abs(dummyRobotX-myGoalX[octetNum+1])<20 && abs(dummyRobotY-myGoalY[octetNum+1])<20){ //checks to see if goal is too close to current position, 20 is arbitrary
+        octetNum++;
+      }
+      else(){
+        moveToGoal(myGoalX[octet],myGoalY[octet]);
+      }
+      if(octet == 8){octet = 0;loopNum++;}
+      if(loopNum == 3){
+        while(!(moveToGoal(initialPose[0],initialPose[1])));//go back to start position
+      }
+      arduino.moveFlag(0);
     }
-    for(int i = 0; i < 8; i++){
-      myGoalx[i] = goalListx[(i+goalOffset)%8];
-      myGoaly[i] = goalListy[(i+goalOffset)%8];
-    }
- */
-
-
-
+    */
 
 
 
