@@ -13,6 +13,7 @@
 #include "opencv_node/object.h"
 #include <move_base_msgs/MoveBaseAction.h>
 #include <actionlib/client/simple_action_client.h>
+#include <tf/transform_broadcaster.h>
 
 //#include "sensor_msgs/Imu.h"
 #include "Arduino-Serial/ArduinoSerial.h"
@@ -87,7 +88,7 @@ void visionCallback(const opencv_node::vision_msg::ConstPtr &msg)
 
 void moveFwdOneMeter(){
 	//MOVE BASE CODE//
-
+	int counter = 1;
         MoveBaseClient ac("move_base", true); //Tell the client we want to spin a thread by default
          while(!ac.waitForServer(ros::Duration(5.0))){
                 ROS_INFO("Waiting for the move_base action server to come up");
@@ -97,19 +98,26 @@ void moveFwdOneMeter(){
 	
 	moveFwd.target_pose.header.frame_id = "base_footprint";
         moveFwd.target_pose.header.stamp = ros::Time::now();
-
-        moveFwd.target_pose.pose.position.x = 1.0; //move 1 meter forward
-        moveFwd.target_pose.pose.orientation.w = 1.0;
-
+	
+	if(counter){
+        	moveFwd.target_pose.pose.position.x = 1.0; //move 1 meter forward
+		moveFwd.target_pose.pose.orientation = tf::createQuaternionMsgFromYaw(0.0); 
+		counter = 0;
+	}
+	else{
+		counter++;
+		moveFwd.target_pose.pose.position.x = 0.0;
+		moveFwd.target_pose.pose.orientation = tf::createQuaternionMsgFromYaw(-90.0);
+	}
         ROS_INFO("Sending goal");
 	ac.sendGoal(moveFwd);
 
 	//ac.waitForResult();
 
-	if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
-		ROS_INFO("WOOP WOOP YOU DID IT");
-	else
-		ROS_INFO("You screwed up boi");
+	//if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
+	//	ROS_INFO("WOOP WOOP YOU DID IT");
+	//else
+	//	ROS_INFO("You screwed up boi");
         /////////////////
 
 }
@@ -133,8 +141,8 @@ bool moveToGoal(double xGoal, double yGoal, string frame){
 
    /* moving towards the goal*/
 
-   goal.target_pose.pose.position.x =  xGoal;
-   goal.target_pose.pose.position.y =  yGoal;
+   goal.target_pose.pose.position.x = - xGoal;
+   goal.target_pose.pose.position.y = - yGoal;
    goal.target_pose.pose.position.z =  0.0;
    goal.target_pose.pose.orientation.x = 0.0;
    goal.target_pose.pose.orientation.y = 0.0;
@@ -223,10 +231,12 @@ int main(int argc, char **argv)
 	while(ros::ok()) {
 		//TEST #0 - Move. Period.
 	        //testMovement();
-
+		
        		//TEST #1 - Move forward a meter
-       		//moveFwdOneMeter;
-
+		//if(!done){
+       		//	moveFwdOneMeter();
+		//	done = 1;
+		//}
 		//TEST #2 - Go in a circle
 		//bool goalReached = false;
 		//double x1 = 2.25;
@@ -251,7 +261,7 @@ int main(int argc, char **argv)
 	//	}
 					
 		
-		std_msgs::String msg;
+/*		std_msgs::String msg;
 		msg.data = std::string("Hello ");
 		msg.data += std::to_string(count);
 		switch(arduino.getMode()){
@@ -266,7 +276,7 @@ int main(int argc, char **argv)
 			case 3: arduino.updateLCD("Yellow");
 				break;
 			default: break;
-		}
+		}*/
 		ros::spinOnce();
 		arduino.drive(rightSpeed,leftSpeed);
 		arduino.updateArduino();

@@ -59,7 +59,7 @@ int main(int argc, char** argv){
   ros::Subscriber lsub = n.subscribe<std_msgs::Int32>("lwheel",1,lin);
   ros::Subscriber rsub = n.subscribe<std_msgs::Int32>("rwheel",1,rin);
 //  tf::TransformBroadcaster odom_broadcaster;
-  odomIntegral odomI(0.1730756,0.0379095);//base and radius in meters. TODO get accurate values here
+  odomIntegral odomI(0.177*1.5,0.029503688);//base and radius in meters. TODO get accurate values here
 
 
   ros::Time current_time, last_time;
