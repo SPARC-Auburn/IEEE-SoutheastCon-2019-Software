@@ -325,7 +325,7 @@ int main(int argc, char **argv)
         myGoalX[i] = goalListx[(i+goalOffset)%8];
         myGoalY[i] = goalListy[(i+goalOffset)%8];
       }
-      if(arduino.getButtonState){
+      if(arduino.getButtonState()){
         colorChoose++; //this triggers to start
       }
     } 
@@ -423,7 +423,7 @@ int main(int argc, char **argv)
     }
     if(colorChoose == 1){
       
-      colorSelectPub.publish((stoi(colorSelect));
+      colorSelectPub.publish(stoi(colorSelect));
       
     }
 
