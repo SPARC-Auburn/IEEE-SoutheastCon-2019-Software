@@ -31,10 +31,10 @@ double closestBlockX = 0.0;//add this to y for map placement
 double closestBlockY = 0.0;//add this to x for map placement
 int numberBlocks = 0;
 double desiredColor = 0.0;
-string colorSelect[2] = {"0000","0000"};
+string colorSelect = "0";
 int colorChoose = 0;
-int finalColor = 0;
 int goalMet = 0;
+int sentInitialPose = 0; //so we dont spam the shit 
 double dummyRobotX = 0.0;
 double dummyRobotY = 0.0;
 
@@ -278,55 +278,59 @@ int main(int argc, char **argv)
     double myGoalX[8] = {0,0,0,0,0,0,0,0};
     double myGoalY[8] = {0,0,0,0,0,0,0,0};
     double initialPose[2] = {0.0,0.0};
-    int startMatch = 0;
+    
     int goalOffset = 0;
     int octetNum = 0;
     int loopNum = 0;
     if(colorChoose == 1){ //if the first color has been selected
-      switch(stoi(colorSelect[0])){
-        case(1):
-          
-          //ip.pose.pose.position.x = -122; //redStart
-          //ip.pose.pose.position.y = -122;
-          initialPose[0] = -122;
-          initialPose[1] = -122;
-          goalOffset = 0;
-          
+      if(!sentInitialPose){
+        switch(stoi(colorSelect)){
+          case(0):
+            
+            //ip.pose.pose.position.x = -122; //redStart
+            //ip.pose.pose.position.y = -122;
+            initialPose[0] = -122;
+            initialPose[1] = -122;
+            goalOffset = 0;
+            
+            break;
+          case(1):
+            
+            //ip.pose.pose.position.x = -122;//yellowStart
+            //ip.pose.pose.position.y = 122;
+            initialPose[0] = -122;
+            initialPose[1] = 122;
+            goalOffset = 2;
+            break;
+          case(2):
+            
+            //ip.pose.pose.position.x = 122;//blueStart
+            //ip.pose.pose.position.y = 122;
+            initialPose[0] =  122;
+            initialPose[1] =  122;
+            goalOffset = 4;
+            break;
+          case(3):
+            
+            //ip.pose.pose.position.x = 122;//greenStart
+            //ip.pose.pose.position.y = -122;
+            initialPose[0] = 122;
+            initialPose[1] = -122;
+            goalOffset = 6;
           break;
-        case(10):
-          
-          //ip.pose.pose.position.x = -122;//yellowStart
-          //ip.pose.pose.position.y = 122;
-          initialPose[0] = -122;
-          initialPose[1] = 122;
-          goalOffset = 2;
-          break;
-        case(100):
-          
-          //ip.pose.pose.position.x = 122;//blueStart
-          //ip.pose.pose.position.y = 122;
-          initialPose[0] =  122;
-          initialPose[1] =  122;
-          goalOffset = 4;
-          break;
-        case(1000):
-          
-          //ip.pose.pose.position.x = 122;//greenStart
-          //ip.pose.pose.position.y = -122;
-          initialPose[0] = 122;
-          initialPose[1] = -122;
-          goalOffset = 6;
-        break;
+        }
       }
-    
+      sentInitialPose = 1;
       for(int i = 0; i < 8; i++){
         myGoalX[i] = goalListx[(i+goalOffset)%8];
         myGoalY[i] = goalListy[(i+goalOffset)%8];
       }
-    
+      if(arduino.getButtonState){
+        colorChoose++; //this triggers to start
+      }
     } 
 
-    
+    if(colorChoose > 1){ //only runs on second button press
       if(octetNum == 0){//first start location setting
         moveToGoal(myGoalX[octetNum],myGoalY[octetNum]);//go to initial octet
         if(goalMet){octetNum++;}
@@ -355,7 +359,7 @@ int main(int argc, char **argv)
         moveToGoal(initialPose[0],initialPose[1]);//go back to start position
           if(goalMet){octetNum++;loopNum = 0; arduino.moveFlag(0);}
       }
-    
+    }
 
 
 
@@ -396,29 +400,31 @@ int main(int argc, char **argv)
   	std_msgs::String msg;
 		msg.data = std::string("Hello ");
 		msg.data += std::to_string(count);
-		switch(arduino.getMode()){
-      case 0: arduino.updateLCD("Red");
-        if(arduino.getButtonState() && colorChoose < 2){
-          colorSelect[colorChoose] = arduino.getMode();colorChoose++;}
-				break;
-			case 1: arduino.updateLCD("Yellow");
-        if(arduino.getButtonState() && colorChoose < 2){
-          colorSelect[colorChoose] = arduino.getMode();colorChoose++;}
-				break;
-			case 2: arduino.updateLCD("Blue");
-        if(arduino.getButtonState() && colorChoose < 2){
-          colorSelect[colorChoose] = arduino.getMode();colorChoose++;}
-				break;
-			case 3: arduino.updateLCD("Green");
-        if(arduino.getButtonState() && colorChoose < 2){
-          colorSelect[colorChoose] = arduino.getMode();colorChoose++;}
-				break;
-			default: break;
-		}
-    if(colorChoose == 2){
-      finalColor = (stoi(colorSelect[0]) | stoi(colorSelect[1]));
-      colorSelectPub.publish(finalColor);
-      startMatch = 1;
+    if(colorChoose == 0){
+      switch(arduino.getMode()){
+        case 0: arduino.updateLCD("Red");
+          if(arduino.getButtonState() && colorChoose < 1){
+            colorSelect = arduino.getMode();colorChoose++;}
+          break;
+        case 1: arduino.updateLCD("Yellow");
+          if(arduino.getButtonState() && colorChoose < 1){
+            colorSelect = arduino.getMode();colorChoose++;}
+          break;
+        case 2: arduino.updateLCD("Blue");
+          if(arduino.getButtonState() && colorChoose < 1){
+            colorSelect = arduino.getMode();colorChoose++;}
+          break;
+        case 3: arduino.updateLCD("Green");
+          if(arduino.getButtonState() && colorChoose < 1){
+            colorSelect = arduino.getMode();colorChoose++;}
+          break;
+        default: break;
+      }
+    }
+    if(colorChoose == 1){
+      
+      colorSelectPub.publish((stoi(colorSelect));
+      
     }
 
 
