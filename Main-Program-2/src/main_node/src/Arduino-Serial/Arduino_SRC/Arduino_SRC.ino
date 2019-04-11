@@ -141,10 +141,10 @@ void setup()
   lcd.setCursor(0,1);
   lcd.print(LCDtext.substring(17,32)); //Second Line of LCD
   gateServo.attach(10);
-
-  flagServo.attach(130);
+  flagServo.attach(11);
+  
   gateServo.write(20);//initial flag and gate position
-  flagServo.write();
+  flagServo.write(130);
   pinMode(BUTTON, INPUT);
   while(Serial.available())
   Serial.read();
