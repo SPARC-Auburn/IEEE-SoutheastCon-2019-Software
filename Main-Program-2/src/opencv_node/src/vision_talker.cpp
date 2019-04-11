@@ -6,7 +6,7 @@ Organization: Student Projects and Research Committee (SPARC)
 Description:  Takes pictures on the Raspberry Pi Camera V2 and processes them
 with OpenCV2 via color recognition.
 
-Color Indices = Red(0), Blue(1), Yellow(2), Green(3)
+Color Indices = red(0), yellow(1), blue(2), green(3)
 ------------------------------------------------------------------------------*/
 #include <stdio.h>
 #include <stdlib.h>
@@ -32,7 +32,7 @@ const double PI = 3.14159265;
 const int MIN_AREA = 200;
 const int MAX_AREA = 30000;
 const bool VISION_DEBUG_IMAGE = true;
-const int VISION_DEBUG_COLOR_IMAGE = -1; // -1 to disable (0 red,1 blue, 2 yellow, 3 green)
+const int VISION_DEBUG_COLOR_IMAGE = -1; // -1 to disable (0 red,1 yellow, 2 blue, 3 green)
 const bool VISION_DEBUG_TEXT = false;
 const bool VISION_DEBUG_3D = true;
 const double DEBRIS_MIN_W2H = 0.75;
@@ -48,8 +48,8 @@ using namespace std;
 
 enum Colors {
 	Red,
-	Blue,
 	Yellow,
+	Blue,
 	Green
 };
 
@@ -110,12 +110,12 @@ struct VisionHandle
 	vector<vector<Point>> contours;
 	vector<Vec4i> hierarchy;
 	Mat temp;
-	Scalar lowerThreshes[4] = {Scalar(0, 98, 105), Scalar(89, 56, 100), Scalar(23, 80, 90), Scalar(37, 44, 70)};
-	Scalar upperThreshes[4] = {Scalar(9, 255, 255), Scalar(117, 255, 255), Scalar(35, 255, 255), Scalar(77, 255, 255)};
+	Scalar lowerThreshes[4] = {Scalar(0, 98, 105), Scalar(23, 80, 90), Scalar(89, 56, 100), Scalar(37, 44, 70)};
+	Scalar upperThreshes[4] = {Scalar(9, 255, 255), Scalar(35, 255, 255), Scalar(117, 255, 255), Scalar(77, 255, 255)};
 	Scalar redSecondaryLower{170, 42, 52};
 	Scalar redSecondaryUpper{180, 255, 255};
-	Scalar colors[4] = {Scalar(0, 0, 255), Scalar(255, 0, 0), Scalar(0, 255, 255), Scalar(0, 255, 0)};
-	String labels[4] = {"Red", "Blue", "Yellow", "Green"};
+	Scalar colors[4] = {Scalar(0, 0, 255), Scalar(0, 255, 255), Scalar(255, 0, 0), Scalar(0, 255, 0)};
+	String labels[4] = {"Red", "Yellow", "Blue", "Green"};
 	Mat kernel = getStructuringElement(MORPH_CROSS, Size(3, 3));
 	Size resolution;
 	clock_t begin;

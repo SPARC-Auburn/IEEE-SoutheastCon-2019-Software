@@ -10,10 +10,14 @@
 #include <sensor_msgs/LaserScan.h>
 #include <boost/geometry.hpp>
 #include <vector>
+#include <tf/transform_broadcaster.h>
 #include <math.h> 
-using namespace cv;
+
+#include "opencv2/imgproc/imgproc.hpp"
+#include "opencv2/highgui/highgui.hpp"
 using namespace std;
-#define DEBUG false
+using namespace cv;
+#define DEBUG true
 
 namespace bg = boost::geometry;
     typedef bg::model::point<double, 2, bg::cs::cartesian> point_t;
@@ -23,7 +27,7 @@ namespace trans = bg::strategy::transform;
     typedef trans::translate_transformer<double,2,2> translater;
 
 
-bg::model::multi_point<point_t> last_cloud;
+bg::model::multi_point<point_t> cloud;
 bg::model::ring<point_t> hull;
 ros::Time current_time;
 ros::Subscriber sub;
@@ -39,12 +43,12 @@ void laserCallback(const sensor_msgs::LaserScanConstPtr &msg){
     cout << "Range min:" << msg->range_min << endl;
     cout << "Range max:" << msg->range_max << endl;
   }
-  clear(last_cloud);
-  float angle = msg->angle_min;
-  for(int i = 0; i < scan_time/time_increment; i+=1, angle += msg->angle_increment){
-    bg::append(cloud, point_t(cos(angle)*msg->ranges[i], sin(angle)*msg->ranges[i]));
+  bg::clear(cloud);
+  float angleA = msg->angle_min;
+  for(int i = 0; i < msg->scan_time/msg->time_increment; i+=1, angleA += msg->angle_increment){
+    bg::append(cloud, point_t(cos(angleA)*msg->ranges[i], sin(angleA)*msg->ranges[i]));
   }
-  clear(hull);
+  bg::clear(hull);
   bg::convex_hull(cloud, hull);
 
   point_t centroid;
@@ -70,18 +74,21 @@ void laserCallback(const sensor_msgs::LaserScanConstPtr &msg){
           rothull.clear();
       }
   }
+  double r = sqrt(x*x + y*y);
+  geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(angle+3.14/2);
   geometry_msgs::PoseWithCovarianceStamped ip;
 	ip.header.frame_id = "map";
 	ip.header.stamp = current_time;
-	ip.pose.pose.position.x = x;
-	ip.pose.pose.position.y = y;
-	ip.pose.pose.orientation.z = angle;
+	ip.pose.pose.position.x = r*cos(angle);
+	ip.pose.pose.position.y = r*sin(angle);
+	ip.pose.pose.orientation = odom_quat;
 	ip.pose.covariance[0] = 1e-3;
 	ip.pose.covariance[7] = 1e-3;
 	ip.pose.covariance[35] = 1e-3;
 	pose.publish(ip);
   //just drawing the output from here on down
-  /*rotator rotate(angle);
+  if(DEBUG){
+  rotator rotate(angle);
   boost::geometry::transform(transhull, rothull, rotate);
 
   Mat testimage = Mat::zeros(Size(1000,1000),CV_8UC3);
@@ -113,9 +120,8 @@ void laserCallback(const sensor_msgs::LaserScanConstPtr &msg){
       for (int i = 0; i < 4; i++)
           line(testimage, vertices[i], vertices[(i+1)%4], Scalar(0,255,255),2);
   }
-  imwrite("final.png",testimage);*/
-  
-  
+  imwrite("final.png",testimage);
+  }
 }
 int main(int argc, char **argv)
 {

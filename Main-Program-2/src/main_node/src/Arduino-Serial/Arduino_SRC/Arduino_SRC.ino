@@ -161,13 +161,13 @@ void loop()
   if (sensorValue < 255){       //Red
       mode = "0";
     }
-    else if (sensorValue < 510){    //Green
+    else if (sensorValue < 510){    //Yellow
       mode = "1";
     }
     else if (sensorValue < 765){    //Blue
       mode = "2";
     }                           
-    else if (sensorValue < 1024){   //Yellow
+    else if (sensorValue < 1024){   //Green
       mode = "3";
     }
     else {    //Error
