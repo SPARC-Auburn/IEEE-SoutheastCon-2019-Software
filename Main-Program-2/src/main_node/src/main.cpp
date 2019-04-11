@@ -157,8 +157,7 @@ void moveFwdOneMeter(){
 }
 
 //Note: frame is typicall "map" or "base_footprint"
-bool moveToGoal(double xGoal, double yGoal, string frame){
-
+bool moveToGoal(double xGoal, double yGoal){
    //define a client for to send goal requests to the move_base server through a SimpleActionClient
    actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> ac("move_base", true);
 
@@ -170,7 +169,7 @@ bool moveToGoal(double xGoal, double yGoal, string frame){
    move_base_msgs::MoveBaseGoal goal;
 
    //set up the frame parameters
-   goal.target_pose.header.frame_id = frame;
+   goal.target_pose.header.frame_id = "map";
    goal.target_pose.header.stamp = ros::Time::now();
 
    /* moving towards the goal*/
@@ -343,7 +342,7 @@ int main(int argc, char **argv)
         if(goalMet){octetNum++;}
 
       }
-      else if(numBlocks == 0 && abs(dummyRobotX-myGoalX[octetNum+1])<20 && abs(dummyRobotY-myGoalY[octetNum+1])<20){ //checks to see if goal is too close to current position, 20 is arbitrary
+      else if(numberBlocks == 0 && abs(dummyRobotX-myGoalX[octetNum+1])<20 && abs(dummyRobotY-myGoalY[octetNum+1])<20){ //checks to see if goal is too close to current position, 20 is arbitrary
         octetNum++;
       }
       else{
