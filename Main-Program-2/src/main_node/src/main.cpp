@@ -128,7 +128,7 @@ bool moveToGoal(double xGoal, double yGoal, string frame){
    move_base_msgs::MoveBaseGoal goal;
 
    //set up the frame parameters
-   goal.target_pose.header.frame_id = "map";
+   goal.target_pose.header.frame_id = frame;
    goal.target_pose.header.stamp = ros::Time::now();
 
    /* moving towards the goal*/
@@ -228,21 +228,21 @@ int main(int argc, char **argv)
 
 		//TEST #2 - Go in a circle
 		//bool goalReached = false;
-		//double x1 = 2.25;
-		//double y1 = 2.25;
+		//double x1 = 0;
+		//double y1 = -2.25;
 		//double x2 = 2.25;
-		//double y2 = 2.25;
-		//double x3 = 2.25;
+		//double y2 = 0;
+		//double x3 = 0;
 		//double y3 = 2.25;
-		//double x4 = 2.25;
-		//double x5 = 2.25;
-		//if(goalReached == moveToGoal(x1,y1)){
+		//double x4 = -2.25;
+		//double x5 = 0;
+		//if(goalReached == moveToGoal(x1,y1, "map")){
 		//	goalReached = false;
-		//	if(goalReached == moveToGoal(x2,y2)){
+		//	if(goalReached == moveToGoal(x2,y2, "map")){
 		//		goalReached = false;
-		//		if(goalReached == moveToGoal(x3,y3)){
+		//		if(goalReached == moveToGoal(x3,y3, "map")){
 		//			goalReached = false;
-		//			if(goalReached == moveToGoal(x4,y4)){
+		//			if(goalReached == moveToGoal(x4,y4, "map")){
 		//				goalReached = false;
 		//			}
 		//		}
