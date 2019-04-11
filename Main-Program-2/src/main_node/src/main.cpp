@@ -248,6 +248,8 @@ int main(int argc, char **argv)
 	// ros::Publisher arduinoSend = n.advertise<std_msgs::String>("arduinoTopic", 500);
 	// ros::Subscriber arduinoReceive = n.subscribe("arduinoPub", 500, arduinoCallback);
   ros::Publisher colorSelectPub = n.advertise<std_msgs::Int32>("colorSelect",1);
+  ros::Publisher gate_cmd = n.advertise<std_msgs::Int32>("gate_cmd",1);
+  ros::Publisher flag_cmd = n.advertise<std_msgs::Int32>("flag_cmd",1);
 	ros::Rate loop_rate(40);	//1 Hz
 
 
@@ -427,7 +429,8 @@ int main(int argc, char **argv)
       
     }
 
-
+    gate_cmd.publish(gatePos);
+    flag_cmd.publish(flagPos);
 		ros::spinOnce();
 		arduino.drive(rightSpeed,leftSpeed);
 		arduino.updateArduino();
