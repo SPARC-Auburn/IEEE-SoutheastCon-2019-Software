@@ -1,6 +1,7 @@
 #include "ros/ros.h"
 #include "std_msgs/String.h"
 #include "std_msgs/Float32.h"
+#include "std_msgs/Int32.h"
 #include <thread>
 #include <unistd.h>
 #include <iostream>
@@ -33,7 +34,7 @@ double desiredColor = 0.0;
 string colorSelect[2] = {"0000","0000"};
 int colorChoose = 0;
 int finalColor = 0;
-
+int goalMet = 0;
 
 
 void testMovement()
@@ -189,10 +190,12 @@ bool moveToGoal(double xGoal, double yGoal, string frame){
 
    if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED){
       ROS_INFO("You have reached the destination");
+      goalMet = 1;
       return true;
    }
    else{
       ROS_INFO("The robot failed to reach the destination");
+      goalMet = 0;
       return false;
    }
 
@@ -283,8 +286,8 @@ int main(int argc, char **argv)
       switch(colorChoose[0]){
         case(1):
           
-          ip.pose.pose.position.x = -122; //redStart
-          ip.pose.pose.position.y = -122;
+          //ip.pose.pose.position.x = -122; //redStart
+          //ip.pose.pose.position.y = -122;
           initialPose[0] = -122;
           initialPose[1] = -122;
           goalOffset = 0;
@@ -292,24 +295,24 @@ int main(int argc, char **argv)
           break;
         case(10):
           
-          ip.pose.pose.position.x = -122;//yellowStart
-          ip.pose.pose.position.y = 122;
+          //ip.pose.pose.position.x = -122;//yellowStart
+          //ip.pose.pose.position.y = 122;
           initialPose[0] = -122;
           initialPose[1] = 122;
           goalOffset = 2;
           break;
         case(100):
           
-          ip.pose.pose.position.x = 122;//blueStart
-          ip.pose.pose.position.y = 122;
+          //ip.pose.pose.position.x = 122;//blueStart
+          //ip.pose.pose.position.y = 122;
           initialPose[0] =  122;
           initialPose[1] =  122;
           goalOffset = 4;
           break;
         case(1000):
           
-          ip.pose.pose.position.x = 122;//greenStart
-          ip.pose.pose.position.y = -122;
+          //ip.pose.pose.position.x = 122;//greenStart
+          //ip.pose.pose.position.y = -122;
           initialPose[0] = 122;
           initialPose[1] = -122;
           goalOffset = 6;
@@ -324,10 +327,9 @@ int main(int argc, char **argv)
     } 
 
     
-      if(octet == 0){//first start location setting
+      if(octetNum == 0){//first start location setting
         moveToGoal(myGoalX[octetNum],myGoalY[octetNum]);//go to initial octet
-        ac.waitForResult();
-        if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED){octetNum++;}
+        if(goalMet){octetNum++;}
       }
 
       //check to see if any blocks in view, if so go to them.
@@ -338,21 +340,21 @@ int main(int argc, char **argv)
         moveToGoal(dummyRobotX+closestBlockY+0.11,dummyRobotY+closestBlockX);//location reference to map, .11 is roughly half the width of the robot 
         //to compensate for camera offset,,this waits until the robot has met its goal
         //also this moves to collect all blocks
-        if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED){octetNum++;}
+        if(goalMet){octetNum++;}
 
       }
       else if(numBlocks == 0 && abs(dummyRobotX-myGoalX[octetNum+1])<20 && abs(dummyRobotY-myGoalY[octetNum+1])<20){ //checks to see if goal is too close to current position, 20 is arbitrary
         octetNum++;
       }
-      else(){
-        moveToGoal(myGoalX[octet],myGoalY[octet]);
+      else{
+        moveToGoal(myGoalX[octetNum],myGoalY[octetNum]);
       }
-      if(octet == 8){octet = 0;loopNum++;}
+
+      if(octetNum == 8){octetNum = 0;loopNum++;}
       if(loopNum == 3){
         moveToGoal(initialPose[0],initialPose[1]);//go back to start position
-          if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED){octetNum++;loopNum = 0; arduino.moveFlag(0);}
+          if(goalMet){octetNum++;loopNum = 0; arduino.moveFlag(0);}
       }
-    }
     
 
 
