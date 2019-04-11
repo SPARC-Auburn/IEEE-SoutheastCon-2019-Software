@@ -35,7 +35,8 @@ string colorSelect[2] = {"0000","0000"};
 int colorChoose = 0;
 int finalColor = 0;
 int goalMet = 0;
-
+double dummyRobotX = 0.0;
+double dummyRobotY = 0.0;
 
 void testMovement()
 {
@@ -282,7 +283,7 @@ int main(int argc, char **argv)
     int octetNum = 0;
     int loopNum = 0;
     if(colorChoose == 1){ //if the first color has been selected
-      switch(colorChoose[0]){
+      switch(stoi(colorSelect[0])){
         case(1):
           
           //ip.pose.pose.position.x = -122; //redStart
@@ -333,8 +334,8 @@ int main(int argc, char **argv)
 
       //check to see if any blocks in view, if so go to them.
       if(numberBlocks != 0 && octetNum != 0){ //
-        double dummyRobotX = 0.0;
-        double dummyRobotY = 0.0;
+        
+        
         arduino.moveGate(180);//open gate
         moveToGoal(dummyRobotX+closestBlockY+0.11,dummyRobotY+closestBlockX);//location reference to map, .11 is roughly half the width of the robot 
         //to compensate for camera offset,,this waits until the robot has met its goal
@@ -391,26 +392,26 @@ int main(int argc, char **argv)
 		//	}
 	//	}
 					
-		/*
+		
   	std_msgs::String msg;
 		msg.data = std::string("Hello ");
 		msg.data += std::to_string(count);
 		switch(arduino.getMode()){
       case 0: arduino.updateLCD("Red");
-        if(stoi(arduino.getButtonState()) && colorChoose < 2){
-          colorSelect[colorChoose] = stoi(arduino.getMode());colorChoose++;}
+        if(arduino.getButtonState() && colorChoose < 2){
+          colorSelect[colorChoose] = arduino.getMode();colorChoose++;}
 				break;
 			case 1: arduino.updateLCD("Yellow");
-        if(stoi(arduino.getButtonState()) && colorChoose < 2){
-          colorSelect[colorChoose] = stoi(arduino.getMode());colorChoose++;}
+        if(arduino.getButtonState() && colorChoose < 2){
+          colorSelect[colorChoose] = arduino.getMode();colorChoose++;}
 				break;
 			case 2: arduino.updateLCD("Blue");
-        if(stoi(arduino.getButtonState()) && colorChoose < 2){
-          colorSelect[colorChoose] = stoi(arduino.getMode());colorChoose++;}
+        if(arduino.getButtonState() && colorChoose < 2){
+          colorSelect[colorChoose] = arduino.getMode();colorChoose++;}
 				break;
 			case 3: arduino.updateLCD("Green");
-        if(stoi(arduino.getButtonState()) && colorChoose < 2){
-          colorSelect[colorChoose] = stoi(arduino.getMode());colorChoose++;}
+        if(arduino.getButtonState() && colorChoose < 2){
+          colorSelect[colorChoose] = arduino.getMode();colorChoose++;}
 				break;
 			default: break;
 		}
@@ -420,7 +421,7 @@ int main(int argc, char **argv)
       startMatch = 1;
     }
 
-    */
+
 		ros::spinOnce();
 		arduino.drive(rightSpeed,leftSpeed);
 		arduino.updateArduino();
