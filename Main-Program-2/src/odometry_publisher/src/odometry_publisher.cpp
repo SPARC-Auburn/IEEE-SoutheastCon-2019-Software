@@ -43,6 +43,8 @@
 #define pi 3.141592
 #define tau 2*pi
 #define bad -2147483648
+double baseWidth;
+double wheelRadius;
 int rightCount=bad,leftCount=bad;
 void rin(const std_msgs::Int32ConstPtr &msg){
         rightCount = msg->data;
@@ -55,10 +57,13 @@ void lin(const std_msgs::Int32ConstPtr &msg){
 int main(int argc, char** argv){
   ros::init(argc, argv, "odometry_publisher");
   ros::NodeHandle n;
+  n.getParam("baseWidth"), baseWidth);
+  n.getParam("wheelRadius", wheelRadius);
   ros::Publisher odom_pub = n.advertise<nav_msgs::Odometry>("fuck/odom", 1);
   ros::Subscriber lsub = n.subscribe<std_msgs::Int32>("lwheel",1,lin);
   ros::Subscriber rsub = n.subscribe<std_msgs::Int32>("rwheel",1,rin);
 //  tf::TransformBroadcaster odom_broadcaster;
+
   odomIntegral odomI(0.177*1.5,0.029503688);//base and radius in meters. TODO get accurate values here
 
 
