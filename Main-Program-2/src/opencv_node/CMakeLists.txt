@@ -40,8 +40,6 @@ catkin_package(
 ###########
 ## Build ##
 ###########
-set(raspicam_DIR "~/ieee-2019-electrical-software/Main-Program-2/src/opencv_node/raspicam/build")
-find_package(raspicam REQUIRED)
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
@@ -54,9 +52,9 @@ include_directories(
 )
 
 add_library(opencv_node src/vision_talker.cpp)
-target_link_libraries(opencv_node ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${raspicam_CV_LIBS})
+target_link_libraries(opencv_node ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 add_dependencies(opencv_node opencv_node_generate_messages_cpp)
 
 add_executable(vision_talker src/vision_talker.cpp src/Vision3D.cpp)
-target_link_libraries(vision_talker ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${raspicam_CV_LIBS})
+target_link_libraries(vision_talker ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 add_dependencies(vision_talker opencv_node_generate_messages_cpp)
