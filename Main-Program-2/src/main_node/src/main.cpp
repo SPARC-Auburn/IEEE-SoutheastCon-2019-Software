@@ -38,7 +38,8 @@ int octetNum = 0;
 double dummyRobotX = 0.0;
 double dummyRobotY = 0.0;
 int startMatch = 0;
-
+int loopNum = 0;
+double initialPose[2] = {0.0,0.0};
 
 void rin(const std_msgs::Float32ConstPtr &msg){
 	rightSpeed = (int)msg->data;
@@ -49,10 +50,10 @@ void lin(const std_msgs::Float32ConstPtr &msg){
 }
 
 void colorSelected(const std_msgs::Float32ConstPtr &msg){
-  colorChoose = stoi(msg->data);
+  colorChoose = int(msg->data);
 }
 void matchStarted(const std_msgs::Float32ConstPtr &msg){
-	startMatch = stoi(msg->data);
+	startMatch = int(msg->data);
 }
 
 
