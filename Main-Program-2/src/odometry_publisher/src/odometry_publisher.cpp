@@ -57,14 +57,14 @@ void lin(const std_msgs::Int32ConstPtr &msg){
 int main(int argc, char** argv){
   ros::init(argc, argv, "odometry_publisher");
   ros::NodeHandle n;
-  n.getParam("baseWidth"), baseWidth);
+  n.getParam("baseWidth", baseWidth);
   n.getParam("wheelRadius", wheelRadius);
   ros::Publisher odom_pub = n.advertise<nav_msgs::Odometry>("fuck/odom", 1);
   ros::Subscriber lsub = n.subscribe<std_msgs::Int32>("lwheel",1,lin);
   ros::Subscriber rsub = n.subscribe<std_msgs::Int32>("rwheel",1,rin);
 //  tf::TransformBroadcaster odom_broadcaster;
 
-  odomIntegral odomI(0.177*1.5,0.029503688);//base and radius in meters. TODO get accurate values here
+  odomIntegral odomI(baseWidth,wheelRadius);//base and radius in meters. TODO get accurate values here
 
 
   ros::Time current_time, last_time;
@@ -72,7 +72,7 @@ int main(int argc, char** argv){
 	ros::spinOnce();
   }
   int lastValueR=rightCount,lastValueL=leftCount,curValueR,curValueL;
-  ros::Rate r(60);
+  ros::Rate r(120);
   last_time = ros::Time::now();
   while(n.ok()){
     ros::spinOnce();
@@ -110,7 +110,7 @@ int main(int argc, char** argv){
     nav_msgs::Odometry odom;
     odom.header.stamp = current_time;
     odom.header.frame_id = "odom";
-    odom.child_frame_id = "base_footprint";
+    odom.child_frame_id = "odom_footprint";
 
     //set the position
     odom.pose.pose.position.x = odomI.x;
