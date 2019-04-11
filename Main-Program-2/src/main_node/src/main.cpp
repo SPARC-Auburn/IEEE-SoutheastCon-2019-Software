@@ -42,41 +42,46 @@ void testMovement()
 {
   arduino.updateLCD("Starting movement test..");
   usleep(1000*500);
-  arduino.updateLCD("Forward..");
-  arduino.goForward(25);
-  usleep(1000*500);
-  arduino.updateLCD("Stop");
-  arduino.stopMotors(); 
-  usleep(1000*500);
-  arduino.updateLCD("Backward..");
-  arduino.goBackward(25);
-  usleep(1000*500);
-  arduino.updateLCD("Stop");
-  arduino.stopMotors(); 
-  usleep(1000*500);
-  arduino.updateLCD("Right..");     
-  arduino.turnRight(25);
-  usleep(1000*500);
-  arduino.updateLCD("Stop");
-  arduino.stopMotors();
-  usleep(1000*500);
-  arduino.updateLCD("Left..");
-  arduino.turnLeft(25);
-  usleep(1000*500);
-  arduino.updateLCD("Stop");
-  arduino.stopMotors();
-  usleep(1000*500);
+  arduino.updateArduino();
+  //arduino.updateLCD("Forward..");
+  //arduino.goForward(25);
+  //usleep(1000*500);
+  //arduino.updateLCD("Stop");
+  //arduino.stopMotors(); 
+  //usleep(1000*500);
+  //arduino.updateLCD("Backward..");
+  //arduino.goBackward(25);
+  //usleep(1000*500);
+  //arduino.updateLCD("Stop");
+  //arduino.stopMotors(); 
+  //usleep(1000*500);
+  //arduino.updateLCD("Right..");     
+  //arduino.turnRight(25);
+  //usleep(1000*500);
+  //arduino.updateLCD("Stop");
+  //arduino.stopMotors();
+  //usleep(1000*500);
+  //arduino.updateLCD("Left..");
+  //arduino.turnLeft(25);
+  //usleep(1000*500);
+  //arduino.updateLCD("Stop");
+  //arduino.stopMotors();
+  //usleep(1000*500);
   arduino.updateLCD("Moving Gate Up..");
-  arduino.moveGate(180);
+  arduino.moveGate(120);
+  arduino.updateArduino();
   usleep(1000*500);
   arduino.updateLCD("Moving Gate Down..");
-  arduino.moveGate(0);
+  arduino.moveGate(40);
+  arduino.updateArduino();
   usleep(1000*500);
   arduino.updateLCD("Moving Flag Up..");
-  arduino.moveFlag(0);
+  arduino.moveFlag(40);
+  arduino.updateArduino();
   usleep(1000*500);
   arduino.updateLCD("Moving Flag Down..");
-  arduino.moveFlag(180);
+  arduino.moveFlag(120);
+  arduino.updateArduino();
   usleep(1000*500);
   arduino.updateLCD("Movement Test   Compeleted!");
 }
@@ -247,7 +252,7 @@ int main(int argc, char **argv)
 
 	// ros::Publisher arduinoSend = n.advertise<std_msgs::String>("arduinoTopic", 500);
 	// ros::Subscriber arduinoReceive = n.subscribe("arduinoPub", 500, arduinoCallback);
-  ros::Publisher colorSelectPub = n.advertise<std_msgs::Int32>("colorSelect",1);
+  //ros::Publisher colorSelectPub = n.advertise<std_msgs::Int32>("colorSelect",1);
 	ros::Rate loop_rate(40);	//1 Hz
 
 
@@ -265,11 +270,11 @@ int main(int argc, char **argv)
 	*/
 	int count = 0;
 	bool done = 0;
-  
-	while(ros::ok()) {
-    //this tests the octet and debris goal setting
+ while(ros::ok()) {
+	//testMovement();
+   //this tests the octet and debris goal setting
     
-    arduino.moveFlag(180);//lower flag
+/*    arduino.moveFlag(180);//lower flag
     arduino.moveGate(0);//close gate
     
       
@@ -360,43 +365,7 @@ int main(int argc, char **argv)
           if(goalMet){octetNum++;loopNum = 0; arduino.moveFlag(0);}
       }
     }
-
-
-
-
-
-		//TEST #0 - Move. Period.
-	        //testMovement();
-		
-       		//TEST #1 - Move forward a meter
-		//if(!done){
-       		//	moveFwdOneMeter();
-		//	done = 1;
-		//}
-		//TEST #2 - Go in a circle
-		//bool goalReached = false;
-		//double x1 = 0;
-		//double y1 = -2.25;
-		//double x2 = 2.25;
-		//double y2 = 0;
-		//double x3 = 0;
-		//double y3 = 2.25;
-		//double x4 = -2.25;
-		//double x5 = 0;
-		//if(goalReached == moveToGoal(x1,y1, "map")){
-		//	goalReached = false;
-		//	if(goalReached == moveToGoal(x2,y2, "map")){
-		//		goalReached = false;
-		//		if(goalReached == moveToGoal(x3,y3, "map")){
-		//			goalReached = false;
-		//			if(goalReached == moveToGoal(x4,y4, "map")){
-		//				goalReached = false;
-		//			}
-		//		}
-		//	}
-	//	}
-					
-		
+	
   	std_msgs::String msg;
 		msg.data = std::string("Hello ");
 		msg.data += std::to_string(count);
@@ -424,10 +393,13 @@ int main(int argc, char **argv)
     if(colorChoose == 1){
       
       colorSelectPub.publish(stoi(colorSelect));
-      
-    }
-
-
+      		
+    }	*/	
+		if(!done){
+		arduino.moveGate(20); //Bottom is 20, Top is 50
+		arduino.moveFlag(130); //Top is 40, Bottom is 130
+		done = 1;
+		}
 		ros::spinOnce();
 		arduino.drive(rightSpeed,leftSpeed);
 		arduino.updateArduino();

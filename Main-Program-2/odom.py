@@ -17,7 +17,7 @@ while not rospy.is_shutdown():
 			x = x.split("<")[-2]
 			x = x.replace(">","")
 			x = x.split(",")
-#		print(-int(x[0]),int(x[1]))
+#			print(-int(x[0]),int(x[1]))
 			a.publish(-int(x[0]))
 			b.publish(int(x[1]))
 			rate.sleep()
