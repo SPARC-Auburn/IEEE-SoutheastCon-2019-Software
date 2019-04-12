@@ -31,7 +31,7 @@ Color Indices = red(0), yellow(1), blue(2), green(3)
 const double PI = 3.14159265;
 const int MIN_AREA = 200;
 const int MAX_AREA = 30000;
-const bool VISION_DEBUG_IMAGE = true;
+const bool VISION_DEBUG_IMAGE = false;
 const int VISION_DEBUG_COLOR_IMAGE = -1; // -1 to disable (0 red,1 blue, 2 yellow, 3 green)
 const bool VISION_DEBUG_TEXT = false;
 const bool VISION_DEBUG_3D = true;
@@ -159,7 +159,8 @@ struct VisionHandle
 		}
 		if(VISION_DEBUG_TEXT)
 			ROS_INFO("%s", "Finished finding objects");
-		displayImage("output");
+		if(VISION_DEBUG_IMAGE)
+			displayImage("output");
 	}
 
 	void debugInvalidObj(Mat imageIn, Rect bounds) {
@@ -271,7 +272,7 @@ struct VisionHandle
 							}
 						}
 						else {
-							debugInvalidObj(imcolorIndex
+							//debugInvalidObj(imcolorIndex)
 						}
 					}
 					else { // wrong size ratiocolorIndex
@@ -343,7 +344,7 @@ struct VisionHandle
   }
 };
 
-}
+};
 int main(int argc, char **argv)
 {
 	IEEE_VISION::VisionHandle vis; // initialize vision
