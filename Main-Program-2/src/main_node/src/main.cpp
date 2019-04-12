@@ -1,6 +1,7 @@
 #include "ros/ros.h"
 #include "std_msgs/String.h"
 #include "std_msgs/Float32.h"
+#include "std_msgs/Int32.h"
 #include <thread>
 #include <unistd.h>
 #include <iostream>
@@ -13,6 +14,7 @@
 #include "opencv_node/object.h"
 #include <move_base_msgs/MoveBaseAction.h>
 #include <actionlib/client/simple_action_client.h>
+#include <tf/transform_broadcaster.h>
 
 //#include "sensor_msgs/Imu.h"
 #include "Arduino-Serial/ArduinoSerial.h"
@@ -21,58 +23,24 @@ using namespace std;
 
 serialPort arduino("/dev/serial/by-id/usb-1a86_USB2.0-Serial-if00-port0");
 
-//ros::Publisher initPose;
+
 typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
-//arduino.setupConnection();
+std_msgs::String msg;
 int rightSpeed=0,leftSpeed=0;
 double closestBlockX = 0.0;//add this to y for map placement
 double closestBlockY = 0.0;//add this to x for map placement
-int numberBlocks = 0;
+int numberBlocks = 0; //number of blocks seen
 double desiredColor = 0.0;
+string colorSelect = "0"; //recieved startColor
+int colorChoose = 0;
+int goalMet = 0;
+int octetNum = 0;
+double dummyRobotX = 0.0;
+double dummyRobotY = 0.0;
+int startMatch = 0;
+int loopNum = 0;
+double initialPose[2] = {0.0,0.0};
 
-
-void testMovement()
-{
-  arduino.updateLCD("Starting movement test..");
-  usleep(1000*500);
-  arduino.updateLCD("Forward..");
-  arduino.goForward(25);
-  usleep(1000*500);
-  arduino.updateLCD("Stop");
-  arduino.stopMotors(); 
-  usleep(1000*500);
-  arduino.updateLCD("Backward..");
-  arduino.goBackward(25);
-  usleep(1000*500);
-  arduino.updateLCD("Stop");
-  arduino.stopMotors(); 
-  usleep(1000*500);
-  arduino.updateLCD("Right..");     
-  arduino.turnRight(25);
-  usleep(1000*500);
-  arduino.updateLCD("Stop");
-  arduino.stopMotors();
-  usleep(1000*500);
-  arduino.updateLCD("Left..");
-  arduino.turnLeft(25);
-  usleep(1000*500);
-  arduino.updateLCD("Stop");
-  arduino.stopMotors();
-  usleep(1000*500);
-  arduino.updateLCD("Moving Gate Up..");
-  arduino.moveGate(180);
-  usleep(1000*500);
-  arduino.updateLCD("Moving Gate Down..");
-  arduino.moveGate(0);
-  usleep(1000*500);
-  arduino.updateLCD("Moving Flag Up..");
-  arduino.moveFlag(0);
-  usleep(1000*500);
-  arduino.updateLCD("Moving Flag Down..");
-  arduino.moveFlag(180);
-  usleep(1000*500);
-  arduino.updateLCD("Movement Test   Compeleted!");
-}
 void rin(const std_msgs::Float32ConstPtr &msg){
 	rightSpeed = (int)msg->data;
 }
@@ -80,6 +48,14 @@ void rin(const std_msgs::Float32ConstPtr &msg){
 void lin(const std_msgs::Float32ConstPtr &msg){
 	leftSpeed = (int)msg->data;
 }
+
+void colorSelected(const std_msgs::Float32ConstPtr &msg){
+  colorChoose = int(msg->data);
+}
+void matchStarted(const std_msgs::Float32ConstPtr &msg){
+	startMatch = int(msg->data);
+}
+
 
 double objDistance(const opencv_node::object& obj) {
 	return sqrt(pow(obj.x_position, 2) + pow(obj.y_position, 2));
@@ -116,7 +92,7 @@ void visionCallback(const opencv_node::vision_msg::ConstPtr &msg)
 
 void moveFwdOneMeter(){
 	//MOVE BASE CODE//
-
+	int counter = 1;
         MoveBaseClient ac("move_base", true); //Tell the client we want to spin a thread by default
          while(!ac.waitForServer(ros::Duration(5.0))){
                 ROS_INFO("Waiting for the move_base action server to come up");
@@ -126,26 +102,32 @@ void moveFwdOneMeter(){
 	
 	moveFwd.target_pose.header.frame_id = "base_footprint";
         moveFwd.target_pose.header.stamp = ros::Time::now();
-
-        moveFwd.target_pose.pose.position.x = 1.0; //move 1 meter forward
-        moveFwd.target_pose.pose.orientation.w = 1.0;
-
+	
+	if(counter){
+        	moveFwd.target_pose.pose.position.x = 1.0; //move 1 meter forward
+		moveFwd.target_pose.pose.orientation = tf::createQuaternionMsgFromYaw(0.0); 
+		counter = 0;
+	}
+	else{
+		counter++;
+		moveFwd.target_pose.pose.position.x = 0.0;
+		moveFwd.target_pose.pose.orientation = tf::createQuaternionMsgFromYaw(-90.0);
+	}
         ROS_INFO("Sending goal");
 	ac.sendGoal(moveFwd);
 
 	//ac.waitForResult();
 
-	if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
-		ROS_INFO("WOOP WOOP YOU DID IT");
-	else
-		ROS_INFO("You screwed up boi");
+	//if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
+	//	ROS_INFO("WOOP WOOP YOU DID IT");
+	//else
+	//	ROS_INFO("You screwed up boi");
         /////////////////
 
 }
 
 //Note: frame is typicall "map" or "base_footprint"
-bool moveToGoal(double xGoal, double yGoal, string frame){
-
+bool moveToGoal(double xGoal, double yGoal){
    //define a client for to send goal requests to the move_base server through a SimpleActionClient
    actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> ac("move_base", true);
 
@@ -157,13 +139,13 @@ bool moveToGoal(double xGoal, double yGoal, string frame){
    move_base_msgs::MoveBaseGoal goal;
 
    //set up the frame parameters
-   goal.target_pose.header.frame_id = frame;
+   goal.target_pose.header.frame_id = "map";
    goal.target_pose.header.stamp = ros::Time::now();
 
    /* moving towards the goal*/
 
-   goal.target_pose.pose.position.x =  xGoal;
-   goal.target_pose.pose.position.y =  yGoal;
+   goal.target_pose.pose.position.x = - xGoal;
+   goal.target_pose.pose.position.y = - yGoal;
    goal.target_pose.pose.position.z =  0.0;
    goal.target_pose.pose.orientation.x = 0.0;
    goal.target_pose.pose.orientation.y = 0.0;
@@ -177,10 +159,12 @@ bool moveToGoal(double xGoal, double yGoal, string frame){
 
    if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED){
       ROS_INFO("You have reached the destination");
+      goalMet = 1;
       return true;
    }
    else{
       ROS_INFO("The robot failed to reach the destination");
+      goalMet = 0;
       return false;
    }
 
@@ -230,10 +214,14 @@ int main(int argc, char **argv)
   sleep(1);
   //ros::Subscriber sub2 = n.subscribe("sensor_msgs/Imu", 1000, imuCallback);
 
-	// ros::Publisher arduinoSend = n.advertise<std_msgs::String>("arduinoTopic", 500);
-	// ros::Subscriber arduinoReceive = n.subscribe("arduinoPub", 500, arduinoCallback);
-	ros::Rate loop_rate(40);	//1 Hz
+  ros::Publisher colorSelectPub = n.advertise<std_msgs::Int32>("colorSelect",1);//this publishes data to vision shit
+  ros::Publisher gate_cmd = n.advertise<std_msgs::Int32>("gate_cmd",1);
+  ros::Publisher flag_cmd = n.advertise<std_msgs::Int32>("flag_cmd",1);
 
+  ros::Subscriber startColorSub = n.subscribe<std_msgs::Float32>("start_color", 1, colorSelected);
+  ros::Subscriber startMatchSub = n.subscribe<std_msgs::Float32>("start_match", 1, matchStarted);
+	ros::Rate loop_rate(40);	//1 Hz
+  
 
 	//geometry_msgs::PoseWithCovarianceStamped ip;
 	//ip.header.frame_id = "map";
@@ -249,139 +237,56 @@ int main(int argc, char **argv)
 	*/
 	int count = 0;
 	bool done = 0;
-  
+  double myGoalX[8] = {0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
+  double myGoalY[8] = {0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};//set these according to the new map locations
+
 	while(ros::ok()) {
-    //this tests the octet and debris goal setting
-    /*
-    arduino.moveFlag(180);//lower flag
-    arduino.moveGate(0);//close gate
-    if(arduino.getButtonState){
-      int startingPos = arduino.getMode(); //query the set starting corner
-      double goalListx[8] = {0, 0.45, 0.32, 0.45, 0, -0.45,-0.32, -0.45};//map frame position
-      double goalListy[8] = {-0.32, -0.45, 0, 0.45, 0.32, 0.45, 0, -0.45};//map frame position
-      double myGoalX[8] = {0,0,0,0,0,0,0,0};
-      double myGoalY[8] = {0,0,0,0,0,0,0,0};
-      double initialPose[2] = {0.0,0.0};
-      int startMatch = 0;
-      int goalOffset = 0;
-      int octetNum = 0;
-      int loopNum = 0;
-      switch(startingPos){
-        case(0):
-          ip.pose.pose.position.x = -122; //redStart
-          ip.pose.pose.position.y = -122;
-          initialPose[0] = -122;
-          initialPose[1] = -122;
-          goalOffset = 0;
-          
-          break;
-        case(1):
-          ip.pose.pose.position.x = -122;//yellowStart
-          ip.pose.pose.position.y = 122;
-          initialPose[0] = -122;
-          initialPose[1] = 122;
-          goalOffset = 2;
-          break;
-        case(2):
-          ip.pose.pose.position.x = 122;//blueStart
-          ip.pose.pose.position.y = 122;
-          initialPose[0] =  122;
-          initialPose[1] =  122;
-          goalOffset = 4;
-          break;
-        case(3):
-          ip.pose.pose.position.x = 122;//greenStart
-          ip.pose.pose.position.y = -122;
-          initialPose[0] = 122;
-          initialPose[1] = -122;
-          goalOffset = 6;
-        break;
-      }
-      
-      for(int i = 0; i < 8; i++){
-        myGoalX[i] = goalListx[(i+goalOffset)%8];
-        myGoalY[i] = goalListy[(i+goalOffset)%8];
-      }
-      startMatch = 1;//never execute this switch case more than once
-    } 
-    if(startMatch){
-      if(loopNUm == 0 && octet == 0){//first start location setting
-        while(!(moveToGoal(myGoalX[octetNum],myGoalY[octetNum])));//go to initial octet
-        octetNum++;
-      }
-      //check to see if any blocks in view, if so go to them.
-      if(numberBlocks != 0){
-        double dummyRobotX = 0.0;
-        double dummyRobotY = 0.0;
-        arduino.moveGate(180);
-        while(!(moveToGoal(dummyRobotX+closestBlockY+0.11,dummyRobotY+closestBlockX)));//location reference to map, .11 is roughly half the width of the robot 
-        //to compensate for camera offset,,this waits until the robot has met its goal
-        //also this moves to collect all blocks 
-      }
-      else if(numBlocks == 0 && abs(dummyRobotX-myGoalX[octetNum+1])<20 && abs(dummyRobotY-myGoalY[octetNum+1])<20){ //checks to see if goal is too close to current position, 20 is arbitrary
-        octetNum++;
-      }
-      else(){
-        moveToGoal(myGoalX[octet],myGoalY[octet]);
-      }
-      if(octet == 8){octet = 0;loopNum++;}
-      if(loopNum == 3){
-        while(!(moveToGoal(initialPose[0],initialPose[1])));//go back to start position
-      }
-      arduino.moveFlag(0);
-    }
-    */
-
-
-
-
-
-		//TEST #0 - Move. Period.
-	        //testMovement();
-
-       		//TEST #1 - Move forward a meter
-       		//moveFwdOneMeter;
-
-		//TEST #2 - Go in a circle
-		//bool goalReached = false;
-		//double x1 = 0;
-		//double y1 = -2.25;
-		//double x2 = 2.25;
-		//double y2 = 0;
-		//double x3 = 0;
-		//double y3 = 2.25;
-		//double x4 = -2.25;
-		//double x5 = 0;
-		//if(goalReached == moveToGoal(x1,y1, "map")){
-		//	goalReached = false;
-		//	if(goalReached == moveToGoal(x2,y2, "map")){
-		//		goalReached = false;
-		//		if(goalReached == moveToGoal(x3,y3, "map")){
-		//			goalReached = false;
-		//			if(goalReached == moveToGoal(x4,y4, "map")){
-		//				goalReached = false;
-		//			}
-		//		}
-		//	}
-	//	}
-					
-		
-		std_msgs::String msg;
+      	
 		msg.data = std::string("Hello ");
 		msg.data += std::to_string(count);
-		switch(arduino.getMode()){
-			case 0: arduino.updateLCD("Red");
-				//moveFwdOneMeter();
-				ROS_INFO_STREAM(msg.data);
-				break;
-			case 1: arduino.updateLCD("Yellow");
-				break;
-			case 2: arduino.updateLCD("Blue");
-				break;
-			case 3: arduino.updateLCD("Green");
-				break;
-			default: break;
-		}
+    //this sets the selected 
+    if(colorChoose == 0){
+      //color selection has not been received by Arduino com
+    }
+    if(colorChoose == 1){
+      //publish the selected color to the vision node
+      //colorSelectPub.publish(color)
+    }
+
+    //this tests the octet and debris goal setting
+    if(startMatch == 1){ //only runs on second button press
+      
+      if(octetNum == 0){//first start location setting
+        moveToGoal(myGoalX[octetNum],myGoalY[octetNum]);//go to initial octet
+        if(goalMet){octetNum++;}
+      }
+
+      //check to see if any blocks in view, if so go to them.
+      if(numberBlocks > 0 && octetNum != 0){ 
+        
+        
+        arduino.moveGate(180);//open gate
+        moveToGoal(dummyRobotX+closestBlockY+0.11,dummyRobotY+closestBlockX);//location reference to map, .11 is roughly half the width of the robot 
+        //to compensate for camera offset,,this waits until the robot has met its goal
+        //also this moves to collect all blocks
+        if(goalMet){octetNum++;}
+
+      }
+      else if(numberBlocks == 0 && abs(dummyRobotX-myGoalX[octetNum+1])<20 && abs(dummyRobotY-myGoalY[octetNum+1])<20){ //checks to see if goal is too close to current position, 20 is arbitrary
+        octetNum++;
+      }
+      else{
+        moveToGoal(myGoalX[octetNum],myGoalY[octetNum]);
+      }
+
+      if(octetNum == 8){octetNum = 0;loopNum++;}
+
+      if(loopNum == 3){
+        moveToGoal(initialPose[0],initialPose[1]);//go back to start position
+          if(goalMet){octetNum++;loopNum = 0; arduino.moveFlag(0);}
+      }
+    }
+
 		ros::spinOnce();
 		arduino.drive(rightSpeed,leftSpeed);
 		arduino.updateArduino();

@@ -111,6 +111,7 @@ class PidVelocity():
             self.ticks_since_target += 1
             if self.ticks_since_target == self.timeout_ticks:
                 self.pub_motor.publish(0)
+		rospy.loginfo("timeout")
             
     #####################################################
     def calcVelocity(self):
@@ -152,7 +153,7 @@ class PidVelocity():
         #if (self.target == 0):
         #    self.motor = 0
     
-        rospy.loginfo("vel:%0.2f tar:%0.2f err:%0.2f int:%0.2f der:%0.2f ## motor:%d " % 
+        rospy.logdebug("vel:%0.2f tar:%0.2f err:%0.2f int:%0.2f der:%0.2f ## motor:%d " % 
                       (self.vel, self.target, self.error, self.integral, self.derivative, self.motor))
     
     

@@ -11,7 +11,7 @@
 #include <boost/geometry.hpp>
 #include <vector>
 #include <tf/transform_broadcaster.h>
-#include <math.h> 
+#include <math.h>
 
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/highgui/highgui.hpp"
@@ -46,7 +46,7 @@ void laserCallback(const sensor_msgs::LaserScanConstPtr &msg){
   bg::clear(cloud);
   float angleA = msg->angle_min;
   for(int i = 0; i < msg->scan_time/msg->time_increment; i+=1, angleA += msg->angle_increment){
-    bg::append(cloud, point_t(cos(angleA)*msg->ranges[i], sin(angleA)*msg->ranges[i]));
+    bg::append(cloud, point_t(cos(angleA)*(msg->ranges[i]), sin(angleA)*(msg->ranges[i])));
   }
   bg::clear(hull);
   bg::convex_hull(cloud, hull);
@@ -79,8 +79,8 @@ void laserCallback(const sensor_msgs::LaserScanConstPtr &msg){
   geometry_msgs::PoseWithCovarianceStamped ip;
 	ip.header.frame_id = "map";
 	ip.header.stamp = current_time;
-	ip.pose.pose.position.x = r*cos(angle);
-	ip.pose.pose.position.y = r*sin(angle);
+	ip.pose.pose.position.x = 1.22-x;
+	ip.pose.pose.position.y = 1.22-y;
 	ip.pose.pose.orientation = odom_quat;
 	ip.pose.covariance[0] = 1e-3;
 	ip.pose.covariance[7] = 1e-3;
@@ -103,7 +103,7 @@ void laserCallback(const sensor_msgs::LaserScanConstPtr &msg){
       int x2 = (int)(200*rothull[rothull.size()-1].get<0>()+500), y2 = (int)(200*rothull[rothull.size()-1].get<1>()+500);
       line(testimage,Point(x1,y1),Point(x2,y2),Scalar(0,0,255));
   }
-  cout << angle*180*3.14 << " degrees" << endl; 
+  cout << angle*180/3.14 << " degrees" << endl; 
   cout << centroid.get<0>() << "," << centroid.get<1>() << endl;
   rectangle(testimage,Rect(-1.22*200+500,-1.22*200+500,2.44*200,2.44*200),Scalar(255,255,255),1);
   {
@@ -114,7 +114,7 @@ void laserCallback(const sensor_msgs::LaserScanConstPtr &msg){
           line(testimage, vertices[i], vertices[(i+1)%4], Scalar(255,255,255));
   }
   {
-      RotatedRect rRect = RotatedRect(Point2f(500-centroid.get<0>()*200,500+centroid.get<1>()*200), Size2f(.2286*200,.2286*200), angle*180*3.14);
+      RotatedRect rRect = RotatedRect(Point2f(500-centroid.get<0>()*200,500+centroid.get<1>()*200), Size2f(.2286*200,.2286*200), angle*180/3.14);
       Point2f vertices[4];
       rRect.points(vertices);
       for (int i = 0; i < 4; i++)
