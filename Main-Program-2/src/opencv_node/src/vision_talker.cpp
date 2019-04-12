@@ -20,7 +20,7 @@ Color Indices = red(0), yellow(1), blue(2), green(3)
 #include <opencv2/highgui.hpp>
 #include <raspicam/raspicam_cv.h>
 #include <ctime>
-
+#include <std_msgs/Float32.h>
 #include "ros/ros.h"
 #include "std_msgs/String.h"
 #include <sstream>
@@ -41,10 +41,19 @@ const double CORNER_MIN_W2H  = .1;
 const double CORNER_MAX_W2H = .4;
 const double DEBRIS_MIN_PERCENT_FILLED = 0.70;
 const double DISTANCE_MULTIPLIER = 26.95;
-
+int colorChoose = 0;
 // Common Namespaces
 using namespace cv;
 using namespace std;
+ros::NodeHandle n;
+
+
+void colorSelected(const std_msgs::Float32ConstPtr &msg){
+                colorChoose = int(msg->data);
+        }
+
+
+ros::Subscriber startColorSub = n.subscribe<std_msgs::Float32>("start_color", 1, colorSelected);
 
 enum Colors {
 	Red,
@@ -141,11 +150,6 @@ struct VisionHandle
 		Camera.release();
 	}
 
-	// Processes the message from Arduino for desired color
-	void colorSelected(const std_msgs::Float32ConstPtr &msg){
-		colorChoose = int(msg->data);
-	}
-
 	// Takes a picture, saves it in image, and converts it to HSV
 	void takePicture()
 	{
@@ -163,7 +167,6 @@ struct VisionHandle
 	void findObjects() 
 	{
 		objectProperties.clear();
-		ros::Subscriber startColorSub = n.subscribe<std_msgs::Float32>("start_color", 1, colorSelected);
 		if (desiredColor == All){
 			for (int i = 0; i < 4; i++) {
 				findObjectsOfColor(i);
@@ -333,7 +336,6 @@ struct VisionHandle
 	int processVision(int argc, char **argv)
 	{
 		ros::init(argc, argv, "vision_talker"); // initialize ROS
-		ros::NodeHandle n;
 		ros::Publisher pub = n.advertise<opencv_node::vision_msg>("vision_info", 1000); // start publishing chatter
 		ros::Rate loop_rate(10);
 		while (ros::ok())

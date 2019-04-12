@@ -40,7 +40,7 @@ double dummyRobotY = 0.0;
 int startMatch = 0;
 int loopNum = 0;
 double initialPose[2] = {0.0,0.0};
-
+int moveBaseTest = 0;
 
 void colorSelected(const std_msgs::Float32ConstPtr &msg){
   colorChoose = int(msg->data);
@@ -266,14 +266,18 @@ int main(int argc, char **argv)
         moveToGoal(myGoalX[octetNum],myGoalY[octetNum]);
       }
 
-      if(octetNum == 8){octetNum = 0;loopNum++;color_Want.publish(colorChoose++;)}
+      if(octetNum == 8){octetNum = 0;loopNum++;color_Want.publish(colorChoose++);}
 
       if(loopNum == 3){
         moveToGoal(initialPose[0],initialPose[1]);//go back to start position
           if(goalMet){octetNum++;loopNum = 0; flag_cmd.publish(40);}
       }
     }
-
+		if(moveBaseTest == 0){
+			moveBaseTest++;
+			moveToGoal(-0.5,0);
+		}
+		
 		ros::spinOnce();	
 		loop_rate.sleep();
 		++count;
