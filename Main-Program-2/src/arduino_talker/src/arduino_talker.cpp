@@ -18,7 +18,9 @@ include "../main_node/src/Arduino-Serial/ArduinoSerial.h"
 using namespace std;
 int colorSelected = 0;
 int colorChoose = 0;
-
+int matchStatus  = 0;
+int gatePos = 0;
+int flagPos = 0;
 serialPort arduino("/dev/serial/by-id/usb-1a86_USB2.0-Serial-if00-port0");
 
 void rin(const std_msgs::Float32ConstPtr &msg){
@@ -31,6 +33,19 @@ void lin(const std_msgs::Float32ConstPtr &msg){
 void colorSelectFunc(const std_msgs::Float32ConstPtr &msg){
 	colorSelect = (int)msg->data;
 }
+void startMatchFunc(const std_msgs::Float32ConstPtr &msg){
+	matchStatus = (int)msg->data;
+}
+void flagFunc(const std_msgs::Float32ConstPtr &msg){
+	flagPos = (int)msg->data;
+    arduino.moveFlag(flagPos);
+}
+void gateFunc(const std_msgs::Float32ConstPtr &msg){
+	gatePos = (int)msg->data;
+    arduino.moveFlag(gatePos);
+
+}
+
 
 int main(int argc, char **argv){
 
@@ -38,13 +53,20 @@ int main(int argc, char **argv){
     ros::Rate loop_rate(40);	//1 Hz
     ros::Subscriber lsub = n.subscribe<std_msgs::Float32>("rmotor_cmd", 1,lin);
     ros::Subscriber rsub = n.subscribe<std_msgs::Float32>("lmotor_cmd", 1,rin);
-    ros::Publisher colorSelectPub = n.advertise<std_msgs::Int32>("colorSelectFunc",1);
+    ros::Subscriber flag = n.subscribe<std_msgs::Float32>("flag_cmd", 1,flagFunc);
+    ros::Subscriber gate = n.subscribe<std_msgs::Float32>("gate_cmd", 1,gateFunc);
 
+    ros::Publisher colorSelectPub = n.advertise<std_msgs::Int32>("colorSelectFunc",1);
+    ros::Publisher startMatchPub = n.advertise<std_msgs::Int32>("startMatchFunc",1);
 
     ros::Rate loop_rate(40);	//1 Hz
     ros::Time current_time = ros::Time::now();
 
     while(ros::ok()) {
+
+        if(arduino.getButtonState && colorChoose){
+            startMatchPub.publish(matchStatus);
+        }
 
         std_msgs::String msg;
 		msg.data = std::string("Hello ");

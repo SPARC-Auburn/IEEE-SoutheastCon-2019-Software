@@ -21,7 +21,7 @@
 //Color Indices = red(0), yellow(1), blue(2), green(3)
 using namespace std;
 
-serialPort arduino("/dev/serial/by-id/usb-1a86_USB2.0-Serial-if00-port0");
+//serialPort arduino("/dev/serial/by-id/usb-1a86_USB2.0-Serial-if00-port0");
 
 
 typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
@@ -41,13 +41,6 @@ int startMatch = 0;
 int loopNum = 0;
 double initialPose[2] = {0.0,0.0};
 
-void rin(const std_msgs::Float32ConstPtr &msg){
-	rightSpeed = (int)msg->data;
-}
-
-void lin(const std_msgs::Float32ConstPtr &msg){
-	leftSpeed = (int)msg->data;
-}
 
 void colorSelected(const std_msgs::Float32ConstPtr &msg){
   colorChoose = int(msg->data);
@@ -245,13 +238,7 @@ int main(int argc, char **argv)
 		msg.data = std::string("Hello ");
 		msg.data += std::to_string(count);
     //this sets the selected 
-    if(colorChoose == 0){
-      //color selection has not been received by Arduino com
-    }
-    if(colorChoose == 1){
-      //publish the selected color to the vision node
-      //colorSelectPub.publish(color)
-    }
+    
 
     //this tests the octet and debris goal setting
     if(startMatch == 1){ //only runs on second button press
@@ -265,7 +252,7 @@ int main(int argc, char **argv)
       if(numberBlocks > 0 && octetNum != 0){ 
         
         
-        arduino.moveGate(180);//open gate
+        gate_cmd.publish(75);//open gate
         moveToGoal(dummyRobotX+closestBlockY+0.11,dummyRobotY+closestBlockX);//location reference to map, .11 is roughly half the width of the robot 
         //to compensate for camera offset,,this waits until the robot has met its goal
         //also this moves to collect all blocks
@@ -273,6 +260,7 @@ int main(int argc, char **argv)
 
       }
       else if(numberBlocks == 0 && abs(dummyRobotX-myGoalX[octetNum+1])<20 && abs(dummyRobotY-myGoalY[octetNum+1])<20){ //checks to see if goal is too close to current position, 20 is arbitrary
+        gate_cmd.publish(20);//close Gate
         octetNum++;
       }
       else{
@@ -283,13 +271,11 @@ int main(int argc, char **argv)
 
       if(loopNum == 3){
         moveToGoal(initialPose[0],initialPose[1]);//go back to start position
-          if(goalMet){octetNum++;loopNum = 0; arduino.moveFlag(0);}
+          if(goalMet){octetNum++;loopNum = 0; flag_cmd.publish(40);}
       }
     }
 
-		ros::spinOnce();
-		arduino.drive(rightSpeed,leftSpeed);
-		arduino.updateArduino();
+		ros::spinOnce();	
 		loop_rate.sleep();
 		++count;
 	}
