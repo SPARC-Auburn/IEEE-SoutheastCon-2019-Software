@@ -21,76 +21,32 @@
 //Color Indices = red(0), yellow(1), blue(2), green(3)
 using namespace std;
 
-serialPort arduino("/dev/serial/by-id/usb-1a86_USB2.0-Serial-if00-port0");
+//serialPort arduino("/dev/serial/by-id/usb-1a86_USB2.0-Serial-if00-port0");
 
-//ros::Publisher initPose;
+
 typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
-//arduino.setupConnection();
+std_msgs::String msg;
 int rightSpeed=0,leftSpeed=0;
 double closestBlockX = 0.0;//add this to y for map placement
 double closestBlockY = 0.0;//add this to x for map placement
-int numberBlocks = 0;
+int numberBlocks = 0; //number of blocks seen
 double desiredColor = 0.0;
-string colorSelect = "0";
+string colorSelect = "0"; //recieved startColor
 int colorChoose = 0;
 int goalMet = 0;
-int sentInitialPose = 0; //so we dont spam the shit 
+int octetNum = 0;
 double dummyRobotX = 0.0;
 double dummyRobotY = 0.0;
+int startMatch = 0;
+int loopNum = 0;
+double initialPose[2] = {0.0,0.0};
 
-void testMovement()
-{
-  arduino.updateLCD("Starting movement test..");
-  usleep(1000*500);
-  arduino.updateArduino();
-  //arduino.updateLCD("Forward..");
-  //arduino.goForward(25);
-  //usleep(1000*500);
-  //arduino.updateLCD("Stop");
-  //arduino.stopMotors(); 
-  //usleep(1000*500);
-  //arduino.updateLCD("Backward..");
-  //arduino.goBackward(25);
-  //usleep(1000*500);
-  //arduino.updateLCD("Stop");
-  //arduino.stopMotors(); 
-  //usleep(1000*500);
-  //arduino.updateLCD("Right..");     
-  //arduino.turnRight(25);
-  //usleep(1000*500);
-  //arduino.updateLCD("Stop");
-  //arduino.stopMotors();
-  //usleep(1000*500);
-  //arduino.updateLCD("Left..");
-  //arduino.turnLeft(25);
-  //usleep(1000*500);
-  //arduino.updateLCD("Stop");
-  //arduino.stopMotors();
-  //usleep(1000*500);
-  arduino.updateLCD("Moving Gate Up..");
-  arduino.moveGate(120);
-  arduino.updateArduino();
-  usleep(1000*500);
-  arduino.updateLCD("Moving Gate Down..");
-  arduino.moveGate(40);
-  arduino.updateArduino();
-  usleep(1000*500);
-  arduino.updateLCD("Moving Flag Up..");
-  arduino.moveFlag(40);
-  arduino.updateArduino();
-  usleep(1000*500);
-  arduino.updateLCD("Moving Flag Down..");
-  arduino.moveFlag(120);
-  arduino.updateArduino();
-  usleep(1000*500);
-  arduino.updateLCD("Movement Test   Compeleted!");
-}
-void rin(const std_msgs::Float32ConstPtr &msg){
-	rightSpeed = (int)msg->data;
-}
 
-void lin(const std_msgs::Float32ConstPtr &msg){
-	leftSpeed = (int)msg->data;
+void colorSelected(const std_msgs::Float32ConstPtr &msg){
+  colorChoose = int(msg->data);
+}
+void matchStarted(const std_msgs::Float32ConstPtr &msg){
+	startMatch = int(msg->data);
 }
 
 double objDistance(const opencv_node::object& obj) {
@@ -231,8 +187,7 @@ int main(int argc, char **argv)
   ros::NodeHandle n;
   ros::Subscriber sub = n.subscribe("vision_info", 1000, visionCallback);
 
-  ros::Subscriber lsub = n.subscribe<std_msgs::Float32>("rmotor_cmd", 1,lin);
-  ros::Subscriber rsub = n.subscribe<std_msgs::Float32>("lmotor_cmd", 1,rin);
+
 
  // initPose = n.advertise<geometry_msgs::PoseWithCovarianceStamped>("initialpose",1,true);
 
@@ -250,11 +205,15 @@ int main(int argc, char **argv)
   sleep(1);
   //ros::Subscriber sub2 = n.subscribe("sensor_msgs/Imu", 1000, imuCallback);
 
-	// ros::Publisher arduinoSend = n.advertise<std_msgs::String>("arduinoTopic", 500);
-	// ros::Subscriber arduinoReceive = n.subscribe("arduinoPub", 500, arduinoCallback);
-  //ros::Publisher colorSelectPub = n.advertise<std_msgs::Int32>("colorSelect",1);
-	ros::Rate loop_rate(40);	//1 Hz
+  ros::Publisher colorSelectPub = n.advertise<std_msgs::Int32>("colorSelect",1);//this publishes data to vision shit
+  ros::Publisher gate_cmd = n.advertise<std_msgs::Int32>("gate_cmd",1);
+  ros::Publisher flag_cmd = n.advertise<std_msgs::Int32>("flag_cmd",1);
+  ros::Publisher color_Want = n.advertise<std_msgs::Float32>("color_want",1);
 
+  ros::Subscriber startColorSub = n.subscribe<std_msgs::Float32>("start_color", 1, colorSelected);
+  ros::Subscriber startMatchSub = n.subscribe<std_msgs::Float32>("start_match", 1, matchStarted);
+	ros::Rate loop_rate(40);	//1 Hz
+  
 
 	//geometry_msgs::PoseWithCovarianceStamped ip;
 	//ip.header.frame_id = "map";
@@ -270,82 +229,29 @@ int main(int argc, char **argv)
 	*/
 	int count = 0;
 	bool done = 0;
- while(ros::ok()) {
-	//testMovement();
-   //this tests the octet and debris goal setting
-    
-/*    arduino.moveFlag(180);//lower flag
-    arduino.moveGate(0);//close gate
-    
-      
-    double goalListx[8] = {0, 0.45, 0.32, 0.45, 0, -0.45,-0.32, -0.45};//map frame position
-    double goalListy[8] = {-0.32, -0.45, 0, 0.45, 0.32, 0.45, 0, -0.45};//map frame position
-    double myGoalX[8] = {0,0,0,0,0,0,0,0};
-    double myGoalY[8] = {0,0,0,0,0,0,0,0};
-    double initialPose[2] = {0.0,0.0};
-    
-    int goalOffset = 0;
-    int octetNum = 0;
-    int loopNum = 0;
-    if(colorChoose == 1){ //if the first color has been selected
-      if(!sentInitialPose){
-        switch(stoi(colorSelect)){
-          case(0):
-            
-            //ip.pose.pose.position.x = -122; //redStart
-            //ip.pose.pose.position.y = -122;
-            initialPose[0] = -122;
-            initialPose[1] = -122;
-            goalOffset = 0;
-            
-            break;
-          case(1):
-            
-            //ip.pose.pose.position.x = -122;//yellowStart
-            //ip.pose.pose.position.y = 122;
-            initialPose[0] = -122;
-            initialPose[1] = 122;
-            goalOffset = 2;
-            break;
-          case(2):
-            
-            //ip.pose.pose.position.x = 122;//blueStart
-            //ip.pose.pose.position.y = 122;
-            initialPose[0] =  122;
-            initialPose[1] =  122;
-            goalOffset = 4;
-            break;
-          case(3):
-            
-            //ip.pose.pose.position.x = 122;//greenStart
-            //ip.pose.pose.position.y = -122;
-            initialPose[0] = 122;
-            initialPose[1] = -122;
-            goalOffset = 6;
-          break;
-        }
-      }
-      sentInitialPose = 1;
-      for(int i = 0; i < 8; i++){
-        myGoalX[i] = goalListx[(i+goalOffset)%8];
-        myGoalY[i] = goalListy[(i+goalOffset)%8];
-      }
-      if(arduino.getButtonState()){
-        colorChoose++; //this triggers to start
-      }
-    } 
+  double myGoalX[8] = {0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
+  double myGoalY[8] = {0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};//set these according to the new map locations
 
-    if(colorChoose > 1){ //only runs on second button press
+	while(ros::ok()) {
+      	
+		msg.data = std::string("Hello ");
+		msg.data += std::to_string(count);
+    //this sets the selected 
+    
+
+    //this tests the octet and debris goal setting
+    if(startMatch == 1){ //only runs on second button press
+      
       if(octetNum == 0){//first start location setting
         moveToGoal(myGoalX[octetNum],myGoalY[octetNum]);//go to initial octet
         if(goalMet){octetNum++;}
       }
 
       //check to see if any blocks in view, if so go to them.
-      if(numberBlocks != 0 && octetNum != 0){ //
+      if(numberBlocks > 0 && octetNum != 0){ 
         
         
-        arduino.moveGate(180);//open gate
+        gate_cmd.publish(75);//open gate
         moveToGoal(dummyRobotX+closestBlockY+0.11,dummyRobotY+closestBlockX);//location reference to map, .11 is roughly half the width of the robot 
         //to compensate for camera offset,,this waits until the robot has met its goal
         //also this moves to collect all blocks
@@ -353,56 +259,22 @@ int main(int argc, char **argv)
 
       }
       else if(numberBlocks == 0 && abs(dummyRobotX-myGoalX[octetNum+1])<20 && abs(dummyRobotY-myGoalY[octetNum+1])<20){ //checks to see if goal is too close to current position, 20 is arbitrary
+        gate_cmd.publish(20);//close Gate
         octetNum++;
       }
       else{
         moveToGoal(myGoalX[octetNum],myGoalY[octetNum]);
       }
 
-      if(octetNum == 8){octetNum = 0;loopNum++;}
+      if(octetNum == 8){octetNum = 0;loopNum++;color_Want.publish(colorChoose++;)}
+
       if(loopNum == 3){
         moveToGoal(initialPose[0],initialPose[1]);//go back to start position
-          if(goalMet){octetNum++;loopNum = 0; arduino.moveFlag(0);}
+          if(goalMet){octetNum++;loopNum = 0; flag_cmd.publish(40);}
       }
     }
-	
-  	std_msgs::String msg;
-		msg.data = std::string("Hello ");
-		msg.data += std::to_string(count);
-    if(colorChoose == 0){
-      switch(arduino.getMode()){
-        case 0: arduino.updateLCD("Red");
-          if(arduino.getButtonState() && colorChoose < 1){
-            colorSelect = arduino.getMode();colorChoose++;}
-          break;
-        case 1: arduino.updateLCD("Yellow");
-          if(arduino.getButtonState() && colorChoose < 1){
-            colorSelect = arduino.getMode();colorChoose++;}
-          break;
-        case 2: arduino.updateLCD("Blue");
-          if(arduino.getButtonState() && colorChoose < 1){
-            colorSelect = arduino.getMode();colorChoose++;}
-          break;
-        case 3: arduino.updateLCD("Green");
-          if(arduino.getButtonState() && colorChoose < 1){
-            colorSelect = arduino.getMode();colorChoose++;}
-          break;
-        default: break;
-      }
-    }
-    if(colorChoose == 1){
-      
-      colorSelectPub.publish(stoi(colorSelect));
-      		
-    }	*/	
-		if(!done){
-		arduino.moveGate(20); //Bottom is 20, Top is 50
-		arduino.moveFlag(130); //Top is 40, Bottom is 130
-		done = 1;
-		}
-		ros::spinOnce();
-		arduino.drive(rightSpeed,leftSpeed);
-		arduino.updateArduino();
+
+		ros::spinOnce();	
 		loop_rate.sleep();
 		++count;
 	}
