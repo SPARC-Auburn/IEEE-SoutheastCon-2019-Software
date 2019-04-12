@@ -12,8 +12,8 @@ const cv::Matx33d Vision3D::cameraMatrix = {512.983, 0.0, 307.130,
 
 const cv::Matx<double, 1, 5> Vision3D::distortionCoefficients = {.20803238, -.352899, .012604, -.0033081, .090205};
 
-Point2d Vision3D::getPosIfHeight(Point imagePos, double height) {
-	vector<Point2d> initial{{(double) imagePos.x, (double) imagePos.y}};
+Point2d Vision3D::getPosIfHeight(Point2d imagePos, double height) {
+	vector<Point2d> initial{imagePos};
 	vector<Point2d> undistorted;
 	undistortPoints(initial, undistorted, cameraMatrix, distortionCoefficients, noArray(), cameraMatrix);		//I was unsure how to use this without it normalizing and denormalizing the values using the camera matrix
 	//ROS_INFO("Before: %f, %f, Undistorted: %f, %f", initial[0].x, initial[0].y, undistorted[0].x, undistorted[0].y);

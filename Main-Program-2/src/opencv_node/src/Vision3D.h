@@ -16,8 +16,8 @@ public:
 
 	static const cv::Matx<double, 1, 5> distortionCoefficients;
 
-	static cv::Point2d getPosIfHeight(cv::Point imagePos, double height);			//Positive x is points to the right of the camera. Positive y is points out the front of the camera.
-
+	static cv::Point2d getPosIfHeight(cv::Point2d imagePos, double height);			//Positive x of the return points out the front of the camera. Positive y points to the left of the camera.
+	
 	static constexpr double centerTempOffset = .048;		//Should be set to zero for competition
 	static constexpr double centerHeight = .2545;
 	static constexpr double centerWidth = (.245 + .228) / 2.0;

@@ -181,7 +181,7 @@ struct VisionHandle
 	
 	
 	WrapIterator<Point> findContinuation(WrapIterator<Point> iter) {			//iter refers to the point on the line segment that points in the direction to search; returns the "far" point of the continued line segment (so if the segments are adjacent, iter.next() is returned). If nothing is found, iter is returned.
-		auto former = iter.prev();
+		auto former = iter.prev();													//Todo: prevent a line from being found that is behind the beginning line
 		ROS_INFO_STREAM("Passed in value: " << *iter);
 		ROS_INFO_STREAM("Former: " << *former);
 		ROS_INFO_STREAM("Next: " << *iter.next());
@@ -230,7 +230,13 @@ struct VisionHandle
 		approxPolyDP(contour, smoothedContourContainer[0], .005 * resolutionX, true);
 		drawContours(image, smoothedContourContainer, 0, Scalar(0, 0, 0), 2);
 		vector<Point>& smoothedContour = smoothedContourContainer[0];
-		ROS_INFO_STREAM("Test of intersection: " << intersection(Point(2, 0), Point(1, 0), Point(0, 1), Point(0, 3)));
+		if(smoothedContour.size() < 4) {
+			return;
+		}
+		for(const Point& point : smoothedContour) {
+			ROS_INFO_STREAM("Point: " << point);
+		}
+		ROS_INFO_STREAM("Size: " << smoothedContour.size());
 		
 		int minY0Index = -1, maxY0Index = -1;		//find the two points on the contour that represent the ends of the line segment where a center face goes off top of the screen
 		for(int i = 0; i < smoothedContour.size(); ++i) {
@@ -243,21 +249,25 @@ struct VisionHandle
 		}
 		
 		if(minY0Index != -1 && maxY0Index != -1 && minY0Index != maxY0Index) {		//If these points were found, then a center face (should) exist inside this contour
-			bool incMax = minY0Index < maxY0Index || (maxY0Index == 0 && minY0Index == smoothedContour.size() - 1);
+			bool incMax = (maxY0Index - minY0Index) == 1 || (maxY0Index == 0 && minY0Index == smoothedContour.size() - 1);
+			ROS_INFO_STREAM("incMax: " << incMax);
 			WrapIterator<Point> minY0(smoothedContour, !incMax, minY0Index);
 			WrapIterator<Point> maxY0(smoothedContour, incMax, maxY0Index);
 			if(minY0.isAdjacentTo(maxY0)) {		//It is assumed that approxPolyDP will always make these adjacent when it can and that if they aren't adjacent, then something is wrong (like the contour touches the top of the screen in two different places)
 				auto next = maxY0.next();
 				ROS_INFO_STREAM("Max: " << maxY0.getIndex() << ", Min: " << minY0.getIndex());
+				ROS_INFO_STREAM("Next initial: " << next.getIndex());
 				vector<WrapIterator<Point>> possibleMaxFaceCorners;
-				possibleMaxFaceCorners.push_back(maxY0);		//currently only the first one of these is used
+				possibleMaxFaceCorners.push_back(next);		//currently only the first one of these is used
 				while(1) {
 					auto foundValue = findContinuation(next);
 					if(next == foundValue) {		//nothing found
+						ROS_INFO("Broke max");
 						break;
 					}
 					else {
 						next = foundValue;
+						ROS_INFO_STREAM("Found a value max: " << *foundValue);
 						if(possibleMaxFaceCorners.back().isAdjacentTo(next))
 							possibleMaxFaceCorners.back() = next;
 						else
@@ -265,16 +275,18 @@ struct VisionHandle
 					}
 				}
 				
-				next = minY0;
+				next = minY0.next();
 				vector<WrapIterator<Point>> possibleMinFaceCorners;
-				possibleMinFaceCorners.push_back(minY0);
+				possibleMinFaceCorners.push_back(next);
 				while(1) {
 					auto foundValue = findContinuation(next);
 					if(next == foundValue) {
+						ROS_INFO("Broke min");
 						break;
 					}
 					else {
 						next = foundValue;
+						ROS_INFO_STREAM("Found a value min: " << *foundValue);
 						if(possibleMinFaceCorners.back().isAdjacentTo(next))
 							possibleMinFaceCorners.back() = next;
 						else
@@ -282,18 +294,18 @@ struct VisionHandle
 					}
 				}
 				
-				auto farthestMatchForMax = possibleMaxFaceCorners.at(0);
+				auto farthestMatchForMax = possibleMaxFaceCorners[0].next();
 				while(1) {
-					auto result = findContinuation(farthestMatchForMax.next());
-					if(result == farthestMatchForMax.next())
+					auto result = findContinuation(farthestMatchForMax);
+					if(result == farthestMatchForMax)
 						break;
 					else
 						farthestMatchForMax = result;
 				}
-				auto farthestMatchForMin = possibleMinFaceCorners.at(0);
+				auto farthestMatchForMin = possibleMinFaceCorners[0].next();
 				while(1) {
-					auto result = findContinuation(farthestMatchForMin.next());
-					if(result == farthestMatchForMin.next())
+					auto result = findContinuation(farthestMatchForMin);
+					if(result == farthestMatchForMin)
 						break;
 					else
 						farthestMatchForMin = result;
@@ -303,21 +315,87 @@ struct VisionHandle
 					centerFeature::featureType type = maxY0->x == 0 ?  centerFeature::featureType::Middle : (maxIsRight ? centerFeature::featureType::RightCorner : centerFeature::featureType::LeftCorner);
 					centerFeatures.push_back(centerFeature{colorIndex, type, Vision3D::getPosIfHeight(*possibleMaxFaceCorners[0], Vision3D::centerTempOffset)});
 					circle(image, *possibleMaxFaceCorners[0], 3, colors[Red]);
+					
 					type = minY0->x == 0 ?  centerFeature::featureType::Middle : (maxIsRight ? centerFeature::featureType::LeftCorner : centerFeature::featureType::RightCorner);
 					centerFeatures.push_back(centerFeature{colorIndex, type, Vision3D::getPosIfHeight(*possibleMinFaceCorners[0], Vision3D::centerTempOffset)});
 					circle(image, *possibleMinFaceCorners[0], 3, colors[Red]);
 				}
-				else {
-					const double maxRiskyInterp = .015 * resolutionX;
-					if(maxY0->x == 0 || maxY0->x == resolutionX) {			//If the center face is partially off the screen, we can't verify we interpolated using the correct line by checking the distance between the corners, but if we only interpolated a very small distance, it's ok
-						if(magnitude(*possibleMinFaceCorners[0] - *farthestMatchForMax) < maxRiskyInterp || magnitude(*possibleMaxFaceCorners[0] - *farthestMatchForMin) < maxRiskyInterp)
-					}
-					else if(minY0->x == 0 || minY0->x == resolutionX) {		//Todo: test that resolutionX is not off by one
+				else {		//Todo: check that the corner is not at the bottom of the screen
+					const double maxRiskyInterp = .03 * resolutionX;			//If the center face is partially off the screen, we can't verify we interpolated using the correct line by checking the distance between the corners, but if we only interpolated a very small distance, it's ok
+					ROS_INFO_STREAM("Interp dist for min: " << magnitude(*possibleMinFaceCorners[0] - *farthestMatchForMax));
+					ROS_INFO_STREAM("Interp dist for max: " << magnitude(*possibleMaxFaceCorners[0] - *farthestMatchForMin));
+					if(magnitude(*possibleMinFaceCorners[0] - *farthestMatchForMax) < maxRiskyInterp) {
+						centerFeature::featureType type = maxY0->x == 0 ?  centerFeature::featureType::Middle : (maxIsRight ? centerFeature::featureType::RightCorner : centerFeature::featureType::LeftCorner);
+						centerFeatures.push_back(centerFeature{colorIndex, type, Vision3D::getPosIfHeight(*possibleMaxFaceCorners[0], Vision3D::centerTempOffset)});
+						circle(image, *possibleMaxFaceCorners[0], 3, colors[Red]);
 						
+						Point2d interpCorner = intersect(*possibleMinFaceCorners[0], *minY0, *possibleMaxFaceCorners[0], *farthestMatchForMax);
+						type = minY0->x == 0 ?  centerFeature::featureType::Middle : (maxIsRight ? centerFeature::featureType::LeftCorner : centerFeature::featureType::RightCorner);
+						centerFeatures.push_back(centerFeature{colorIndex, type, Vision3D::getPosIfHeight(interpCorner, Vision3D::centerTempOffset)});
+						circle(image, interpCorner, 3, colors[Red]);
 					}
-					WrapIterator<Point> vertLinePoints[2] = {possibleMinFaceCorners[0], possibleMaxFaceCorners[0]};
-					WrapIterator<Point> castPoints[2] = {farthestMatchForMin, farthestMatchForMax}
-					if(!maxIsRight)
+					else if(magnitude(*possibleMaxFaceCorners[0] - *farthestMatchForMin) < maxRiskyInterp) {
+						Point2d interpCorner = intersect(*possibleMaxFaceCorners[0], *maxY0, *possibleMinFaceCorners[0], *farthestMatchForMin);
+						centerFeature::featureType type = maxY0->x == 0 ?  centerFeature::featureType::Middle : (maxIsRight ? centerFeature::featureType::RightCorner : centerFeature::featureType::LeftCorner);
+						centerFeatures.push_back(centerFeature{colorIndex, type, Vision3D::getPosIfHeight(interpCorner, Vision3D::centerTempOffset)});
+						circle(image, interpCorner, 3, colors[Red]);
+						
+						type = minY0->x == 0 ?  centerFeature::featureType::Middle : (maxIsRight ? centerFeature::featureType::LeftCorner : centerFeature::featureType::RightCorner);
+						centerFeatures.push_back(centerFeature{colorIndex, type, Vision3D::getPosIfHeight(*possibleMinFaceCorners[0], Vision3D::centerTempOffset)});
+						circle(image, *possibleMinFaceCorners[0], 3, colors[Red]);
+					}
+					else if(minY0->x != 0 && minY0->x < resolutionX - 1 && maxY0->x != 0 && maxY0->x < resolutionX - 1) {		//Todo: test that resolutionX is not off by one
+						WrapIterator<Point> maxes[2] = {minY0, maxY0};
+						WrapIterator<Point> vertLinePoints[2] = {possibleMinFaceCorners[0], possibleMaxFaceCorners[0]};
+						WrapIterator<Point> castPoints[2] = {farthestMatchForMin, farthestMatchForMax};
+						Point2d vertLinePos[2] = {Vision3D::getPosIfHeight(*vertLinePoints[0], Vision3D::centerTempOffset), Vision3D::getPosIfHeight(*vertLinePoints[1], Vision3D::centerTempOffset)};
+						if(!maxIsRight) {
+							swap(maxes[0], maxes[1]);
+							swap(vertLinePoints[0], vertLinePoints[1]);
+							swap(castPoints[0], castPoints[1]);
+							swap(vertLinePos[0], vertLinePos[1]);
+						}
+						ROS_INFO_STREAM("Left vert line: " << *vertLinePoints[0]);
+						ROS_INFO_STREAM("Right vert line: " << *vertLinePoints[1]);
+						ROS_INFO_STREAM("Cast point from left: " << *castPoints[0]);
+						ROS_INFO_STREAM("Cast point from right: " << *castPoints[1]);
+						Point2d interpCornerLeft = intersect(*maxes[0], *vertLinePoints[0], *castPoints[1], *vertLinePoints[1]);
+						Point2d interpLeftPos = Vision3D::getPosIfHeight(interpCornerLeft, Vision3D::centerTempOffset);
+						Point2d interpCornerRight = intersect(*maxes[1], *vertLinePoints[1], *castPoints[0], *vertLinePoints[0]);
+						Point2d interpRightPos = Vision3D::getPosIfHeight(interpCornerRight, Vision3D::centerTempOffset);
+						int likelyBest = (castPoints[0]->x - vertLinePoints[0]->x > vertLinePoints[1]->x - castPoints[1]->x) ? 0 : 1;		//The side whose cast point gets closest to the other side is probably better
+						const double minDistTolerance = .02;
+						bool interpLeftIsValid = abs(magnitude(interpLeftPos - vertLinePos[1]) - Vision3D::centerWidth) < minDistTolerance;
+						bool interpRightIsValid = abs(magnitude(interpRightPos - vertLinePos[0]) - Vision3D::centerWidth) < minDistTolerance;
+						if(likelyBest == 0 && interpRightIsValid) {
+							centerFeature::featureType type = centerFeature::featureType::RightCorner;
+							centerFeatures.push_back(centerFeature{colorIndex, type, interpRightPos});
+							circle(image, interpCornerRight, 3, colors[Red]);
+							
+							type = centerFeature::featureType::LeftCorner;
+							centerFeatures.push_back(centerFeature{colorIndex, type, vertLinePos[0]});
+							circle(image, *vertLinePoints[0], 3, colors[Red]);
+						}
+						else if(interpLeftIsValid) {
+							centerFeature::featureType type = centerFeature::featureType::RightCorner;
+							centerFeatures.push_back(centerFeature{colorIndex, type, vertLinePos[1]});
+							circle(image, *vertLinePoints[1], 3, colors[Red]);
+							
+							type = centerFeature::featureType::LeftCorner;
+							centerFeatures.push_back(centerFeature{colorIndex, type, interpLeftPos});
+							circle(image, interpCornerLeft, 3, colors[Red]);
+						}
+						else {
+							if(VISION_DEBUG_3D) {
+								ROS_INFO("Corners were not the right distance from each other.");
+							}
+						}
+					}
+					else {
+						if(VISION_DEBUG_3D) {
+							ROS_INFO("Corner points could not be found.");
+						}
+					}
 				}
 			}
 		}
