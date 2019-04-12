@@ -9,18 +9,20 @@
 #include <signal.h>
 #include <stdlib.h>
 #include <stdio.h>
-nclude <move_base_msgs/MoveBaseAction.h>
+#include <move_base_msgs/MoveBaseAction.h>
 #include <actionlib/client/simple_action_client.h>
 #include <tf/transform_broadcaster.h>
 
-include "../main_node/src/Arduino-Serial/ArduinoSerial.h"
+#include "Arduino-Serial/ArduinoSerial.h"
 //Color Indices = red(0), yellow(1), blue(2), green(3)
 using namespace std;
-int colorSelected = 0;
+int colorSelect = 0;
 int colorChoose = 0;
 int matchStatus  = 0;
-int gatePos = 0;
-int flagPos = 0;
+int gatepos = 0;
+int flagpos = 0;
+int rightSpeed = 0;
+int leftSpeed = 0;
 serialPort arduino("/dev/serial/by-id/usb-1a86_USB2.0-Serial-if00-port0");
 
 void rin(const std_msgs::Float32ConstPtr &msg){
@@ -29,26 +31,24 @@ void rin(const std_msgs::Float32ConstPtr &msg){
 
 void lin(const std_msgs::Float32ConstPtr &msg){
 	leftSpeed = (int)msg->data;
-
+}
 void colorSelectFunc(const std_msgs::Float32ConstPtr &msg){
 	colorSelect = (int)msg->data;
 }
-void startMatchFunc(const std_msgs::Float32ConstPtr &msg){
-	matchStatus = (int)msg->data;
-}
+
 void flagFunc(const std_msgs::Float32ConstPtr &msg){
-	flagPos = (int)msg->data;
-    arduino.moveFlag(flagPos);
+	flagpos = (int)msg->data;
+    arduino.moveFlag(flagpos);
 }
 void gateFunc(const std_msgs::Float32ConstPtr &msg){
-	gatePos = (int)msg->data;
-    arduino.moveFlag(gatePos);
+	gatepos = (int)msg->data;
+    arduino.moveFlag(gatepos);
 
 }
 
 
 int main(int argc, char **argv){
-
+    ros::init(argc, argv, "arduino_talker");
     ros::NodeHandle n;
     ros::Rate loop_rate(40);	//1 Hz
     ros::Subscriber lsub = n.subscribe<std_msgs::Float32>("rmotor_cmd", 1,lin);
@@ -58,19 +58,17 @@ int main(int argc, char **argv){
 
     ros::Publisher colorSelectPub = n.advertise<std_msgs::Int32>("colorSelectFunc",1);
     ros::Publisher startMatchPub = n.advertise<std_msgs::Int32>("startMatchFunc",1);
-    ros::Rate loop_rate(40);	//1 Hz
     ros::Time current_time = ros::Time::now();
 
     while(ros::ok()) {
 
-        if(arduino.getButtonState && colorChoose){
+        if(matchStatus){
             startMatchPub.publish(matchStatus);
             colorChoose++;
         }
 
         std_msgs::String msg;
-		msg.data = std::string("Hello ");
-		msg.data += std::to_string(count);
+	msg.data = std::string("Hello ");
         if(colorChoose == 0){
             switch(arduino.getMode()){
                 case 0: arduino.updateLCD("Red");
@@ -95,7 +93,11 @@ int main(int argc, char **argv){
         if(colorChoose == 1){
             colorSelectPub.publish(colorSelect);   
         }
+	if(colorChoose == 1 && arduino.getButtonState()){
+		matchStatus = 1;
+	}
         ros::spinOnce();
+		//cout << "ButtonState " << arduino.getButtonState() << endl;
 		arduino.drive(rightSpeed,leftSpeed);
 		arduino.updateArduino();
 		loop_rate.sleep();	

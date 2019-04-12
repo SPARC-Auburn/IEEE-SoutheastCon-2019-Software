@@ -95,16 +95,16 @@ void moveFwdOneMeter(){
 	moveFwd.target_pose.header.frame_id = "base_footprint";
         moveFwd.target_pose.header.stamp = ros::Time::now();
 	
-	if(counter){
-        	moveFwd.target_pose.pose.position.x = 1.0; //move 1 meter forward
+	//if(counter){
+        	moveFwd.target_pose.pose.position.x = 0.5; //move 1 meter forward
 		moveFwd.target_pose.pose.orientation = tf::createQuaternionMsgFromYaw(0.0); 
 		counter = 0;
-	}
-	else{
-		counter++;
-		moveFwd.target_pose.pose.position.x = 0.0;
+	//}
+	//else{
+	/*	counter++;
+		moveFwd.target_pose.pose.position.x = 0.5;
 		moveFwd.target_pose.pose.orientation = tf::createQuaternionMsgFromYaw(-90.0);
-	}
+	}*/
         ROS_INFO("Sending goal");
 	ac.sendGoal(moveFwd);
 
@@ -275,7 +275,8 @@ int main(int argc, char **argv)
     }
 		if(moveBaseTest == 0){
 			moveBaseTest++;
-			moveToGoal(-0.5,0);
+			//moveToGoal(-0.5,0);
+			moveFwdOneMeter();
 		}
 		
 		ros::spinOnce();	

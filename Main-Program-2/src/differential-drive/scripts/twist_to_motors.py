@@ -45,7 +45,7 @@ class TwistToMotors():
     
     
         self.rate = rospy.get_param("~rate", 50)
-        self.timeout_ticks = rospy.get_param("~timeout_ticks", 10)
+        self.timeout_ticks = rospy.get_param("~timeout_ticks", 20)
         self.left = 0
         self.right = 0
         
