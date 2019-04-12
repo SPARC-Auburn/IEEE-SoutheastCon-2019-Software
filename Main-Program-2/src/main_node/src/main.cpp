@@ -49,7 +49,6 @@ void matchStarted(const std_msgs::Float32ConstPtr &msg){
 	startMatch = int(msg->data);
 }
 
-
 double objDistance(const opencv_node::object& obj) {
 	return sqrt(pow(obj.x_position, 2) + pow(obj.y_position, 2));
 }
@@ -188,8 +187,7 @@ int main(int argc, char **argv)
   ros::NodeHandle n;
   ros::Subscriber sub = n.subscribe("vision_info", 1000, visionCallback);
 
-  ros::Subscriber lsub = n.subscribe<std_msgs::Float32>("rmotor_cmd", 1,lin);
-  ros::Subscriber rsub = n.subscribe<std_msgs::Float32>("lmotor_cmd", 1,rin);
+
 
  // initPose = n.advertise<geometry_msgs::PoseWithCovarianceStamped>("initialpose",1,true);
 
@@ -210,6 +208,7 @@ int main(int argc, char **argv)
   ros::Publisher colorSelectPub = n.advertise<std_msgs::Int32>("colorSelect",1);//this publishes data to vision shit
   ros::Publisher gate_cmd = n.advertise<std_msgs::Int32>("gate_cmd",1);
   ros::Publisher flag_cmd = n.advertise<std_msgs::Int32>("flag_cmd",1);
+  ros::Publisher color_Want = n.advertise<std_msgs::Float32>("color_want",1);
 
   ros::Subscriber startColorSub = n.subscribe<std_msgs::Float32>("start_color", 1, colorSelected);
   ros::Subscriber startMatchSub = n.subscribe<std_msgs::Float32>("start_match", 1, matchStarted);
@@ -267,7 +266,7 @@ int main(int argc, char **argv)
         moveToGoal(myGoalX[octetNum],myGoalY[octetNum]);
       }
 
-      if(octetNum == 8){octetNum = 0;loopNum++;}
+      if(octetNum == 8){octetNum = 0;loopNum++;color_Want.publish(colorChoose++;)}
 
       if(loopNum == 3){
         moveToGoal(initialPose[0],initialPose[1]);//go back to start position

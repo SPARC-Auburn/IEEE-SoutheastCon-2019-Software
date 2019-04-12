@@ -58,7 +58,6 @@ int main(int argc, char **argv){
 
     ros::Publisher colorSelectPub = n.advertise<std_msgs::Int32>("colorSelectFunc",1);
     ros::Publisher startMatchPub = n.advertise<std_msgs::Int32>("startMatchFunc",1);
-
     ros::Rate loop_rate(40);	//1 Hz
     ros::Time current_time = ros::Time::now();
 
@@ -66,6 +65,7 @@ int main(int argc, char **argv){
 
         if(arduino.getButtonState && colorChoose){
             startMatchPub.publish(matchStatus);
+            colorChoose++;
         }
 
         std_msgs::String msg;
