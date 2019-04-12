@@ -47,46 +47,82 @@ boolean newData = false;
 void recvWithStartEndMarkers() {
     static boolean recvInProgress = false;
     static byte ndx = 0;
-    auto s = Serial.readStringUntil('>');
-    int first = s.indexOf(",");
-    int second = s.indexOf(",",first+1);
-    int third = s.indexOf(",",second+1);
-    int fourth = s.indexOf(",",third+1);
-    int fifth = s.indexOf(",",fourth+1);
-    speed1 = s.substring(1,first).toInt();
-    speed2 = s.substring(first+1,second).toInt();
-    gatePos = s.substring(second+1,third).toInt();
-    flagPos = s.substring(third+1,fourth).toInt();
-    clearButtonState = s.substring(fourth+1,fifth).toInt();
-    LCDtext = s.substring(fifth+1);
+    char startMarker = '<';
+    char endMarker = '>';
+    char rc;
+ 
+    while (Serial.available() > 0 && newData == false) {
+        rc = Serial.read();
+
+        if (recvInProgress == true) {
+            if (rc != endMarker) {
+                receivedChars[ndx] = rc;
+                ndx++;
+                if (ndx >= numChars) {
+                    ndx = numChars - 1;
+                }
+            }
+            else {
+                receivedChars[ndx] = '\0'; // terminate the string
+                recvInProgress = false;
+                ndx = 0;
+                newData = true;
+            }
+        }
+
+        else if (rc == startMarker) {
+            recvInProgress = true;
+        }
+    }
 }
 
 //Output Data
 void takeNewData() {
-  Serial.print(speed1);
-  Serial.print(',');
-  Serial.print(speed2);
-  Serial.print(',');
-  Serial.print(gatePos);
-  Serial.print(',');
-  Serial.print(flagPos);
-  Serial.print(',');
-  Serial.print(clearButtonState);
-  Serial.print(',');
-  Serial.print(LCDtext);
-  Serial.print(',');
-  Serial.print(buttonState);
-  Serial.print(',');
-  Serial.print(mode);
-  Serial.println(", Correct");
-  smartDriveDuo30.control(speed1,speed2);
-  gateServo.write(gatePos);
-  flagServo.write(flagPos);
-  lcd.clear();
-  lcd.setCursor(0,0);
-  lcd.print(LCDtext.substring(0,15)); //First line of LCD
-  lcd.setCursor(0,1);
-  lcd.print(LCDtext.substring(16,32)); //Second Line of LCD
+    if (newData == true) {
+        speed1 = receivedChars[0];
+        speed2 = receivedChars[1];
+        gatePos = receivedChars[2];
+        flagPos = receivedChars[3];
+        clearButtonState = receivedChars[4];
+        signed char checksumIn = receivedChars[5];
+        for(int i = 0; i < 32; i++){
+          receivedLCDText[i] = receivedChars[i+6];  
+        }
+        LCDtext = receivedLCDText;
+        Serial.print(speed1);
+        Serial.print(',');
+        Serial.print(speed2);
+        Serial.print(',');
+        Serial.print(gatePos);
+        Serial.print(',');
+        Serial.print(flagPos);
+        Serial.print(',');
+        Serial.print(clearButtonState);
+        Serial.print(',');
+        Serial.print(checksumIn);
+        Serial.print(',');
+        Serial.print(LCDtext);
+        Serial.print(',');
+        Serial.print(buttonState);
+        Serial.print(',');
+        Serial.print(mode);
+        signed char calculatedChecksum = speed1 + speed2  + gatePos + flagPos + clearButtonState + 1;
+        if(calculatedChecksum == checksumIn){
+          Serial.println(", Correct");
+          smartDriveDuo30.control(speed1,speed2);
+          gateServo.write(gatePos);
+          flagServo.write(flagPos);
+          lcd.clear();
+          lcd.setCursor(0,0);
+          lcd.print(LCDtext.substring(0,15)); //First line of LCD
+          lcd.setCursor(0,1);
+          lcd.print(LCDtext.substring(16,32)); //Second Line of LCD
+        }
+        else{
+          Serial.print(", Error");
+        }
+        newData = false;
+    }
 }
 
 
@@ -106,9 +142,6 @@ void setup()
   lcd.print(LCDtext.substring(17,32)); //Second Line of LCD
   gateServo.attach(10);
   flagServo.attach(11);
-  
-  gateServo.write(20);//initial flag and gate position
-  flagServo.write(130);
   pinMode(BUTTON, INPUT);
   while(Serial.available())
   Serial.read();
@@ -142,6 +175,5 @@ void loop()
     }
   recvWithStartEndMarkers();
   takeNewData();  
-
   delay(1);
 }
