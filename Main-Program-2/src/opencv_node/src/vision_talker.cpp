@@ -20,7 +20,7 @@ Color Indices = red(0), yellow(1), blue(2), green(3)
 #include <opencv2/highgui.hpp>
 #include <raspicam/raspicam_cv.h>
 #include <ctime>
-
+#include <std_msgs/Float32.h>
 #include "ros/ros.h"
 #include "std_msgs/String.h"
 #include <sstream>
@@ -32,26 +32,38 @@ const double PI = 3.14159265;
 const int MIN_AREA = 200;
 const int MAX_AREA = 30000;
 const bool VISION_DEBUG_IMAGE = false;
-const int VISION_DEBUG_COLOR_IMAGE = -1; // -1 to disable (0 red,1 blue, 2 yellow, 3 green)
+const int VISION_DEBUG_COLOR_IMAGE = -1; // -1 to disable (0 red,1 yellow, 2 blue, 3 green)
 const bool VISION_DEBUG_TEXT = false;
 const bool VISION_DEBUG_3D = true;
 const double DEBRIS_MIN_W2H = 0.75;
 const double DEBRIS_MAX_W2H = 1.5;
 const double CORNER_MIN_W2H  = .1;
-const double CORNER_MAX_W2H = .333;
+const double CORNER_MAX_W2H = .4;
 const double DEBRIS_MIN_PERCENT_FILLED = 0.70;
 const double DISTANCE_MULTIPLIER = 26.95;
-
+int colorChoose = 0;
 // Common Namespaces
 using namespace cv;
 using namespace std;
+ros::NodeHandle n;
+
+
+void colorSelected(const std_msgs::Float32ConstPtr &msg){
+                colorChoose = int(msg->data);
+        }
+
+
+ros::Subscriber startColorSub = n.subscribe<std_msgs::Float32>("start_color", 1, colorSelected);
 
 enum Colors {
 	Red,
-	Blue,
 	Yellow,
-	Green
+	Blue,
+	Green,
+	All
 };
+
+
 
 // Debris Object Namespace
 namespace IEEE_VISION
@@ -104,13 +116,13 @@ vector<DebrisObject> objectProperties;
 struct VisionHandle
 {
 	raspicam::RaspiCam_Cv Camera;
-	Mat image, hsv, threshed, threshedSecondary;
+	Mat image, hsv, threshed, threshedSecondary;	
 
   private:
 	vector<vector<Point>> contours;
 	vector<Vec4i> hierarchy;
 	Mat temp;
-	Scalar lowerThreshes[4] = {Scalar(0, 98, 105), Scalar(23, 80, 100), Scalar(89, 56, 100), Scalar(37, 44, 100)};
+	Scalar lowerThreshes[4] = {Scalar(0, 98, 105), Scalar(23, 80, 90), Scalar(89, 56, 100), Scalar(37, 44, 70)};
 	Scalar upperThreshes[4] = {Scalar(9, 255, 255), Scalar(35, 255, 255), Scalar(117, 255, 255), Scalar(77, 255, 255)};
 	Scalar redSecondaryLower{170, 42, 52};
 	Scalar redSecondaryUpper{180, 255, 255};
@@ -119,6 +131,7 @@ struct VisionHandle
 	Mat kernel = getStructuringElement(MORPH_CROSS, Size(3, 3));
 	Size resolution;
 	clock_t begin;
+	int desiredColor = All;
 	
 
   public:
@@ -154,8 +167,13 @@ struct VisionHandle
 	void findObjects() 
 	{
 		objectProperties.clear();
-		for (int i = 0; i < 4; i++) {
-			findObjectsOfColor(i);
+		if (desiredColor == All){
+			for (int i = 0; i < 4; i++) {
+				findObjectsOfColor(i);
+			}
+		}
+		else{
+			findObjectsOfColor(desiredColor);
 		}
 		if(VISION_DEBUG_TEXT)
 			ROS_INFO("%s", "Finished finding objects");
@@ -227,9 +245,14 @@ struct VisionHandle
 				else if (w2h < DEBRIS_MAX_W2H && w2h > DEBRIS_MIN_W2H && boundRect.y != 0) {		//Checking the boundRect prevents detection of a corner that is mostly cut off to where it is square
 					objectType = DebrisObject::ObjectType::Debris;
 					position = Vision3D::getPosIfHeight((boundRect.br() + boundRect.tl()) / 2, Vision3D::AvgDebrisHeight / 2);		//It is assumed that the center of the boundRect goes through the centroid of the object
-					if (VISION_DEBUG_IMAGE)
+					if(position.x <= 0.0) {
+						debugInvalidObj(image, boundRect);
+						continue;
+					}
+					if (VISION_DEBUG_IMAGE) {
 						rectangle(image, boundRect.tl(), boundRect.br(), colors[index], 4, 8, 0);
-						//drawContours(image, contours, i, Scalar(0, 0, 0));
+						//drawContours(image, contours, i, colors[index]);
+					}
 				}
 				else {
 					RotatedRect rotated = minAreaRect(contours[i]);
@@ -247,35 +270,38 @@ struct VisionHandle
 					if(betterw2h < CORNER_MAX_W2H && betterw2h > CORNER_MIN_W2H) {
 						double squareEdge = boundRect.height * .3;
 						if(boundRect.x  - squareEdge >= 0.0 && boundRect.x + boundRect.width + squareEdge < image.size().width) {		//ensure that the tested areas are inside the image
-							double offset = boundRect.height * .2;
+							double offset = boundRect.height * .4;
 							Mat mask(image.size(), CV_8UC1, Scalar::all(0));
 							Rect ROI(boundRect.x - squareEdge, boundRect.y + boundRect.height - squareEdge - offset, squareEdge, squareEdge);
-							rectangle(image, ROI.tl(), ROI.br(), Scalar(0, 0, 0), 1);
+							//rectangle(image, ROI.tl(), ROI.br(), Scalar(0, 0, 0), 1);
 							mask(ROI).setTo(Scalar::all(255));
 							ROI.x = boundRect.x + boundRect.width;
-							rectangle(image, ROI.tl(), ROI.br(), Scalar(0, 0, 0), 1);
+							//rectangle(image, ROI.tl(), ROI.br(), Scalar(0, 0, 0), 1);
 							mask(ROI).setTo(Scalar::all(255));
 							Scalar meanColor = mean(hsv, mask);				//The purpose of this is to see if the area on both sides of a potential corner is white.
 							//ROS_INFO("Average: %f, %f, %f", meanColor.val[0], meanColor.val[1], meanColor.val[2]);
 							
-							if(meanColor.val[1] <= 22.0 && meanColor.val[2] >= 145) {
+							if(meanColor.val[1] <= 35.0 && meanColor.val[2] >= 145) {
 								objectType = DebrisObject::ObjectType::Corner;
 								Point2f points[4];
 								rotated.points(points);
-								sort(std::begin(points), std::end(points), [] (const Point2f& point1, const Point2f& point2) { return point1.y < point2.y; });
+								sort(std::begin(points), std::end(points), [] (const Point2f& point1, const Point2f& point2) { return point1.y > point2.y; });
+								//circle(image, (points[0] + points[1]) / 2.0, 3, colors[Red]);
 								position = Vision3D::getPosIfHeight((points[0] + points[1]) / 2.0, 0.0);		//Approximate location of the center of the corner's bottom square. OpenCV rounds when converting from Point2f to Point2i
 								if (VISION_DEBUG_IMAGE)
 									drawRotatedRect(image, rotated, Scalar(0, 0, 0));
 							}
 							else {
+								//drawContours(image, contours, i, Scalar(0, 0, 0));
 								debugInvalidObj(image, boundRect);
 							}
 						}
 						else {
-							//debugInvalidObj(imcolorIndex)
+							debugInvalidObj(image, boundRect);
 						}
 					}
-					else { // wrong size ratiocolorIndex
+					else { // wrong size ratio
+						//drawContours(image, contours, i, Scalar(0, 0, 0));
 						debugInvalidObj(image, boundRect);
 					}
 				}
@@ -310,7 +336,6 @@ struct VisionHandle
 	int processVision(int argc, char **argv)
 	{
 		ros::init(argc, argv, "vision_talker"); // initialize ROS
-		ros::NodeHandle n;
 		ros::Publisher pub = n.advertise<opencv_node::vision_msg>("vision_info", 1000); // start publishing chatter
 		ros::Rate loop_rate(10);
 		while (ros::ok())
