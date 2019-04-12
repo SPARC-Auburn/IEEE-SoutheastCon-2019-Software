@@ -56,15 +56,16 @@ int main(int argc, char **argv){
     ros::Subscriber flag = n.subscribe<std_msgs::Float32>("flag_cmd", 1,flagFunc);
     ros::Subscriber gate = n.subscribe<std_msgs::Float32>("gate_cmd", 1,gateFunc);
 
-    ros::Publisher colorSelectPub = n.advertise<std_msgs::Int32>("colorSelectFunc",1);
-    ros::Publisher startMatchPub = n.advertise<std_msgs::Int32>("startMatchFunc",1);
+    ros::Publisher colorSelectPub = n.advertise<std_msgs::Int32>("colorSelectFunc",1,bool latch = true);
+    ros::Publisher startMatchPub = n.advertise<std_msgs::Int32>("startMatchFunc",1,bool latch = true);
     ros::Time current_time = ros::Time::now();
 
     while(ros::ok()) {
 
-        if(matchStatus){
+        if(matchStatus == 1){
             startMatchPub.publish(matchStatus);
-            colorChoose++;
+            matchStatus++;
+
         }
 
         std_msgs::String msg;
@@ -90,10 +91,11 @@ int main(int argc, char **argv){
                 default: break;
             }
         }
-        if(colorChoose == 1){
-            colorSelectPub.publish(colorSelect);   
+        if(colorChoose == 1 && matchStatus == 0){
+            colorSelectPub.publish(colorSelect);
+            colorChoose++;   
         }
-	if(colorChoose == 1 && arduino.getButtonState()){
+	if(colorChoose > 1 && arduino.getButtonState()){
 		matchStatus = 1;
 	}
         ros::spinOnce();
