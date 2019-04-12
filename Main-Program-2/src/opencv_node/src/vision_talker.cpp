@@ -50,8 +50,11 @@ enum Colors {
 	Red,
 	Yellow,
 	Blue,
-	Green
+	Green,
+	All
 };
+
+
 
 // Debris Object Namespace
 namespace IEEE_VISION
@@ -104,7 +107,7 @@ vector<DebrisObject> objectProperties;
 struct VisionHandle
 {
 	raspicam::RaspiCam_Cv Camera;
-	Mat image, hsv, threshed, threshedSecondary;
+	Mat image, hsv, threshed, threshedSecondary;	
 
   private:
 	vector<vector<Point>> contours;
@@ -119,6 +122,7 @@ struct VisionHandle
 	Mat kernel = getStructuringElement(MORPH_CROSS, Size(3, 3));
 	Size resolution;
 	clock_t begin;
+	int desiredColor = All;
 	
 
   public:
@@ -135,6 +139,11 @@ struct VisionHandle
 	~VisionHandle()
 	{
 		Camera.release();
+	}
+
+	// Processes the message from Arduino for desired color
+	void colorSelected(const std_msgs::Float32ConstPtr &msg){
+		colorChoose = int(msg->data);
 	}
 
 	// Takes a picture, saves it in image, and converts it to HSV
@@ -154,8 +163,14 @@ struct VisionHandle
 	void findObjects() 
 	{
 		objectProperties.clear();
-		for (int i = 0; i < 4; i++) {
-			findObjectsOfColor(i);
+		ros::Subscriber startColorSub = n.subscribe<std_msgs::Float32>("start_color", 1, colorSelected);
+		if (desiredColor == All){
+			for (int i = 0; i < 4; i++) {
+				findObjectsOfColor(i);
+			}
+		}
+		else{
+			findObjectsOfColor(desiredColor);
 		}
 		if(VISION_DEBUG_TEXT)
 			ROS_INFO("%s", "Finished finding objects");
