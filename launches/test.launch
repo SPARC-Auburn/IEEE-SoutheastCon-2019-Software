@@ -13,8 +13,8 @@
       <rosparam param="Kp">1</rosparam>
       <rosparam param="Ki">0.02</rosparam>
       <rosparam param="Kd">0.01</rosparam>
-      <rosparam param="out_min">-127</rosparam>
-      <rosparam param="out_max">127</rosparam>
+      <rosparam param="out_min">-30</rosparam>
+      <rosparam param="out_max">30</rosparam>
       <rosparam param="timeout_ticks">15</rosparam>
       <rosparam param="rolling_pts">5</rosparam>
       <rosparam param="rate">60</rosparam>
@@ -29,8 +29,8 @@
       <rosparam param="Kp">1</rosparam>
       <rosparam param="Ki">0.02</rosparam>
       <rosparam param="Kd">0.01</rosparam>
-      <rosparam param="out_min">-127</rosparam>
-      <rosparam param="out_max">127</rosparam>
+      <rosparam param="out_min">-30</rosparam>
+      <rosparam param="out_max">30</rosparam>
       <rosparam param="timeout_ticks">15</rosparam>
       <rosparam param="rolling_pts">5</rosparam>
       <rosparam param="rate">60</rosparam>
@@ -39,7 +39,7 @@
 
   
 <node pkg="differential_drive" type="twist_to_motors.py" name="twist_to_motors" output="screen">
-  <rosparam param="~publish_rate">60</rosparam>
+  <rosparam param="publish_rate">60</rosparam>
   <remap from="twist" to="cmd_vel"/>
 </node>
 </launch>

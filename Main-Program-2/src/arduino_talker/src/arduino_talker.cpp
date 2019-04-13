@@ -56,8 +56,8 @@ int main(int argc, char **argv){
     ros::Subscriber flag = n.subscribe<std_msgs::Float32>("flag_cmd", 1,flagFunc);
     ros::Subscriber gate = n.subscribe<std_msgs::Float32>("gate_cmd", 1,gateFunc);
 
-    ros::Publisher colorSelectPub = n.advertise<std_msgs::Int32>("colorSelectFunc",1,bool latch = true);
-    ros::Publisher startMatchPub = n.advertise<std_msgs::Int32>("startMatchFunc",1,bool latch = true);
+    ros::Publisher colorSelectPub = n.advertise<std_msgs::Int32>("colorSelectFunc",1,true);
+    ros::Publisher startMatchPub = n.advertise<std_msgs::Int32>("startMatchFunc",1,true);
     ros::Time current_time = ros::Time::now();
 
     while(ros::ok()) {

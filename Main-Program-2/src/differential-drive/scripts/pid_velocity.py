@@ -121,13 +121,15 @@ class PidVelocity():
         rospy.logdebug("-D- %s caclVelocity dt=%0.3f wheel_latest=%0.3f wheel_prev=%0.3f" % (self.nodename, self.dt, self.wheel_latest, self.wheel_prev))
     
         # we received a new wheel value
-        cur_vel = (self.wheel_latest - self.wheel_prev) / self.dt
-        self.updateVel(cur_vel)
-        rospy.logdebug("-D- %s **** wheel updated vel=%0.3f **** " % (self.nodename, self.vel))
-        self.wheel_prev = self.wheel_latest
-        self.then = rospy.Time.now()
-        self.pub_vel.publish(self.vel)
-        
+	if(self.dt != 0):
+	        cur_vel = (self.wheel_latest - self.wheel_prev) / self.dt
+		self.updateVel(cur_vel)
+	        rospy.logdebug("-D- %s **** wheel updated vel=%0.3f **** " % (self.nodename, self.vel))
+	        self.wheel_prev = self.wheel_latest
+	        self.then = rospy.Time.now()
+		self.pub_vel.publish(self.vel)
+        else:
+		rospy.loginfo("dt was zero")
     #####################################################
     def updateVel(self, val):
     #####################################################
@@ -137,27 +139,26 @@ class PidVelocity():
     #####################################################
     def doPid(self):
     #####################################################
-        pid_dt_duration = rospy.Time.now() - self.prev_pid_time
-        pid_dt = pid_dt_duration.to_sec()
-        self.prev_pid_time = rospy.Time.now()
+        pid_dt = self.dt
+	if(self.dt!=0):
+        	self.prev_pid_time = rospy.Time.now()
         
-        self.error = self.target - self.vel
-        self.integral = self.integral + (self.error * pid_dt)
+        	self.error = self.target - self.vel
+        	self.integral = self.integral + (self.error * pid_dt)
         # rospy.loginfo("i = i + (e * dt):  %0.3f = %0.3f + (%0.3f * %0.3f)" % (self.integral, self.integral, self.error, pid_dt))
-        self.updateDerv((self.error - self.previous_error) / pid_dt)
-        self.previous_error = self.error
+        	self.updateDerv((self.error - self.previous_error) / pid_dt)
+        	self.previous_error = self.error
     
-        self.motor += max(min((self.Kp * self.error) + (self.Ki * self.integral) + (self.Kd * self.derivative),self.max_change),-self.max_change)
-        self.motor = min(max(self.motor,self.out_min),self.out_max)
+        	self.motor += max(min((self.Kp * self.error) + (self.Ki * self.integral) + (self.Kd * self.derivative),self.max_change),-self.max_change)
+        	self.motor = min(max(self.motor,self.out_min),self.out_max)
       
         #if (self.target == 0):
         #    self.motor = 0
     
-        rospy.logdebug("vel:%0.2f tar:%0.2f err:%0.2f int:%0.2f der:%0.2f ## motor:%d " % 
+        	rospy.logdebug("vel:%0.2f tar:%0.2f err:%0.2f int:%0.2f der:%0.2f ## motor:%d " % 
                       (self.vel, self.target, self.error, self.integral, self.derivative, self.motor))
-    
-    
-
+    	else:
+		rospy.loginfo("dt was zero")  	
 
     #####################################################
     def wheelCallback(self, msg):

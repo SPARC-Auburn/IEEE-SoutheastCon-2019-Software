@@ -79,19 +79,20 @@ int main(int argc, char** argv){
     current_time = ros::Time::now();
     //compute odometry in a typical way given the velocities of the robot
     double dt = (current_time - last_time).toSec();
-    curValueR = rightCount;
-    curValueL = leftCount;
+    if(dt != 0){
+    	curValueR = rightCount;
+    	curValueL = leftCount;
 //    std::cout << curValueR << " " << curValueL << std::endl;
-    double diffR = curValueR-lastValueR;
-    double diffL = curValueL-lastValueL;
-    double wR = (tau*diffR)/(ticksPerRev*dt); //revolution speed of the right wheel in radians per second. This is computed as an instantneous measurement since the last time we updated
-    double wL = (tau*diffL)/(ticksPerRev*dt);
-    odomI.proc(wL,wR,dt);  //this performs all the integration
-    lastValueR = curValueR;
-    lastValueL = curValueL;
+    	double diffR = curValueR-lastValueR;
+    	double diffL = curValueL-lastValueL;
+    	double wR = (tau*diffR)/(ticksPerRev*dt); //revolution speed of the right wheel in radians per second. This is computed as an instantneous measurement since the last time we updated
+    	double wL = (tau*diffL)/(ticksPerRev*dt);
+    	odomI.proc(wL,wR,dt);  //this performs all the integration
+    	lastValueR = curValueR;
+    	lastValueL = curValueL;
     //since all odometry is 6DOF we'll need a quaternion created from yaw
-    geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(odomI.theta);
-
+    	geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(odomI.theta);
+    
     //first, we'll publish the transform over tf
     /*geometry_msgs::TransformStamped odom_trans;
     odom_trans.header.stamp = current_time;
@@ -131,7 +132,7 @@ int main(int argc, char** argv){
 
     //publish the message
     odom_pub.publish(odom);
-
+    }
     last_time = current_time;
 //    std::cout << "x:" << odomI.x << " y:" << odomI.y << " t:" << odomI.theta << std::endl;
     r.sleep();
