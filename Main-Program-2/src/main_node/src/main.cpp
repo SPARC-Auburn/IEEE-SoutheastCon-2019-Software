@@ -258,7 +258,7 @@ int main(int argc, char **argv)
         if(goalMet){octetNum++;}
 
       }
-      else if(numberBlocks == 0 && abs(dummyRobotX-myGoalX[octetNum+1])<20 && abs(dummyRobotY-myGoalY[octetNum+1])<20){ //checks to see if goal is too close to current position, 20 is arbitrary
+      else if(numberBlocks == 0 && abs(dummyRobotX-myGoalX[octetNum+1])>0.2 && abs(dummyRobotY-myGoalY[octetNum+1])<0.2){ //checks to see if goal is too close to current position, 20 is arbitrary
         gate_cmd.publish(20);//close Gate
         octetNum++;
       }
