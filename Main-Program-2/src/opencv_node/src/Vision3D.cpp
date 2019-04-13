@@ -6,11 +6,17 @@
 using namespace std;
 using namespace cv;
 
-const cv::Matx33d Vision3D::cameraMatrix = {512.983, 0.0, 307.130,
-		0, 513.019, 253.954,
-		0, 0, 1};
+//Old robot
+//const cv::Matx33d Vision3D::cameraMatrix = {512.983, 0.0, 307.130,
+		//0, 513.019, 253.954,
+		//0, 0, 1};
+//const cv::Matx<double, 1, 5> Vision3D::distortionCoefficients = {.20803238, -.352899, .012604, -.0033081, .090205};
 
-const cv::Matx<double, 1, 5> Vision3D::distortionCoefficients = {.20803238, -.352899, .012604, -.0033081, .090205};
+//New robot
+const cv::Matx33d Vision3D::cameraMatrix = {502.564, 0.0, 309.1057,
+		0.0, 502.666, 248.452,
+		0.0, 0.0, 1.0};
+const cv::Matx<double, 1, 5> Vision3D::distortionCoefficients = {.1402, -.2818, .01328, .00042, .1597};
 
 Point2d Vision3D::getPosIfHeight(Point imagePos, double height) {
 	vector<Point2d> initial{{(double) imagePos.x, (double) imagePos.y}};

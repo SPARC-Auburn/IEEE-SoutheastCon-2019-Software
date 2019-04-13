@@ -31,7 +31,7 @@ Color Indices = red(0), yellow(1), blue(2), green(3)
 const double PI = 3.14159265;
 const int MIN_AREA = 200;
 const int MAX_AREA = 30000;
-const bool VISION_DEBUG_IMAGE = false;
+const bool VISION_DEBUG_IMAGE = true;
 const int VISION_DEBUG_COLOR_IMAGE = -1; // -1 to disable (0 red,1 yellow, 2 blue, 3 green)
 const bool VISION_DEBUG_TEXT = false;
 const bool VISION_DEBUG_3D = true;
@@ -45,15 +45,12 @@ int colorChoose = 0;
 // Common Namespaces
 using namespace cv;
 using namespace std;
-ros::NodeHandle n;
 
 
 void colorSelected(const std_msgs::Float32ConstPtr &msg){
                 colorChoose = int(msg->data);
         }
 
-
-ros::Subscriber startColorSub = n.subscribe<std_msgs::Float32>("start_color", 1, colorSelected);
 
 enum Colors {
 	Red,
@@ -336,6 +333,8 @@ struct VisionHandle
 	int processVision(int argc, char **argv)
 	{
 		ros::init(argc, argv, "vision_talker"); // initialize ROS
+		ros::NodeHandle n;
+		ros::Subscriber startColorSub = n.subscribe<std_msgs::Float32>("start_color", 1, colorSelected);
 		ros::Publisher pub = n.advertise<opencv_node::vision_msg>("vision_info", 1000); // start publishing chatter
 		ros::Rate loop_rate(10);
 		while (ros::ok())
@@ -372,6 +371,7 @@ struct VisionHandle
 };
 int main(int argc, char **argv)
 {
+
 	IEEE_VISION::VisionHandle vis; // initialize vision
 	vis.processVision(argc,argv);
 	return 0;
