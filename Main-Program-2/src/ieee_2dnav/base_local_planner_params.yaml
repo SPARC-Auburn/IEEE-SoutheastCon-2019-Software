@@ -8,5 +8,6 @@ TrajectoryPlannerROS:
   acc_lim_x: 2.5
   acc_lim_y: 2.5
   yaw_goal_tolerance: 0.5
-  
+  forward_point_distance: 0.2
+  publish_cost_grid: true
   holonomic_robot: false

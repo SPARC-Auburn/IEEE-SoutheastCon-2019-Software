@@ -20,7 +20,7 @@ Color Indices = red(0), yellow(1), blue(2), green(3)
 #include <opencv2/highgui.hpp>
 #include <raspicam/raspicam_cv.h>
 #include <ctime>
-
+#include <std_msgs/Float32.h>
 #include "ros/ros.h"
 #include "std_msgs/String.h"
 #include <sstream>
@@ -41,17 +41,26 @@ const double CORNER_MIN_W2H  = .1;
 const double CORNER_MAX_W2H = .4;
 const double DEBRIS_MIN_PERCENT_FILLED = 0.70;
 const double DISTANCE_MULTIPLIER = 26.95;
-
+int colorChoose = 0;
 // Common Namespaces
 using namespace cv;
 using namespace std;
+
+
+void colorSelected(const std_msgs::Float32ConstPtr &msg){
+                colorChoose = int(msg->data);
+        }
+
 
 enum Colors {
 	Red,
 	Yellow,
 	Blue,
-	Green
+	Green,
+	All
 };
+
+
 
 // Debris Object Namespace
 namespace IEEE_VISION
@@ -104,7 +113,7 @@ vector<DebrisObject> objectProperties;
 struct VisionHandle
 {
 	raspicam::RaspiCam_Cv Camera;
-	Mat image, hsv, threshed, threshedSecondary;
+	Mat image, hsv, threshed, threshedSecondary;	
 
   private:
 	vector<vector<Point>> contours;
@@ -119,6 +128,7 @@ struct VisionHandle
 	Mat kernel = getStructuringElement(MORPH_CROSS, Size(3, 3));
 	Size resolution;
 	clock_t begin;
+	int desiredColor = All;
 	
 
   public:
@@ -154,12 +164,18 @@ struct VisionHandle
 	void findObjects() 
 	{
 		objectProperties.clear();
-		for (int i = 0; i < 4; i++) {
-			findObjectsOfColor(i);
+		if (desiredColor == All){
+			for (int i = 0; i < 4; i++) {
+				findObjectsOfColor(i);
+			}
+		}
+		else{
+			findObjectsOfColor(desiredColor);
 		}
 		if(VISION_DEBUG_TEXT)
 			ROS_INFO("%s", "Finished finding objects");
-		displayImage("output");
+		if(VISION_DEBUG_IMAGE)
+			displayImage("output");
 	}
 
 	void debugInvalidObj(Mat imageIn, Rect bounds) {
@@ -278,7 +294,6 @@ struct VisionHandle
 							}
 						}
 						else {
-							//drawContours(image, contours, i, Scalar(0, 0, 0));
 							debugInvalidObj(image, boundRect);
 						}
 					}
@@ -319,6 +334,7 @@ struct VisionHandle
 	{
 		ros::init(argc, argv, "vision_talker"); // initialize ROS
 		ros::NodeHandle n;
+		ros::Subscriber startColorSub = n.subscribe<std_msgs::Float32>("start_color", 1, colorSelected);
 		ros::Publisher pub = n.advertise<opencv_node::vision_msg>("vision_info", 1000); // start publishing chatter
 		ros::Rate loop_rate(10);
 		while (ros::ok())
@@ -352,9 +368,10 @@ struct VisionHandle
   }
 };
 
-}
+};
 int main(int argc, char **argv)
 {
+
 	IEEE_VISION::VisionHandle vis; // initialize vision
 	vis.processVision(argc,argv);
 	return 0;

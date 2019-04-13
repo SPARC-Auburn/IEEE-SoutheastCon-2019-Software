@@ -21,7 +21,7 @@
 //Color Indices = red(0), yellow(1), blue(2), green(3)
 using namespace std;
 
-serialPort arduino("/dev/serial/by-id/usb-1a86_USB2.0-Serial-if00-port0");
+//serialPort arduino("/dev/serial/by-id/usb-1a86_USB2.0-Serial-if00-port0");
 
 
 typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
@@ -40,14 +40,7 @@ double dummyRobotY = 0.0;
 int startMatch = 0;
 int loopNum = 0;
 double initialPose[2] = {0.0,0.0};
-
-void rin(const std_msgs::Float32ConstPtr &msg){
-	rightSpeed = (int)msg->data;
-}
-
-void lin(const std_msgs::Float32ConstPtr &msg){
-	leftSpeed = (int)msg->data;
-}
+int moveBaseTest = 0;
 
 void colorSelected(const std_msgs::Float32ConstPtr &msg){
   colorChoose = int(msg->data);
@@ -55,7 +48,6 @@ void colorSelected(const std_msgs::Float32ConstPtr &msg){
 void matchStarted(const std_msgs::Float32ConstPtr &msg){
 	startMatch = int(msg->data);
 }
-
 
 double objDistance(const opencv_node::object& obj) {
 	return sqrt(pow(obj.x_position, 2) + pow(obj.y_position, 2));
@@ -93,7 +85,7 @@ void visionCallback(const opencv_node::vision_msg::ConstPtr &msg)
 void moveFwdOneMeter(){
 	//MOVE BASE CODE//
 	int counter = 1;
-        MoveBaseClient ac("move_base", true); //Tell the client we want to spin a thread by default
+        MoveBaseClient ac("/move_base", true); //Tell the client we want to spin a thread by default
          while(!ac.waitForServer(ros::Duration(5.0))){
                 ROS_INFO("Waiting for the move_base action server to come up");
         }
@@ -103,16 +95,16 @@ void moveFwdOneMeter(){
 	moveFwd.target_pose.header.frame_id = "base_footprint";
         moveFwd.target_pose.header.stamp = ros::Time::now();
 	
-	if(counter){
-        	moveFwd.target_pose.pose.position.x = 1.0; //move 1 meter forward
+	//if(counter){
+        	moveFwd.target_pose.pose.position.x = 0.5; //move 1 meter forward
 		moveFwd.target_pose.pose.orientation = tf::createQuaternionMsgFromYaw(0.0); 
 		counter = 0;
-	}
-	else{
-		counter++;
-		moveFwd.target_pose.pose.position.x = 0.0;
+	//}
+	//else{
+	/*	counter++;
+		moveFwd.target_pose.pose.position.x = 0.5;
 		moveFwd.target_pose.pose.orientation = tf::createQuaternionMsgFromYaw(-90.0);
-	}
+	}*/
         ROS_INFO("Sending goal");
 	ac.sendGoal(moveFwd);
 
@@ -129,7 +121,7 @@ void moveFwdOneMeter(){
 //Note: frame is typicall "map" or "base_footprint"
 bool moveToGoal(double xGoal, double yGoal){
    //define a client for to send goal requests to the move_base server through a SimpleActionClient
-   actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> ac("move_base", true);
+   actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> ac("/move_base", true);
 
    //wait for the action server to come up
    while(!ac.waitForServer(ros::Duration(5.0))){
@@ -195,8 +187,7 @@ int main(int argc, char **argv)
   ros::NodeHandle n;
   ros::Subscriber sub = n.subscribe("vision_info", 1000, visionCallback);
 
-  ros::Subscriber lsub = n.subscribe<std_msgs::Float32>("rmotor_cmd", 1,lin);
-  ros::Subscriber rsub = n.subscribe<std_msgs::Float32>("lmotor_cmd", 1,rin);
+
 
  // initPose = n.advertise<geometry_msgs::PoseWithCovarianceStamped>("initialpose",1,true);
 
@@ -217,6 +208,7 @@ int main(int argc, char **argv)
   ros::Publisher colorSelectPub = n.advertise<std_msgs::Int32>("colorSelect",1);//this publishes data to vision shit
   ros::Publisher gate_cmd = n.advertise<std_msgs::Int32>("gate_cmd",1);
   ros::Publisher flag_cmd = n.advertise<std_msgs::Int32>("flag_cmd",1);
+  ros::Publisher color_Want = n.advertise<std_msgs::Float32>("color_want",1);
 
   ros::Subscriber startColorSub = n.subscribe<std_msgs::Float32>("start_color", 1, colorSelected);
   ros::Subscriber startMatchSub = n.subscribe<std_msgs::Float32>("start_match", 1, matchStarted);
@@ -245,13 +237,7 @@ int main(int argc, char **argv)
 		msg.data = std::string("Hello ");
 		msg.data += std::to_string(count);
     //this sets the selected 
-    if(colorChoose == 0){
-      //color selection has not been received by Arduino com
-    }
-    if(colorChoose == 1){
-      //publish the selected color to the vision node
-      //colorSelectPub.publish(color)
-    }
+    
 
     //this tests the octet and debris goal setting
     if(startMatch == 1){ //only runs on second button press
@@ -265,31 +251,35 @@ int main(int argc, char **argv)
       if(numberBlocks > 0 && octetNum != 0){ 
         
         
-        arduino.moveGate(180);//open gate
+        gate_cmd.publish(75);//open gate
         moveToGoal(dummyRobotX+closestBlockY+0.11,dummyRobotY+closestBlockX);//location reference to map, .11 is roughly half the width of the robot 
         //to compensate for camera offset,,this waits until the robot has met its goal
         //also this moves to collect all blocks
         if(goalMet){octetNum++;}
 
       }
-      else if(numberBlocks == 0 && abs(dummyRobotX-myGoalX[octetNum+1])<20 && abs(dummyRobotY-myGoalY[octetNum+1])<20){ //checks to see if goal is too close to current position, 20 is arbitrary
+      else if(numberBlocks == 0 && abs(dummyRobotX-myGoalX[octetNum+1])>0.2 && abs(dummyRobotY-myGoalY[octetNum+1])<0.2){ //checks to see if goal is too close to current position, 20 is arbitrary
+        gate_cmd.publish(20);//close Gate
         octetNum++;
       }
       else{
         moveToGoal(myGoalX[octetNum],myGoalY[octetNum]);
       }
 
-      if(octetNum == 8){octetNum = 0;loopNum++;}
+      if(octetNum == 8){octetNum = 0;loopNum++;color_Want.publish(colorChoose++);}
 
       if(loopNum == 3){
         moveToGoal(initialPose[0],initialPose[1]);//go back to start position
-          if(goalMet){octetNum++;loopNum = 0; arduino.moveFlag(0);}
+          if(goalMet){octetNum++;loopNum = 0; flag_cmd.publish(40);}
       }
     }
-
-		ros::spinOnce();
-		arduino.drive(rightSpeed,leftSpeed);
-		arduino.updateArduino();
+		if(moveBaseTest == 0){
+			moveBaseTest++;
+			moveToGoal(-0.5,0);
+			//moveFwdOneMeter();
+		}
+		
+		ros::spinOnce();	
 		loop_rate.sleep();
 		++count;
 	}

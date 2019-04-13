@@ -8,8 +8,8 @@ class Vision3D {
 public:
 	static constexpr double CornerHeight = .3;		//meters; constexpr instead of const because it allows in-class initialization
 	static constexpr double AvgDebrisHeight = .05715;		//If we gain the ability to differentiate between cubes and spheres, this should be replaced with two values
-	static constexpr double CameraHeight = .208;				//.195 on the new robot
-	static constexpr double CameraAngle = 28.0 / 180.0 * 3.14159265;		//Angle the camera circuit board makes with the vertical. Started at 30 and was experimentally determined to be 28.
+	static constexpr double CameraHeight = .178;				//.195 on the new robot
+	static constexpr double CameraAngle = 24.3 / 180.0 * 3.14159265;		//Angle the camera circuit board makes with the vertical. Started at 30 and was experimentally determined to be 28.
 
 	//Found using OpenCV's calibrate.py. Units are in meters. Assumes a resolution of 640 x 480.
 	static const cv::Matx33d cameraMatrix;
