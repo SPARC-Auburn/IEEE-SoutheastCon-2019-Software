@@ -2,13 +2,18 @@
 
  <!--- Run move_base stack --> 
    <remap from="global_pose" to="amcl_pose"/>
-   <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
-    <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS"/>
-    <rosparam file="$(find ieee_2dnav)/costmap_common_params.yaml" command="load" ns="global_costmap" /> 
-    <rosparam file="$(find ieee_2dnav)/costmap_common_params.yaml" command="load" ns="local_costmap" />
-    <rosparam file="$(find ieee_2dnav)/local_costmap_params.yaml" command="load" />
-    <rosparam file="$(find ieee_2dnav)/global_costmap_params.yaml" command="load" /> 
-    <rosparam file="$(find ieee_2dnav)/base_local_planner_params.yaml" command="load" />
+   <remap from="base_link" to="base_footprint"/>
+   <node pkg="asr_move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <param name="controller_frequency" value="5"/>
+    <param name="planner_frequency" value="5"/>
+    <param name="base_global_planner" value="navfn/NavfnROS"/>
+    <param name="base_local_planner" value="ftc_local_planner/FTCPlanner" /> 
+    <rosparam file="$(find ieee_2dnav)/costmap_common_params.yaml" command="load" ns="global_costmap"/>
+    <rosparam file="$(find ieee_2dnav)/costmap_common_params.yaml" command="load" ns="local_costmap"/>
+    <rosparam file="$(find ieee_2dnav)/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find ieee_2dnav)/local_costmap_params.yaml" command="load"/>
+    <rosparam file="$(find ieee_2dnav)/ftc_local_planner_params.yaml" command="load"/> 
+    
  </node>
 
 </launch> 

@@ -85,7 +85,7 @@ void visionCallback(const opencv_node::vision_msg::ConstPtr &msg)
 void moveFwdOneMeter(){
 	//MOVE BASE CODE//
 	int counter = 1;
-        MoveBaseClient ac("move_base", true); //Tell the client we want to spin a thread by default
+        MoveBaseClient ac("/move_base", true); //Tell the client we want to spin a thread by default
          while(!ac.waitForServer(ros::Duration(5.0))){
                 ROS_INFO("Waiting for the move_base action server to come up");
         }
@@ -121,7 +121,7 @@ void moveFwdOneMeter(){
 //Note: frame is typicall "map" or "base_footprint"
 bool moveToGoal(double xGoal, double yGoal){
    //define a client for to send goal requests to the move_base server through a SimpleActionClient
-   actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> ac("move_base", true);
+   actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> ac("/move_base", true);
 
    //wait for the action server to come up
    while(!ac.waitForServer(ros::Duration(5.0))){
@@ -275,8 +275,8 @@ int main(int argc, char **argv)
     }
 		if(moveBaseTest == 0){
 			moveBaseTest++;
-			//moveToGoal(-0.5,0);
-			moveFwdOneMeter();
+			moveToGoal(-0.5,0);
+			//moveFwdOneMeter();
 		}
 		
 		ros::spinOnce();	
