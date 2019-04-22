@@ -1,5 +1,5 @@
-roslaunch odometry_publisher odometry_publisher.launch &
-python ../Main-Program-2/odom.py &
+#roslaunch odometry_publisher odometry_publisher.launch &
+#python ../Main-Program-2/odom.py &
 #roslaunch razor-pub.launch &
 #roslaunch ydlidar lidar.launch &
 roslaunch ekf_template.launch &

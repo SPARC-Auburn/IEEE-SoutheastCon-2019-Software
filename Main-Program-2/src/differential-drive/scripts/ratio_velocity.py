@@ -151,8 +151,13 @@ class PidVelocity():
         	self.previous_error = self.error
     		#Make PID loop a passthrough
 		#self.motor = self.target 
-        	self.motor += max(min((self.Kp * self.error) + (self.Ki * self.integral) + (self.Kd * self.derivative),self.max_change),-self.max_change)
-        	self.motor = min(max(self.motor,self.out_min),self.out_max)
+        	#self.motor += max(min((self.Kp * self.error) + (self.Ki * self.integral) + (self.Kd * self.derivative),self.max_change),-self.max_change)
+		if (self.target>0):
+        		self.motor = min(max((self.target*self.Kp), 20), 50)
+		elif(self.target<0):
+			self.motor = max(min((self.target*self.Kp), -20), -50)
+		else:
+			self.motor = 0 
       
         #if (self.target == 0):
         #    self.motor = 0
