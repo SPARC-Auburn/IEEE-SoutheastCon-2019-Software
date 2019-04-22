@@ -2,6 +2,7 @@
 #include "std_msgs/String.h"
 #include "std_msgs/Float32.h"
 #include "std_msgs/Int32.h"
+#include "std_msgs/Int8.h"
 #include <thread>
 #include <unistd.h>
 #include <iostream>
@@ -28,30 +29,30 @@ int rightWheelVal = 0;
 
 serialPort arduino("/dev/serial/by-id/usb-1a86_USB2.0-Serial-if00-port0");
 
-void rin(const std_msgs::Float32ConstPtr &msg){
+void rin(const std_msgs::Int8ConstPtr &msg){
 	rightSpeed = (int)msg->data;
 }
 
-void lin(const std_msgs::Float32ConstPtr &msg){
+void lin(const std_msgs::Int8ConstPtr &msg){
 	leftSpeed = (int)msg->data;
 }
 void colorSelectFunc(const std_msgs::Float32ConstPtr &msg){
 	colorSelect = (int)msg->data;
 }
 
-void flagFunc(const std_msgs::Int32 &msg){
+void flagFunc(const std_msgs::Int32ConstPtr &msg){
 	flagpos = (int)msg->data;
     arduino.moveFlag(flagpos);
 }
-void gateFunc(const std_msgs::Int32 &msg){
+void gateFunc(const std_msgs::Int32ConstPtr &msg){
 	gatepos = (int)msg->data;
     arduino.moveFlag(gatepos);
 
 }
-void leftWheelFunc(const std_msgs::Int32 &msg){
+void leftWheelFunc(const std_msgs::Int32ConstPtr &msg){
     leftWheelVal = msg->data;
 }
-void rightWheelFunc(const std_msgs::Int32 &msg){
+void rightWheelFunc(const std_msgs::Int32ConstPtr &msg){
     rightWheelVal = msg->data;
 }
 
@@ -60,10 +61,10 @@ int main(int argc, char **argv){
     ros::init(argc, argv, "arduino_talker");
     ros::NodeHandle n;
     ros::Rate loop_rate(40);	//1 Hz
-    ros::Subscriber lsub = n.subscribe<std_msgs::Float32>("rmotor_cmd", 1,lin);
-    ros::Subscriber rsub = n.subscribe<std_msgs::Float32>("lmotor_cmd", 1,rin);
-    ros::Subscriber flag = n.subscribe<std_msgs::Float32>("flag_cmd", 1,flagFunc);
-    ros::Subscriber gate = n.subscribe<std_msgs::Float32>("gate_cmd", 1,gateFunc);
+    ros::Subscriber lsub = n.subscribe<std_msgs::Int8>("rmotor_cmd", 1,lin);
+    ros::Subscriber rsub = n.subscribe<std_msgs::Int8>("lmotor_cmd", 1,rin);
+    ros::Subscriber flag = n.subscribe<std_msgs::Int32>("flag_cmd", 1,flagFunc);
+    ros::Subscriber gate = n.subscribe<std_msgs::Int32>("gate_cmd", 1,gateFunc);
     ros::Subscriber leftWheel = n .subscribe<std_msgs::Int32>("lwheel",1,leftWheelFunc);
     ros::Subscriber rightWheel = n .subscribe<std_msgs::Int32>("rwheel",1,rightWheelFunc);
 
@@ -111,10 +112,6 @@ int main(int argc, char **argv){
         ros::spinOnce();
 		//cout << "ButtonState " << arduino.getButtonState() << endl;
 		arduino.drive(rightSpeed,leftSpeed);
-        if(leftWheelVal < 4|| rightWheelVal < 4){
-            arduino.updateLCD("L" + atoi(leftWheelVal));
-            arduino.updateLCD("R" + atoi(rightWheelVal));
-        }
 		arduino.updateArduino();
 		loop_rate.sleep();	
     }

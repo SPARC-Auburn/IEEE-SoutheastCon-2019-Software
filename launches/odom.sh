@@ -2,5 +2,5 @@ rosrun tf2_ros static_transform_publisher 0.06 0 0 1.570796327 0 0 base_footprin
 rosrun tf2_ros static_transform_publisher -0.06 0 0 0 0 0 base_footprint odom_footprint  &
 roslaunch odometry_publisher odometry_publisher.launch &
 python ../Main-Program-2/odom.py &
-roslaunch ./razor-pub.launch &
-roslaunch ./ekf_template.launch &
+#roslaunch ./razor-pub.launch &
+#roslaunch ./ekf_template.launch &

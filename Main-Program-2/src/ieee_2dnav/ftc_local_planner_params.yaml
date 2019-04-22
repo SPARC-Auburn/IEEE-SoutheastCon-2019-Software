@@ -1,12 +1,12 @@
 FTCPlanner:
    max_x_vel: 0.5
-   min_x_vel: 0.2
    max_rotation_vel: 1.0
-   min_rotation_vel: 1.0
-   acceleration_x: 0.2
+   min_rotation_vel: 0.4
+   acceleration_x: 0.5
+   acceleration_z: 0.5
    position_accuracy: 0.1
    rotation_accuracy: 0.1
-   slow_down_factor: 0
-   sim_time: 1
+   slow_down_factor: 2.5
+   sim_time: 0.3
    local_planner_frequency: 5
    join_obstacle: false

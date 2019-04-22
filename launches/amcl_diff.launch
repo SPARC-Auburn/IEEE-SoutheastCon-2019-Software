@@ -35,7 +35,7 @@
   <param name="tf_broadcast" value="true"/>
   <param name="initial_pose_x" value="-1.06"/>
   <param name="initial_pose_y" value="1.06"/>
-  <param name="initial_pose_a" value="-1.57"/>
+  <param name="initial_pose_a" value="-0.7854"/>
   <param name="initial_cov_xx" value="0.02"/>
   <param name="initial_cov_yy" value="0.02"/>
   <param name="initial_cov_aa" value="0.01"/>
