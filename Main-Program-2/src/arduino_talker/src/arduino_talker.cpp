@@ -15,7 +15,7 @@
 #include <tf/transform_broadcaster.h>
 
 #include "Arduino-Serial/ArduinoSerial.h"
-//Color Indices = red(0), yellow(1), blue(2), green(3)
+
 using namespace std;
 int colorSelect = 0;
 int colorChoose = 0;
@@ -36,9 +36,7 @@ void rin(const std_msgs::Int8ConstPtr &msg){
 void lin(const std_msgs::Int8ConstPtr &msg){
 	leftSpeed = (int)msg->data;
 }
-void colorSelectFunc(const std_msgs::Float32ConstPtr &msg){
-	colorSelect = (int)msg->data;
-}
+
 
 void flagFunc(const std_msgs::Int32ConstPtr &msg){
 	flagpos = (int)msg->data;
@@ -76,41 +74,17 @@ int main(int argc, char **argv){
         if(matchStatus == 1){
             startMatchPub.publish(matchStatus);
             matchStatus++;
-
         }
 
         std_msgs::String msg;
-	msg.data = std::string("Hello ");
-        if(colorChoose == 0){
-            switch(arduino.getMode()){
-                case 0: arduino.updateLCD("Red");
-                if(arduino.getButtonState() && colorChoose < 1){
-                    colorSelect = arduino.getMode();colorChoose++;}
-                break;
-                case 1: arduino.updateLCD("Yellow");
-                if(arduino.getButtonState() && colorChoose < 1){
-                    colorSelect = arduino.getMode();colorChoose++;}
-                break;
-                case 2: arduino.updateLCD("Blue");
-                if(arduino.getButtonState() && colorChoose < 1){
-                    colorSelect = arduino.getMode();colorChoose++;}
-                break;
-                case 3: arduino.updateLCD("Green");
-                if(arduino.getButtonState() && colorChoose < 1){
-                    colorSelect = arduino.getMode();colorChoose++;}
-                break;
-                default: break;
-            }
-        }
-        if(colorChoose == 1 && matchStatus == 0){
-            colorSelectPub.publish(colorSelect);
-            colorChoose++;   
-        }
-	if(colorChoose > 1 && arduino.getButtonState()){
-		matchStatus = 1;
+	    msg.data = std::string("Hello Fuck Shits");
+       
+        
+	if(arduino.getButtonState()){
+		startMatchPub.publish(1);
 	}
         ros::spinOnce();
-		//cout << "ButtonState " << arduino.getButtonState() << endl;
+		arduino.updateLCD("Fuck");
 		arduino.drive(rightSpeed,leftSpeed);
 		arduino.updateArduino();
 		loop_rate.sleep();	
